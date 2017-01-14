@@ -90,8 +90,8 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>echo PREBUILD
-echo nuget restore "$(SolutionDir)ACMESharp\ACMESharp\ACMESharp.sln"
-nuget restore "$(SolutionDir)ACMESharp\ACMESharp\ACMESharp.sln"
+echo call nuget restore "$(SolutionDir)ACMESharp\ACMESharp\ACMESharp.sln"
+call nuget restore "$(SolutionDir)ACMESharp\ACMESharp\ACMESharp.sln"
 echo "$(MSBuildBinPath)\msbuild.exe" "$(SolutionDir)ACMESharp\ACMESharp\ACMESharp.sln" /t:ACMESharp;ACMESharp_PKI_Providers_BouncyCastle;ACMESharp_POSH;ACMESharp_Vault /p:Configuration="Debug"
 "$(MSBuildBinPath)\msbuild.exe" "$(SolutionDir)ACMESharp\ACMESharp\ACMESharp.sln" /t:ACMESharp;ACMESharp_PKI_Providers_BouncyCastle;ACMESharp_POSH;ACMESharp_Vault /p:Configuration="Debug"
 echo ENDPREBUILD
