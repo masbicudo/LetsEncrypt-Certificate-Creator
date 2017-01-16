@@ -65,7 +65,7 @@
             this.btnReg.Name = "btnReg";
             this.btnReg.Size = new System.Drawing.Size(354, 23);
             this.btnReg.TabIndex = 1;
-            this.btnReg.Text = "Register with LetsEncrypt";
+            this.btnReg.Text = "Register challenge";
             this.btnReg.UseVisualStyleBackColor = true;
             this.btnReg.Click += new System.EventHandler(this.btnReg_Click);
             // 

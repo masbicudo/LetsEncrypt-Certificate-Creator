@@ -17,7 +17,13 @@ namespace LetsEncryptAcmeReg
 {
     public partial class frm : Form
     {
-        // based on: https://gist.github.com/nul800sebastiaan/31b000874ffa69f4c0af
+        // Based on:
+        //  - https://github.com/ebekker/ACMESharp
+        //  - https://gist.github.com/nul800sebastiaan/31b000874ffa69f4c0af
+        // Read more at:
+        //  - https://cultiv.nl/blog/lets-encrypt-on-windows-revisited/
+        // Related issues:
+        //  - https://github.com/ebekker/ACMESharp/issues/205
         private readonly Registrator reg = new Registrator();
 
         public frm()
@@ -193,12 +199,23 @@ namespace LetsEncryptAcmeReg
 
     internal class Registrator
     {
+        public VaultInfo Vault()
+        {
+            VaultInfo vlt = new GetVault().GetValue<VaultInfo>()
+                ?? new InitializeVault { BaseUri = "https://acme-v01.api.letsencrypt.org/" }.GetValue<VaultInfo>();
+            return vlt;
+        }
+
         public RegistrationData Register(RegistrationOptions registrationOptions)
         {
-            var fdsg = new GetVault().GetValue<object>();
-            if (fdsg == null)
+            var v = Vault();
+
+            var r = v.Registrations.Values
+                .Select(x => x.Registration)
+                .Single(x => x.Contacts.Any(c => c == $"mailto:{registrationOptions.Email}"));
+
+            if (r == null)
             {
-                new InitializeVault { BaseUri = "https://acme-v01.api.letsencrypt.org/" }.Run();
                 new NewRegistration { Contacts = new[] { $"mailto:{registrationOptions.Email}" } }.Run();
                 new UpdateRegistration { AcceptTos = SwitchParameter.Present }.Run();
             }
@@ -210,10 +227,15 @@ namespace LetsEncryptAcmeReg
                 ? new GetIdentifier { IdentifierRef = idref }.GetValue<AuthorizationState>()
                 : new NewIdentifier { Dns = registrationOptions.Domain, Alias = idref }.GetValue<AuthorizationState>();
 
+            //using (var vlt = ACMESharp.POSH.Util.VaultHelper.GetVault())
+            //{
+            //    vlt.OpenStorage(true);
+            //    vlt.LoadVault();
+            //}
+
             state = new GetIdentifier { IdentifierRef = idref }.GetValue<AuthorizationState>();
 
-            state = state ??
-                new CompleteChallenge { Handler = "Manual", IdentifierRef = idref, ChallengeType = "http-01", Repeat = SwitchParameter.Present }
+            state = new CompleteChallenge { Handler = "Manual", IdentifierRef = idref, ChallengeType = "http-01", Repeat = SwitchParameter.Present, Regenerate = SwitchParameter.Present }
                     .GetValue<AuthorizationState>();
 
             var challenge =
@@ -236,10 +258,12 @@ namespace LetsEncryptAcmeReg
         public static bool IdentifierExists(string idref)
         {
             IDictionary[] allIds = new GetIdentifier()
-                .GetValues().Select(x => (x as object).ToDictionary()).ToArray();
+                .GetValues()
+                .Where(x => x != null)
+                .Select(x => (x as object).ToDictionary()).ToArray();
 
             return allIds
-                .Any(x => x["Alias"].ToString() == idref);
+                .Any(x => (x["Alias"] ?? "").ToString() == idref);
         }
 
         public static string GetIdentifier(string domain)
@@ -248,13 +272,14 @@ namespace LetsEncryptAcmeReg
                 .GetValues().Select(x => (x as object).ToDictionary()).ToArray();
 
             string idref = allIds
-                .Where(x => x["Dns"].ToString() == domain)
-                .Select(x => x["Alias"].ToString())
+                .Where(x => x != null)
+                .Where(x => (x["Dns"] ?? "").ToString() == domain)
+                .Select(x => (x["Alias"] ?? "").ToString())
                 .SingleOrDefault();
 
             if (idref == null)
             {
-                idref = "dns" + (allIds.Length + 1);
+                idref = "dns" + (allIds.Count(x => x != null) + 1);
             }
 
             return idref;
@@ -307,6 +332,9 @@ namespace LetsEncryptAcmeReg
     {
         public static IDictionary ToDictionary(this object value)
         {
+            if (value == null)
+                return null;
+
             var dic = new Dictionary<string, object>();
 
             foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(value.GetType()))
