@@ -30,6 +30,7 @@
         {
             this.btnReg = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnCertText = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.txtSiteRoot = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
@@ -74,6 +75,7 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Controls.Add(this.btnCertText);
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Controls.Add(this.listBox1);
             this.panel1.Controls.Add(this.txtEmail);
@@ -95,6 +97,18 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(360, 437);
             this.panel1.TabIndex = 2;
+            // 
+            // btnCertText
+            // 
+            this.btnCertText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCertText.Location = new System.Drawing.Point(3, 348);
+            this.btnCertText.Name = "btnCertText";
+            this.btnCertText.Size = new System.Drawing.Size(354, 23);
+            this.btnCertText.TabIndex = 4;
+            this.btnCertText.Text = "Get certificate as text (pem)";
+            this.btnCertText.UseVisualStyleBackColor = true;
+            this.btnCertText.Click += new System.EventHandler(this.btnCertText_Click);
             // 
             // panel2
             // 
@@ -187,9 +201,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.listBox1.FormattingEnabled = true;
             this.listBox1.IntegralHeight = false;
-            this.listBox1.Location = new System.Drawing.Point(3, 355);
+            this.listBox1.Location = new System.Drawing.Point(3, 380);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(354, 79);
+            this.listBox1.Size = new System.Drawing.Size(354, 54);
             this.listBox1.TabIndex = 2;
             // 
             // txtEmail
@@ -219,7 +233,6 @@
             this.btnSaveCert.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSaveCert.Location = new System.Drawing.Point(3, 319);
-            this.btnSaveCert.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
             this.btnSaveCert.Name = "btnSaveCert";
             this.btnSaveCert.Size = new System.Drawing.Size(354, 23);
             this.btnSaveCert.TabIndex = 1;
@@ -375,10 +388,11 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txtKey;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button btnSaveCert;
         private System.Windows.Forms.TextBox txtCertFile;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button btnSelectFile;
+        private System.Windows.Forms.Button btnCertText;
+        private System.Windows.Forms.Button btnSaveCert;
     }
 }
 
