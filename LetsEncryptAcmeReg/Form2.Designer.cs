@@ -76,13 +76,14 @@
             this.chkAutoCreateCertificate = new System.Windows.Forms.CheckBox();
             this.chkAutoSubmit = new System.Windows.Forms.CheckBox();
             this.btnSubmit = new System.Windows.Forms.Button();
-            this.btnRegister = new System.Windows.Forms.Button();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.lnkTOS = new System.Windows.Forms.LinkLabel();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.cmbRegistration = new System.Windows.Forms.ComboBox();
             this.chkAutoAcceptTos = new System.Windows.Forms.CheckBox();
             this.btnAcceptTos = new System.Windows.Forms.Button();
+            this.btnRegister = new System.Windows.Forms.Button();
+            this.chkAutoRegister = new System.Windows.Forms.CheckBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
@@ -94,7 +95,6 @@
             this.lstRegistrations = new System.Windows.Forms.ListBox();
             this.label12 = new System.Windows.Forms.Label();
             this.lstDomains = new System.Windows.Forms.ListBox();
-            this.chkAutoRegister = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -568,6 +568,9 @@
             this.lblFullPath.Size = new System.Drawing.Size(327, 13);
             this.lblFullPath.TabIndex = 16;
             this.lblFullPath.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblFullPath.MouseEnter += new System.EventHandler(this.lblFullPath_MouseEnter);
+            this.lblFullPath.MouseLeave += new System.EventHandler(this.lblFullPath_MouseLeave);
+            this.lblFullPath.MouseMove += new System.Windows.Forms.MouseEventHandler(this.lblFullPath_MouseMove);
             // 
             // label7
             // 
@@ -852,20 +855,6 @@
             this.btnSubmit.UseVisualStyleBackColor = true;
             this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
             // 
-            // btnRegister
-            // 
-            this.btnRegister.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRegister.AutoSize = true;
-            this.btnRegister.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnRegister.Location = new System.Drawing.Point(535, 1);
-            this.btnRegister.Margin = new System.Windows.Forms.Padding(1);
-            this.btnRegister.Name = "btnRegister";
-            this.btnRegister.Size = new System.Drawing.Size(56, 23);
-            this.btnRegister.TabIndex = 2;
-            this.btnRegister.Text = "Register";
-            this.btnRegister.UseVisualStyleBackColor = true;
-            this.btnRegister.Click += new System.EventHandler(this.btnRegister_Click);
-            // 
             // tableLayoutPanel6
             // 
             this.tableLayoutPanel6.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -955,6 +944,37 @@
             this.btnAcceptTos.Text = "Accept";
             this.btnAcceptTos.UseVisualStyleBackColor = true;
             this.btnAcceptTos.Click += new System.EventHandler(this.btnAcceptTos_Click);
+            // 
+            // btnRegister
+            // 
+            this.btnRegister.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnRegister.AutoSize = true;
+            this.btnRegister.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnRegister.Location = new System.Drawing.Point(535, 1);
+            this.btnRegister.Margin = new System.Windows.Forms.Padding(1);
+            this.btnRegister.Name = "btnRegister";
+            this.btnRegister.Size = new System.Drawing.Size(56, 23);
+            this.btnRegister.TabIndex = 2;
+            this.btnRegister.Text = "Register";
+            this.btnRegister.UseVisualStyleBackColor = true;
+            this.btnRegister.Click += new System.EventHandler(this.btnRegister_Click);
+            // 
+            // chkAutoRegister
+            // 
+            this.chkAutoRegister.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkAutoRegister.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkAutoRegister.AutoSize = true;
+            this.chkAutoRegister.Checked = true;
+            this.chkAutoRegister.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkAutoRegister.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.chkAutoRegister.Location = new System.Drawing.Point(510, 1);
+            this.chkAutoRegister.Margin = new System.Windows.Forms.Padding(1);
+            this.chkAutoRegister.Name = "chkAutoRegister";
+            this.chkAutoRegister.Size = new System.Drawing.Size(23, 23);
+            this.chkAutoRegister.TabIndex = 11;
+            this.chkAutoRegister.Text = ">";
+            this.chkAutoRegister.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.chkAutoRegister.UseVisualStyleBackColor = true;
             // 
             // tabPage2
             // 
@@ -1100,23 +1120,6 @@
             this.lstDomains.Size = new System.Drawing.Size(290, 372);
             this.lstDomains.TabIndex = 0;
             this.lstDomains.SelectedIndexChanged += new System.EventHandler(this.lstDomains_SelectedIndexChanged);
-            // 
-            // chkAutoRegister
-            // 
-            this.chkAutoRegister.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkAutoRegister.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkAutoRegister.AutoSize = true;
-            this.chkAutoRegister.Checked = true;
-            this.chkAutoRegister.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkAutoRegister.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkAutoRegister.Location = new System.Drawing.Point(510, 1);
-            this.chkAutoRegister.Margin = new System.Windows.Forms.Padding(1);
-            this.chkAutoRegister.Name = "chkAutoRegister";
-            this.chkAutoRegister.Size = new System.Drawing.Size(23, 23);
-            this.chkAutoRegister.TabIndex = 11;
-            this.chkAutoRegister.Text = ">";
-            this.chkAutoRegister.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.chkAutoRegister.UseVisualStyleBackColor = true;
             // 
             // Form2
             // 

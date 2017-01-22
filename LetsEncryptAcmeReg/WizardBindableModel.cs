@@ -22,6 +22,7 @@ namespace LetsEncryptAcmeReg
 
         public Bindable<string> FileRelativePath { get; } = new Bindable<string>(nameof(FileRelativePath));
         public Bindable<string> FilePath { get; } = new Bindable<string>(nameof(FilePath));
+        public Bindable<string[]> Files { get; } = new Bindable<string[]>(nameof(Files));
         public Bindable<RegistrationInfo> CurrentRegistration { get; } = new Bindable<RegistrationInfo>(nameof(CurrentRegistration));
         public Bindable<AuthorizationState> CurrentAuthState { get; } = new Bindable<AuthorizationState>(nameof(CurrentAuthState));
         public Bindable<AuthorizeChallenge> CurrentChallenge { get; } = new Bindable<AuthorizeChallenge>(nameof(CurrentChallenge));

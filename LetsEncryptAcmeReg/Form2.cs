@@ -1,6 +1,7 @@
 ﻿using ACMESharp.Vault.Model;
 using System;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace LetsEncryptAcmeReg
@@ -102,6 +103,8 @@ namespace LetsEncryptAcmeReg
             mo.CanCreateChallenge.Changed += v => this.btnCreateChallenge.Enabled = v;
             mo.CanSaveChallenge.Changed += v => this.btnSaveChallenge.Enabled = v;
 
+            mo.Files.Changed += v => this.lblFullPath.Tag = string.Join("\r\n", v);
+
             init();
         }
 
@@ -110,7 +113,7 @@ namespace LetsEncryptAcmeReg
             if (msg != null)
             {
                 if ((string)this.tooltip.Tag != msg)
-                    this.tooltip.ToolTipFor(ctl).Show(msg);
+                    this.tooltip.ToolTipFor(ctl).ShowMessage(msg);
                 this.tooltip.Tag = msg;
             }
             else
@@ -202,6 +205,25 @@ namespace LetsEncryptAcmeReg
         private void btnShowCertificate_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void lblFullPath_MouseLeave(object sender, EventArgs e)
+        {
+            this.tooltip.ToolTipFor(this.lblFullPath).ShowMessage(null);
+        }
+
+        private void lblFullPath_MouseEnter(object sender, EventArgs e)
+        {
+            var tt = this.tooltip.ToolTipFor(this.lblFullPath);
+            tt.PositionPreferences = "v";
+            tt.ShowMessage((string)this.lblFullPath.Tag);
+        }
+
+        private void lblFullPath_MouseMove(object sender, MouseEventArgs e)
+        {
+            var tt = this.tooltip.ToolTipFor(this.lblFullPath);
+            tt.PositionPreferences = "v";
+            tt.ShowMessage((string)this.lblFullPath.Tag);
         }
     }
 }

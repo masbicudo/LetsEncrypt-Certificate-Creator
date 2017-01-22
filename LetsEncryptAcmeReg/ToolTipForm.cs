@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -18,13 +20,15 @@ namespace LetsEncryptAcmeReg
             InitializeComponent();
         }
 
-        public void Show(string message)
+        public void ShowMessage(string message)
         {
+            if (message != this.currentMessage)
+                this.Invalidate();
+
             this.currentMessage = message;
-            this.currentTextSize = TextRenderer.MeasureText(this.currentMessage, this.Font);
+            this.currentTextSize = message == null ? Size.Empty : TextRenderer.MeasureText(this.currentMessage, this.Font);
 
             this.UpdateFormLocation();
-            this.Invalidate();
         }
 
         private void UpdateFormLocation()
@@ -38,60 +42,67 @@ namespace LetsEncryptAcmeReg
             var cw = this.control.Width;
             var ch = this.control.Height;
 
-            var padding = 4;
+            var padding = this.Padding;
             var tw = size.Width + 2 * padding;
             var th = size.Height + 2 * padding;
 
-            var margin = -1;
+            var margin = this.Margin;
 
-            var rects = new[]
+            var order = this.PositionPreferences.Split(',');
+
+            var rectsDic = new Dictionary<string, Rectangle>
             {
-                new Rectangle(+cw + 2*margin, (+ch - th)/2, tw, th), // >
-                new Rectangle((+cw - tw)/2, +ch + 2*margin, tw, th), // v
-                new Rectangle((+cw - tw)/2, -th - 2*margin, tw, th), // ^
-                new Rectangle(-tw - 2*margin, (+ch - th)/2, tw, th), // ^
+                { ">", new Rectangle(+cw + 2*margin, (+ch - th)/2, tw, th) }, // >
+                { "v", new Rectangle((+cw - tw)/2, +ch + 2*margin, tw, th) }, // v
+                { "^", new Rectangle((+cw - tw)/2, -th - 2*margin, tw, th) }, // ^
+                { "<", new Rectangle(-tw - 2*margin, (+ch - th)/2, tw, th) }, // <
 
-                new Rectangle(+cw + 2*margin, +ch + 2*margin, tw, th), // >v
-                new Rectangle(+cw + 2*margin, -th - 2*margin, tw, th), // >^
-                new Rectangle(-tw - 2*margin, +ch + 2*margin, tw, th), // <v
-                new Rectangle(-tw - 2*margin, -th - 2*margin, tw, th), // <^
+                { ">v", new Rectangle(+cw + 2*margin, +ch + 2*margin, tw, th) }, // >v
+                { ">^", new Rectangle(+cw + 2*margin, -th - 2*margin, tw, th) }, // >^
+                { "<v", new Rectangle(-tw - 2*margin, +ch + 2*margin, tw, th) }, // <v
+                { "<^", new Rectangle(-tw - 2*margin, -th - 2*margin, tw, th) }, // <^
             };
+
+            var rects = order.Where(x => rectsDic.ContainsKey(x)).Select(x => rectsDic[x]).ToArray();
 
             int max = 0;
             Rectangle choice = Rectangle.Empty;
-            foreach (var r in rects)
-            {
-                var a = this.control.PointToScreen(new Point(r.Left, r.Top));
-                var b = this.control.PointToScreen(new Point(r.Left, r.Bottom));
-                var c = this.control.PointToScreen(new Point(r.Right, r.Top));
-                var d = this.control.PointToScreen(new Point(r.Right, r.Bottom));
-                var sa = Screen.FromPoint(a);
-                var sb = Screen.FromPoint(b);
-                var sc = Screen.FromPoint(c);
-                var sd = Screen.FromPoint(d);
-
-                var rect = new Rectangle(a, new Size(d.X - a.X, d.Y - a.Y));
-
-                var val = 0;
-                val += (sa.Bounds.Contains(a) ? 4 : 0)
-                     + (sb.Bounds.Contains(b) ? 4 : 0)
-                     + (sc.Bounds.Contains(c) ? 4 : 0)
-                     + (sd.Bounds.Contains(d) ? 4 : 0);
-                val += (sa.DeviceName == sb.DeviceName ? 1 : 0)
-                     + (sa.DeviceName == sc.DeviceName ? 1 : 0)
-                     + (sa.DeviceName == sd.DeviceName ? 1 : 0);
-
-                if (val > max && !rect.Contains(Cursor.Position))
+            if (size != Size.Empty)
+                foreach (var r in rects)
                 {
-                    max = val;
-                    choice = rect;
+                    var a = this.control.PointToScreen(new Point(r.Left, r.Top));
+                    var b = this.control.PointToScreen(new Point(r.Left, r.Bottom));
+                    var c = this.control.PointToScreen(new Point(r.Right, r.Top));
+                    var d = this.control.PointToScreen(new Point(r.Right, r.Bottom));
+                    var sa = Screen.FromPoint(a);
+                    var sb = Screen.FromPoint(b);
+                    var sc = Screen.FromPoint(c);
+                    var sd = Screen.FromPoint(d);
+
+                    var rect = new Rectangle(a, new Size(d.X - a.X, d.Y - a.Y));
+
+                    var val = 0;
+                    val += (sa.Bounds.Contains(a) ? 4 : 0)
+                         + (sb.Bounds.Contains(b) ? 4 : 0)
+                         + (sc.Bounds.Contains(c) ? 4 : 0)
+                         + (sd.Bounds.Contains(d) ? 4 : 0);
+                    val += (sa.DeviceName == sb.DeviceName ? 1 : 0)
+                         + (sa.DeviceName == sc.DeviceName ? 1 : 0)
+                         + (sa.DeviceName == sd.DeviceName ? 1 : 0);
+
+                    if (val > max && !rect.Contains(Cursor.Position))
+                    {
+                        max = val;
+                        choice = rect;
+                    }
                 }
-            }
 
             if (max > 0)
             {
-                this.Location = choice.Location;
-                this.Size = choice.Size;
+                if (this.Location != choice.Location)
+                    this.Location = choice.Location;
+                if (this.Size != choice.Size)
+                    this.Size = choice.Size;
             }
 
             if (max > 0 && this.canShow)
@@ -123,6 +134,10 @@ namespace LetsEncryptAcmeReg
                 }
             }
         }
+
+        public string PositionPreferences { get; set; } = ">,v,^,<,>v,>^,<v,<^";
+        public new int Margin { get; set; } = -1;
+        public new int Padding { get; set; } = 4;
 
         private void Frm_Activated(object sender, EventArgs e)
         {

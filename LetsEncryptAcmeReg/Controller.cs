@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -9,6 +10,8 @@ using ACMESharp.ACME;
 using ACMESharp.POSH;
 using ACMESharp.Vault.Model;
 using JetBrains.Annotations;
+using LibGit2Sharp;
+using Signature = LibGit2Sharp.Signature;
 
 namespace LetsEncryptAcmeReg
 {
@@ -72,7 +75,22 @@ namespace LetsEncryptAcmeReg
             init += mo.CanCreateChallenge.BindExpression(() => mo.IsChallengeValid.Value);
             init += mo.CanSaveChallenge.BindExpression(() => mo.ChallengeHasFile.Value);
 
+            init += mo.Files.BindExpression(() => this.Files_Value(mo.SiteRoot.Value, mo.FileRelativePath.Value));
+
             return init;
+        }
+
+        private string[] Files_Value(string siteRoot, string indexRelative)
+        {
+            if (siteRoot == null)
+                return new string[0];
+
+            return new[]
+            {
+                indexRelative == null ? "" : Path.Combine(siteRoot, indexRelative, "index.html"),
+                Path.Combine(siteRoot, "CNAME"),
+                Path.Combine(siteRoot, "_config.yml"),
+            };
         }
 
         private bool CanAcceptTos_Value(RegistrationInfo regInfo)
@@ -274,7 +292,25 @@ namespace LetsEncryptAcmeReg
                 this.Model.AutoCommitChallengeTimer,
                 () =>
                 {
-                    throw new NotImplementedException();
+                    try
+                    {
+                        using (var repo = new Repository(this.Model.FilePath.Value))
+                        {
+                            // Stage the file
+                            repo.Index.Add(Path.Combine(this.Model.FilePath.Value, "index.html"));
+
+                            // Create the committer's signature and commit
+                            Signature author = new Signature("James", "@jugglingnutcase", DateTime.Now);
+                            Signature committer = author;
+
+                            // Commit to the repository
+                            Commit commit = repo.Commit("Here's a commit i made!", author, committer);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Exception:RepoActions:StageChanges " + ex.Message);
+                    }
                 },
                 this.Model.AutoTestChallenge,
                 this.TestChallenge);
