@@ -7,7 +7,7 @@ namespace LetsEncryptAcmeReg
 {
     public static class BindHelper
     {
-        public static Action Bind(Bindable<bool> bindable, CheckBox checkBox)
+        public static Action Bind(this Bindable<bool> bindable, CheckBox checkBox)
         {
             Func<bool> getter = () => checkBox.Checked;
             Action<bool> setter = b =>
@@ -19,7 +19,7 @@ namespace LetsEncryptAcmeReg
             return bindable.Bind(getter, setter);
         }
 
-        public static Action Bind(Bindable<string> bindable, Control control)
+        public static Action Bind(this Bindable<string> bindable, Control control)
         {
             Func<string> getter = () => control.Text;
             Action<string> setter = b =>
@@ -31,7 +31,7 @@ namespace LetsEncryptAcmeReg
             return bindable.Bind(getter, setter);
         }
 
-        public static Action Bind<T, T2>(Bindable<T> bindable, ComboBox cmb, Func<T2, T> convert)
+        public static Action Bind<T, T2>(this Bindable<T> bindable, ComboBox cmb, Func<T2, T> convert)
         {
             Func<T> getter = () => convert((T2)cmb.SelectedItem);
             Action<T> setter = b =>
@@ -43,7 +43,7 @@ namespace LetsEncryptAcmeReg
             return bindable.Bind(getter, setter);
         }
 
-        public static Action Bind<T, T2>(Bindable<T> bindable, ListBox lst, Func<T2, T> convert)
+        public static Action Bind<T, T2>(this Bindable<T> bindable, ListBox lst, Func<T2, T> convert)
         {
             Func<T> getter = () => convert((T2)lst.SelectedItem);
             Action<T> setter = b =>
@@ -55,7 +55,7 @@ namespace LetsEncryptAcmeReg
             return bindable.Bind(getter, setter);
         }
 
-        public static Action Bind(Bindable<string> bindable, TextBox txt)
+        public static Action Bind(this Bindable<string> bindable, TextBox txt)
         {
             Func<string> getter = () => txt.Text;
             Action<string> setter = b =>
@@ -74,7 +74,7 @@ namespace LetsEncryptAcmeReg
             return bindable.Bind(getter, setter);
         }
 
-        public static Action Bind(Bindable<string> bindable, ComboBox cmb)
+        public static Action Bind(this Bindable<string> bindable, ComboBox cmb)
         {
             Func<string> getter = () => cmb.Text;
             Action<string> setter = b =>
@@ -93,16 +93,54 @@ namespace LetsEncryptAcmeReg
             return bindable.Bind(getter, setter);
         }
 
-        public static Action Bind<T>(Bindable<T> bindable, Func<T> getter, Action<T> setter)
-        {
-            return bindable.Bind(getter, setter);
-        }
-
-        public static void Assign<T>(Bindable<T> bindable, Expression<Func<T>> exprValue)
+        /// <summary>
+        /// Binds the value of the bindable object with an expression that may contain other bindable references.
+        /// Whenever one of the bindable references changes, the value of the expression will be assigned to the bindable object.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="bindable">To bindable object that will be assigned to the expression.</param>
+        /// <param name="valueExpression">Expression containing bindable references that is used as the value for the bindable object.</param>
+        /// <param name="init">
+        /// If true, assigns the value of the expression to the bindable object using data from the bindable references if they contain data already.
+        /// If false, returns a delegate that does the same. In this case, if the delegate is not called
+        /// then the bindable object and the external data source will not be syncrhonized until
+        /// an event is raised from either objects.
+        /// </param>
+        /// <returns>
+        /// If <see cref="init"/> is true, returns a delegate to assign the value of the expression the the bindable for the first time;
+        /// otherwise it returns null.
+        /// </returns>
+        public static Action BindExpression<T>(this Bindable<T> bindable, Expression<Func<T>> valueExpression, bool init = false)
         {
             // finding all bindables in the expression
-            var finder = new BindableFinder<T>(bindable, exprValue);
-            finder.Visit(exprValue);
+            var finder = new BindableFinder<T>(bindable, valueExpression, init);
+            finder.Visit(valueExpression);
+            return finder.InitAction;
+        }
+
+        /// <summary>
+        /// Binds an expression containing bindable references.
+        /// Whenever one of the bindable references changes, the whole expression is executed.
+        /// </summary>
+        /// <param name="boundExpression">
+        /// The expression to be bound to it's containing bindables.
+        /// </param>
+        /// <param name="init">
+        /// If true, executes the bound expression with data from the bindable objects if they contain data already.
+        /// If false, returns a delegate that does the same. In this case, if the delegate is not called
+        /// then the bindable object and the external data source will not be syncrhonized until
+        /// an event is raised from either objects.
+        /// </param>
+        /// <returns>
+        /// If <see cref="init"/> is true, returns a delegate to do the first execution of the bound expression as a way of synchronization;
+        /// otherwise it returns null.
+        /// </returns>
+        public static Action BindExpression(Expression<Action> boundExpression, bool init = false)
+        {
+            // finding all bindables in the expression
+            var finder = new BindableFinder<string>(boundExpression, init);
+            finder.Visit(boundExpression);
+            return finder.InitAction;
         }
     }
 }

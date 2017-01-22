@@ -71,19 +71,15 @@ namespace LetsEncryptAcmeReg
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnSaveChallenge_Click(object sender, EventArgs e)
         {
             try
             {
                 Directory.CreateDirectory(this.labFullPath.Text);
 
-                using (
-                    var fs = File.Open(Path.Combine(this.labFullPath.Text, "index.html"), FileMode.Create,
-                        FileAccess.ReadWrite))
+                using (var fs = File.Open(Path.Combine(this.labFullPath.Text, "index.html"), FileMode.Create, FileAccess.ReadWrite))
                 using (var sw = new StreamWriter(fs))
-                {
                     sw.Write(this.txtKey.Text);
-                }
             }
             catch
             {
@@ -130,39 +126,39 @@ namespace LetsEncryptAcmeReg
                 }
 
             var idref = Registrator.GetIdentifier(this.txtDomain.Text);
-            var state = new UpdateIdentifier {IdentifierRef = idref}.GetValue<AuthorizationState>();
+            var state = new UpdateIdentifier { IdentifierRef = idref }.GetValue<AuthorizationState>();
             if (state.Status != "valid")
             {
                 state =
-                    new SubmitChallenge {IdentifierRef = idref, ChallengeType = "http-01"}.GetValue<AuthorizationState>();
+                    new SubmitChallenge { IdentifierRef = idref, ChallengeType = "http-01" }.GetValue<AuthorizationState>();
                 int countPending = 0;
                 while (state.Status == "pending")
                 {
                     this.listBox1.Items.Add("Status is still 'pending', waiting for it to change...");
-                    await Task.Delay((countPending + 1)*1000);
-                    state = new UpdateIdentifier {IdentifierRef = idref}.GetValue<AuthorizationState>();
+                    await Task.Delay((countPending + 1) * 1000);
+                    state = new UpdateIdentifier { IdentifierRef = idref }.GetValue<AuthorizationState>();
                     countPending++;
                 }
             }
 
             if (state.Status == "valid")
             {
-                var certificateInfo = new GetCertificate {CertificateRef = "cert1"}.GetValue<CertificateInfo>();
+                var certificateInfo = new GetCertificate { CertificateRef = "cert1" }.GetValue<CertificateInfo>();
 
                 if (certificateInfo == null)
-                    new NewCertificate {IdentifierRef = idref, Alias = "cert1", Generate = SwitchParameter.Present}
+                    new NewCertificate { IdentifierRef = idref, Alias = "cert1", Generate = SwitchParameter.Present }
                         .GetValue<CertificateInfo>();
                 // NOTE: If you have existing keys you can use them as well, this is good to do if you want to use HPKP
                 // new NewCertificate { IdentifierRef = idref, Alias = "cert1", KeyPemFile = "path\\to\\key.pem", CsrPemFile = "path\\to\\csr.pem" }.Run();
                 //certificateInfo = new SubmitCertificate { PkiTool = BouncyCastleProvider.PROVIDER_NAME, CertificateRef = "cert1" }.GetValue<CertificateInfo>();
                 certificateInfo =
-                    new SubmitCertificate {CertificateRef = "cert1", Force = SwitchParameter.Present}
+                    new SubmitCertificate { CertificateRef = "cert1", Force = SwitchParameter.Present }
                         .GetValue<CertificateInfo>();
                 while (string.IsNullOrEmpty(certificateInfo.IssuerSerialNumber))
                 {
                     await Task.Delay(1000);
                     this.listBox1.Items.Add("IssuerSerialNumber is not set yet, waiting for it to be populated...");
-                    certificateInfo = new UpdateCertificate {CertificateRef = "cert1"}.GetValue<CertificateInfo>();
+                    certificateInfo = new UpdateCertificate { CertificateRef = "cert1" }.GetValue<CertificateInfo>();
                 }
 
                 this.listBox1.Items.Add(
@@ -238,7 +234,7 @@ namespace LetsEncryptAcmeReg
             {
                 VaultInfo vlt = new GetVault().GetValue<VaultInfo>()
                                 ??
-                                new InitializeVault {BaseUri = "https://acme-v01.api.letsencrypt.org/"}
+                                new InitializeVault { BaseUri = "https://acme-v01.api.letsencrypt.org/" }
                                     .GetValue<VaultInfo>();
                 return vlt;
             }
@@ -252,16 +248,16 @@ namespace LetsEncryptAcmeReg
 
                 if (r == null)
                 {
-                    new NewRegistration {Contacts = new[] {$"mailto:{registrationOptions.Email}"}}.Run();
-                    new UpdateRegistration {AcceptTos = SwitchParameter.Present}.Run();
+                    new NewRegistration { Contacts = new[] { $"mailto:{registrationOptions.Email}" } }.Run();
+                    new UpdateRegistration { AcceptTos = SwitchParameter.Present }.Run();
                 }
 
                 var idref = GetIdentifier(registrationOptions.Domain);
 
                 AuthorizationState state;
                 state = IdentifierExists(idref)
-                    ? new GetIdentifier {IdentifierRef = idref}.GetValue<AuthorizationState>()
-                    : new NewIdentifier {Dns = registrationOptions.Domain, Alias = idref}.GetValue<AuthorizationState>();
+                    ? new GetIdentifier { IdentifierRef = idref }.GetValue<AuthorizationState>()
+                    : new NewIdentifier { Dns = registrationOptions.Domain, Alias = idref }.GetValue<AuthorizationState>();
 
                 //using (var vlt = ACMESharp.POSH.Util.VaultHelper.GetVault())
                 //{
@@ -269,7 +265,7 @@ namespace LetsEncryptAcmeReg
                 //    vlt.LoadVault();
                 //}
 
-                state = new GetIdentifier {IdentifierRef = idref}.GetValue<AuthorizationState>();
+                state = new GetIdentifier { IdentifierRef = idref }.GetValue<AuthorizationState>();
 
                 state =
                     new CompleteChallenge

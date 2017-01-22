@@ -33,6 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="JetBrains.Annotations, Version=10.2.1.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.10.2.1\lib\net\JetBrains.Annotations.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Management" />
@@ -52,11 +56,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CmdLetExtensions.cs" />
+    <Compile Include="Controller.cs" />
     <Compile Include="DynamicExtensions.cs" />
     <Compile Include="Acme.cs" />
     <Compile Include="Bindable.cs" />
     <Compile Include="BindableFinder.cs" />
     <Compile Include="ManagerBindableModel.cs" />
+    <Compile Include="Messages.cs" />
+    <Compile Include="RegistrationItem.cs" />
+    <Compile Include="ToolTipForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ToolTipForm.Designer.cs">
+      <DependentUpon>ToolTipForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ToolTipManager.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="WizardBindableModel.cs" />
     <Compile Include="BindHelper.cs" />
     <Compile Include="ControlExtensions.cs" />
@@ -72,12 +88,24 @@
     <Compile Include="Form2.Designer.cs">
       <DependentUpon>Form2.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmText.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmText.Designer.cs">
+      <DependentUpon>frmText.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form2.resx">
       <DependentUpon>Form2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmText.resx">
+      <DependentUpon>frmText.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ToolTipForm.resx">
+      <DependentUpon>ToolTipForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
   </ItemGroup>
