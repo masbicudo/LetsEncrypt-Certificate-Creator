@@ -16,6 +16,10 @@ namespace LetsEncryptAcmeReg
         {
             InitializeComponent();
 
+            var tt = this.tooltip.ToolTipFor(this.chkConfigYml)
+                .AutoPopup("Updates or creates a ` _config.yml ` file,\r\nwith instructions to _**not ignore**_ the\r\npath ` .well-known\\ `.", useMarkdown: true);
+            tt.BorderColor = Color.DodgerBlue;
+
             this.controller = new Controller(this.acme)
             {
                 Error = this.Error,
