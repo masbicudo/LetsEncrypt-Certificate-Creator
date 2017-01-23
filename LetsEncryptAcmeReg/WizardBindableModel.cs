@@ -27,6 +27,9 @@ namespace LetsEncryptAcmeReg
         public Bindable<AuthorizationState> CurrentAuthState { get; } = new Bindable<AuthorizationState>(nameof(CurrentAuthState));
         public Bindable<AuthorizeChallenge> CurrentChallenge { get; } = new Bindable<AuthorizeChallenge>(nameof(CurrentChallenge));
 
+        public Bindable<bool> UpdateConfigYml { get; } = new Bindable<bool>(nameof(UpdateConfigYml));
+        public Bindable<bool> UpdateCname { get; } = new Bindable<bool>(nameof(UpdateCname));
+
         public Bindable<bool> IsRegistrationCreated { get; } = new Bindable<bool>(nameof(IsRegistrationCreated));
         public Bindable<bool> IsDomainCreated { get; } = new Bindable<bool>(nameof(IsDomainCreated));
         public Bindable<bool> IsChallengeCreated { get; } = new Bindable<bool>(nameof(IsChallengeCreated));

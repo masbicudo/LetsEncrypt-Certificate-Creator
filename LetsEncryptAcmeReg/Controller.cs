@@ -67,7 +67,7 @@ namespace LetsEncryptAcmeReg
             init += mo.Key.BindExpression(() => mo.CurrentChallenge.Value._(v => v.Challenge._(c => (c.Answer as HttpChallengeAnswer)._(a => a.KeyAuthorization))) ?? "");
             init += mo.FileRelativePath.BindExpression(() => mo.CurrentChallenge.Value._(v => (v.Challenge as HttpChallenge)._(c => c.FilePath)._(s => s.Replace('/', '\\'))) ?? "");
 
-            init += mo.FilePath.BindExpression(() => mo.ChallengeHasFile.Value ? Path.Combine(mo.SiteRoot.Value, mo.FileRelativePath.Value) : "");
+            init += mo.FilePath.BindExpression(() => this.FilePath_Value(mo.ChallengeHasFile.Value, mo.SiteRoot.Value, mo.FileRelativePath.Value));
 
             init += mo.CanRegister.BindExpression(() => mo.IsEmailValid.Value);
             init += mo.CanAcceptTos.BindExpression(() => this.CanAcceptTos_Value(mo.CurrentRegistration.Value));
@@ -75,22 +75,27 @@ namespace LetsEncryptAcmeReg
             init += mo.CanCreateChallenge.BindExpression(() => mo.IsChallengeValid.Value);
             init += mo.CanSaveChallenge.BindExpression(() => mo.ChallengeHasFile.Value);
 
-            init += mo.Files.BindExpression(() => this.Files_Value(mo.SiteRoot.Value, mo.FileRelativePath.Value));
+            init += mo.Files.BindExpression(() => this.Files_Value(mo.SiteRoot.Value, mo.FileRelativePath.Value, mo.UpdateCname.Value, mo.UpdateConfigYml.Value));
 
             return init;
         }
 
-        private string[] Files_Value(string siteRoot, string indexRelative)
-        {
-            if (siteRoot == null)
-                return new string[0];
+        private string FilePath_Value(bool hasFile, string siteRoot, string indexRelativePath)
+            => CatchError(() => hasFile ? Path.Combine(siteRoot, indexRelativePath) : "");
 
-            return new[]
+        private string[] Files_Value(string siteRoot, string indexRelative, bool updateCname, bool updateConfigYml)
+        {
+            return CatchError(() =>
             {
-                indexRelative == null ? "" : Path.Combine(siteRoot, indexRelative, "index.html"),
-                Path.Combine(siteRoot, "CNAME"),
-                Path.Combine(siteRoot, "_config.yml"),
-            };
+                if (new[] { siteRoot, indexRelative }.AnyNullOrWhiteSpace())
+                    return new string[0];
+
+                var items = Enumerable.Empty<string>();
+                items = items.Append(Path.Combine(siteRoot, indexRelative, "index.html"));
+                if (updateCname) items = items.Append(Path.Combine(siteRoot, "CNAME"));
+                if (updateConfigYml) items = items.Append(Path.Combine(siteRoot, "_config.yml"));
+                return items.Where(x => x != null).ToArray();
+            });
         }
 
         private bool CanAcceptTos_Value(RegistrationInfo regInfo)

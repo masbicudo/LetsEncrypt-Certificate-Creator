@@ -16,6 +16,10 @@ namespace LetsEncryptAcmeReg
         {
             InitializeComponent();
 
+            this.txtSiteRoot.MouseMove += this.txtSiteRoot_MouseMove;
+            this.txtSiteRoot.MouseEnter += this.txtSiteRoot_MouseEnter;
+            this.txtSiteRoot.MouseLeave += this.txtSiteRoot_MouseLeave;
+
             var tt = this.tooltip.ToolTipFor(this.chkConfigYml)
                 .AutoPopup("Updates or creates a ` _config.yml ` file,\r\nwith instructions to _**not ignore**_ the\r\npath ` .well-known\\ `.", useMarkdown: true);
             tt.BorderColor = Color.DodgerBlue;
@@ -41,8 +45,7 @@ namespace LetsEncryptAcmeReg
             init += mo.Challenge.Bind(this.cmbChallenge);
             init += mo.Target.Bind(this.txtChallengeTarget);
             init += mo.Key.Bind(this.txtChallengeKey);
-            init += mo.SiteRoot.Bind(this.txtChallengeFile);
-            init += mo.FilePath.Bind(this.lblFullPath);
+            init += mo.SiteRoot.Bind(this.txtSiteRoot);
             init += mo.Certificate.Bind(this.cmbCertificate);
             init += mo.Issuer.Bind(this.txtIssuer);
             init += mo.CertificateType.Bind(this.cmbCertificateType);
@@ -65,6 +68,9 @@ namespace LetsEncryptAcmeReg
             init += mo.CurrentRegistration.Bind(this.cmbRegistration, (RegistrationItem i) => i?.RegistrationInfo);
 
             init += ma.Challenge.Bind(this.lstChallenges);
+
+            init += mo.UpdateConfigYml.Bind(this.chkConfigYml);
+            init += mo.UpdateCname.Bind(this.chkCname);
 
             // 
             init += BindHelper.BindExpression(() => RetryToolTip(this.btnRegister, mo.AutoRegisterRetry.Value, mo.AutoRegisterTimer.Value));
@@ -107,9 +113,16 @@ namespace LetsEncryptAcmeReg
             mo.CanCreateChallenge.Changed += v => this.btnCreateChallenge.Enabled = v;
             mo.CanSaveChallenge.Changed += v => this.btnSaveChallenge.Enabled = v;
 
-            mo.Files.Changed += v => this.lblFullPath.Tag = string.Join("\r\n", v);
+            mo.Files.Changed += this.UpdateFiles;
 
             init();
+        }
+
+        private void UpdateFiles(string[] v)
+        {
+            v = v ?? new string[0];
+            this.txtSiteRoot.Tag = string.Join("\r\n", v);
+            this.UpdateFiles();
         }
 
         private void SetToolTip(Control ctl, string msg)
@@ -117,7 +130,10 @@ namespace LetsEncryptAcmeReg
             if (msg != null)
             {
                 if ((string)this.tooltip.Tag != msg)
-                    this.tooltip.ToolTipFor(ctl).ShowMessage(msg);
+                {
+                    var tt = this.tooltip.ToolTipFor(ctl).ShowMessage(msg, useMarkdown: true);
+                    tt.BorderColor = Color.Gold;
+                }
                 this.tooltip.Tag = msg;
             }
             else
@@ -211,23 +227,27 @@ namespace LetsEncryptAcmeReg
 
         }
 
-        private void lblFullPath_MouseLeave(object sender, EventArgs e)
+        private void txtSiteRoot_MouseLeave(object sender, EventArgs e)
         {
-            this.tooltip.ToolTipFor(this.lblFullPath).ShowMessage(null);
+            this.tooltip.ToolTipFor(this.txtSiteRoot).Hide();
         }
 
-        private void lblFullPath_MouseEnter(object sender, EventArgs e)
+        private void txtSiteRoot_MouseEnter(object sender, EventArgs e)
         {
-            var tt = this.tooltip.ToolTipFor(this.lblFullPath);
-            tt.PositionPreferences = "v";
-            tt.ShowMessage((string)this.lblFullPath.Tag);
+            this.UpdateFiles();
         }
 
-        private void lblFullPath_MouseMove(object sender, MouseEventArgs e)
+        private void txtSiteRoot_MouseMove(object sender, MouseEventArgs e)
         {
-            var tt = this.tooltip.ToolTipFor(this.lblFullPath);
-            tt.PositionPreferences = "v";
-            tt.ShowMessage((string)this.lblFullPath.Tag);
+            this.UpdateFiles();
+        }
+
+        private void UpdateFiles()
+        {
+            var tt = this.tooltip.ToolTipFor(this.txtSiteRoot);
+            tt.BorderColor = Color.Crimson;
+            tt.PositionPreferences = ">,v,^,<";
+            tt.ShowMessage((string)this.txtSiteRoot.Tag, useMarkdown: false);
         }
     }
 }
