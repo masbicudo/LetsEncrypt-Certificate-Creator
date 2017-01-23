@@ -1,10 +1,8 @@
-﻿using System;
+﻿using LetsEncryptAcmeReg.WinAPI;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Text;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -284,10 +282,10 @@ namespace LetsEncryptAcmeReg
                          + (sa.DeviceName == sc.DeviceName ? 1 : 0)
                          + (sa.DeviceName == sd.DeviceName ? 1 : 0);
 
-                    var wndA = GetRootWindow(WindowFromPoint(a));
-                    var wndB = GetRootWindow(WindowFromPoint(b));
-                    var wndC = GetRootWindow(WindowFromPoint(c));
-                    var wndD = GetRootWindow(WindowFromPoint(d));
+                    var wndA = GetRootWindow(User32.WindowFromPoint(a));
+                    var wndB = GetRootWindow(User32.WindowFromPoint(b));
+                    var wndC = GetRootWindow(User32.WindowFromPoint(c));
+                    var wndD = GetRootWindow(User32.WindowFromPoint(d));
 
                     // must at least be over the owner window
                     if (ownerHandle == wndA || ownerHandle == wndB || ownerHandle == wndC || ownerHandle == wndD)
@@ -335,7 +333,8 @@ namespace LetsEncryptAcmeReg
                         frm.Resize += Frm_Resize;
                         frm.Move += Frm_Resize;
                     }
-                    ShowWindow(this.Handle, 8);
+
+                    this.ShowInactiveTopmost();
                 }
             }
             else
@@ -439,29 +438,8 @@ namespace LetsEncryptAcmeReg
 
         private IntPtr GetRootWindow(IntPtr hWnd)
         {
-            var parent = GetParent(hWnd);
+            var parent = User32.GetParent(hWnd);
             return parent == IntPtr.Zero ? hWnd : GetRootWindow(parent);
         }
-
-        [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
-        static extern IntPtr GetParent(IntPtr hWnd);
-
-        [DllImport("user32.dll")]
-        static extern IntPtr WindowFromPoint(Point p);
-
-        [DllImport("user32.dll")]
-        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-    }
-
-    internal class MessagePart
-    {
-        public Font Font { get; set; }
-        public string Text { get; set; }
-        public Brush BackBrush { get; set; }
-        public Brush TextBrush { get; set; }
-        public Pen UnderlinePen { get; set; }
-        public PointF Location { get; set; }
-        public SizeF Size { get; set; }
-        public int Line { get; set; }
     }
 }

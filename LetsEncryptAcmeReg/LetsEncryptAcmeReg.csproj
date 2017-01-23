@@ -71,6 +71,7 @@
     <Compile Include="Messages.cs" />
     <Compile Include="ObjectExtensions.cs" />
     <Compile Include="RegistrationItem.cs" />
+    <Compile Include="WinAPI\ShowWindowCommands.cs" />
     <Compile Include="ToolTipForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,6 +81,8 @@
     <Compile Include="ToolTipManager.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="WinAPI\User32.cs" />
+    <Compile Include="WinAPI\WindowStyles.cs" />
     <Compile Include="WizardBindableModel.cs" />
     <Compile Include="BindHelper.cs" />
     <Compile Include="ControlExtensions.cs" />
