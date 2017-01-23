@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace LetsEncryptAcmeReg
@@ -14,9 +12,25 @@ namespace LetsEncryptAcmeReg
         [STAThread]
         static void Main()
         {
+            if (Environment.OSVersion.Version.Major >= 6)
+                SetProcessDpiAwareness(_Process_DPI_Awareness.Process_Per_Monitor_DPI_Aware);
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new frm());
+        }
+
+        //[DllImport("user32.dll")]
+        //private static extern bool SetProcessDPIAware();
+
+        [DllImport("shcore.dll")]
+        static extern int SetProcessDpiAwareness(_Process_DPI_Awareness value);
+
+        enum _Process_DPI_Awareness
+        {
+            //Process_DPI_Unaware = 0,
+            //Process_System_DPI_Aware = 1,
+            Process_Per_Monitor_DPI_Aware = 2
         }
     }
 }
