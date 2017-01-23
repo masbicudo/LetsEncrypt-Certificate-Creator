@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Management.Automation;
+using System.Text;
 using System.Threading.Tasks;
 using ACMESharp;
 using ACMESharp.ACME;
@@ -282,7 +283,27 @@ namespace LetsEncryptAcmeReg
 
                     using (var fs = File.Open(Path.Combine(this.Model.FilePath.Value, "index.html"), FileMode.Create, FileAccess.ReadWrite))
                     using (var sw = new StreamWriter(fs))
-                        sw.Write(this.Model.Key);
+                        sw.Write(this.Model.Key.Value);
+
+                    if (this.Model.UpdateConfigYml.Value)
+                        using (var fs = File.Open(Path.Combine(this.Model.SiteRoot.Value, "_config.yml"), FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                        {
+                            string allText;
+                            using (var sr = new StreamReader(fs, Encoding.UTF8, false, 1024, true))
+                                allText = sr.ReadToEnd();
+
+                            if (!allText.Contains(@""".well-known"""))
+                                using (var sw = new StreamWriter(fs))
+                                    sw.Write(@"
+# Handling Reading
+include:      ["".well-known""]
+");
+                        }
+
+                    if (this.Model.UpdateCname.Value)
+                        using (var fs = File.Open(Path.Combine(this.Model.SiteRoot.Value, "CNAME"), FileMode.Create, FileAccess.ReadWrite))
+                        using (var sw = new StreamWriter(fs))
+                            sw.Write(this.Model.Domain.Value);
                 },
                 this.Model.AutoCommitChallenge,
                 this.CommitChallenge);
