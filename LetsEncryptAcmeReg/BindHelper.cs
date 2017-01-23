@@ -117,7 +117,7 @@ namespace LetsEncryptAcmeReg
             finder.Visit(valueExpression);
 
             var initAction = finder.InitAction;
-            if (initAction == null)
+            if (finder.BindablesFound.Count == 0)
             {
                 var expr = valueExpression.Compile();
                 initAction = () => bindable.Value = expr();
@@ -129,6 +129,34 @@ namespace LetsEncryptAcmeReg
             }
 
             return initAction;
+        }
+
+        /// <summary>
+        /// Binds an action with an expression containing references to bindable objects.
+        /// Whenever one of the bindable references changes, the action is called passing the value of the whole expression.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="valueExpression">Expression containing bindable references that is used as the value for the action.</param>
+        /// <param name="action">Action that will be called every time the expression changes.</param>
+        /// <param name="init">
+        /// If true, calls the action passing the value of the expression, if it contains data already.
+        /// If false, returns a delegate that does the same. In this case, if the delegate is not called
+        /// then the bindable references and the action will not be synchronized.
+        /// </param>
+        /// <returns>
+        /// If <see cref="init"/> is true, returns a delegate to call the action for the first time;
+        /// otherwise it returns null.
+        /// </returns>
+        public static Action BindExpression<T>(Expression<Func<T>> valueExpression, Action<T> action, bool init = false)
+        {
+            // finding all bindables in the expression
+            var finder = new BindableFinder<T>(action, valueExpression, init);
+            finder.Visit(valueExpression);
+
+            if (finder.BindablesFound.Count == 0)
+                throw new ArgumentException("The expression must contain a bindable reference to bind to.", nameof(valueExpression));
+
+            return finder.InitAction;
         }
 
         /// <summary>
