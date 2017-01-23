@@ -56,6 +56,9 @@
             this.chkAutoCommit = new System.Windows.Forms.CheckBox();
             this.chkAutoTest = new System.Windows.Forms.CheckBox();
             this.chkAutoValidate = new System.Windows.Forms.CheckBox();
+            this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
+            this.chkCname = new System.Windows.Forms.CheckBox();
+            this.chkConfigYml = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
             this.cmbCertificate = new System.Windows.Forms.ComboBox();
             this.btnCreateCertificate = new System.Windows.Forms.Button();
@@ -94,21 +97,20 @@
             this.lstRegistrations = new System.Windows.Forms.ListBox();
             this.label12 = new System.Windows.Forms.Label();
             this.lstDomains = new System.Windows.Forms.ListBox();
-            this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
-            this.chkCname = new System.Windows.Forms.CheckBox();
-            this.chkConfigYml = new System.Windows.Forms.CheckBox();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
+            this.tableLayoutPanel9.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tableLayoutPanel7.SuspendLayout();
             this.tableLayoutPanel8.SuspendLayout();
-            this.tableLayoutPanel9.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -122,7 +124,7 @@
             this.tabControl1.Margin = new System.Windows.Forms.Padding(0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(606, 423);
+            this.tabControl1.Size = new System.Drawing.Size(606, 583);
             this.tabControl1.TabIndex = 1;
             // 
             // tabPage1
@@ -131,7 +133,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(598, 397);
+            this.tabPage1.Size = new System.Drawing.Size(598, 557);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Wizard";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -146,6 +148,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 8);
             this.tableLayoutPanel1.Controls.Add(this.btnCreateChallenge, 3, 3);
             this.tableLayoutPanel1.Controls.Add(this.cmbChallenge, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.btnAddDomain, 3, 2);
@@ -164,7 +167,6 @@
             this.tableLayoutPanel1.Controls.Add(this.chkAutoSubmit, 2, 6);
             this.tableLayoutPanel1.Controls.Add(this.btnSubmit, 3, 6);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel6, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.richTextBox1, 0, 8);
             this.tableLayoutPanel1.Controls.Add(this.cmbRegistration, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.chkAutoAcceptTos, 2, 1);
             this.tableLayoutPanel1.Controls.Add(this.btnAcceptTos, 3, 1);
@@ -183,7 +185,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(592, 391);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(592, 551);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // btnCreateChallenge
@@ -563,6 +565,51 @@
             this.chkAutoValidate.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.chkAutoValidate.UseVisualStyleBackColor = true;
             // 
+            // tableLayoutPanel9
+            // 
+            this.tableLayoutPanel9.AutoSize = true;
+            this.tableLayoutPanel9.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.tableLayoutPanel9.ColumnCount = 2;
+            this.tableLayoutPanel2.SetColumnSpan(this.tableLayoutPanel9, 3);
+            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel9.Controls.Add(this.chkCname, 0, 0);
+            this.tableLayoutPanel9.Controls.Add(this.chkConfigYml, 1, 0);
+            this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel9.Location = new System.Drawing.Point(0, 69);
+            this.tableLayoutPanel9.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanel9.Name = "tableLayoutPanel9";
+            this.tableLayoutPanel9.RowCount = 1;
+            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel9.Size = new System.Drawing.Size(413, 23);
+            this.tableLayoutPanel9.TabIndex = 18;
+            // 
+            // chkCname
+            // 
+            this.chkCname.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.chkCname.AutoSize = true;
+            this.chkCname.Checked = true;
+            this.chkCname.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkCname.Location = new System.Drawing.Point(101, 3);
+            this.chkCname.Name = "chkCname";
+            this.chkCname.Size = new System.Drawing.Size(102, 17);
+            this.chkCname.TabIndex = 0;
+            this.chkCname.Text = "Update CNAME";
+            this.chkCname.UseVisualStyleBackColor = true;
+            // 
+            // chkConfigYml
+            // 
+            this.chkConfigYml.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.chkConfigYml.AutoSize = true;
+            this.chkConfigYml.Checked = true;
+            this.chkConfigYml.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkConfigYml.Location = new System.Drawing.Point(209, 3);
+            this.chkConfigYml.Name = "chkConfigYml";
+            this.chkConfigYml.Size = new System.Drawing.Size(117, 17);
+            this.chkConfigYml.TabIndex = 1;
+            this.chkConfigYml.Text = "Update _config.yml";
+            this.chkConfigYml.UseVisualStyleBackColor = true;
+            // 
             // label7
             // 
             this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
@@ -882,15 +929,13 @@
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.richTextBox1.BackColor = System.Drawing.Color.White;
             this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.tableLayoutPanel1.SetColumnSpan(this.richTextBox1, 4);
-            this.richTextBox1.Location = new System.Drawing.Point(3, 362);
+            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBox1.Location = new System.Drawing.Point(0, 0);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(586, 26);
+            this.richTextBox1.Size = new System.Drawing.Size(584, 184);
             this.richTextBox1.TabIndex = 14;
             this.richTextBox1.Text = "";
             // 
@@ -1112,61 +1157,29 @@
             this.lstDomains.TabIndex = 0;
             this.lstDomains.SelectedIndexChanged += new System.EventHandler(this.lstDomains_SelectedIndexChanged);
             // 
-            // tableLayoutPanel9
+            // panel1
             // 
-            this.tableLayoutPanel9.AutoSize = true;
-            this.tableLayoutPanel9.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanel9.ColumnCount = 2;
-            this.tableLayoutPanel2.SetColumnSpan(this.tableLayoutPanel9, 3);
-            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel9.Controls.Add(this.chkCname, 0, 0);
-            this.tableLayoutPanel9.Controls.Add(this.chkConfigYml, 1, 0);
-            this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel9.Location = new System.Drawing.Point(0, 69);
-            this.tableLayoutPanel9.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel9.Name = "tableLayoutPanel9";
-            this.tableLayoutPanel9.RowCount = 1;
-            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel9.Size = new System.Drawing.Size(413, 23);
-            this.tableLayoutPanel9.TabIndex = 18;
-            // 
-            // chkCname
-            // 
-            this.chkCname.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.chkCname.AutoSize = true;
-            this.chkCname.Checked = true;
-            this.chkCname.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkCname.Location = new System.Drawing.Point(101, 3);
-            this.chkCname.Name = "chkCname";
-            this.chkCname.Size = new System.Drawing.Size(102, 17);
-            this.chkCname.TabIndex = 0;
-            this.chkCname.Text = "Update CNAME";
-            this.chkCname.UseVisualStyleBackColor = true;
-            // 
-            // chkConfigYml
-            // 
-            this.chkConfigYml.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.chkConfigYml.AutoSize = true;
-            this.chkConfigYml.Checked = true;
-            this.chkConfigYml.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkConfigYml.Location = new System.Drawing.Point(209, 3);
-            this.chkConfigYml.Name = "chkConfigYml";
-            this.chkConfigYml.Size = new System.Drawing.Size(117, 17);
-            this.chkConfigYml.TabIndex = 1;
-            this.chkConfigYml.Text = "Update _config.yml";
-            this.chkConfigYml.UseVisualStyleBackColor = true;
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tableLayoutPanel1.SetColumnSpan(this.panel1, 4);
+            this.panel1.Controls.Add(this.richTextBox1);
+            this.panel1.Location = new System.Drawing.Point(3, 362);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(586, 186);
+            this.panel1.TabIndex = 2;
             // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(624, 441);
+            this.ClientSize = new System.Drawing.Size(624, 601);
             this.Controls.Add(this.tabControl1);
             this.DoubleBuffered = true;
             this.MinimumSize = new System.Drawing.Size(640, 480);
             this.Name = "Form2";
-            this.Text = "LetsEncrypt Certification Wizard";
+            this.Text = "LetsEncrypt.com Certification Wizard";
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
@@ -1175,6 +1188,8 @@
             this.tableLayoutPanel2.PerformLayout();
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
+            this.tableLayoutPanel9.ResumeLayout(false);
+            this.tableLayoutPanel9.PerformLayout();
             this.tableLayoutPanel4.ResumeLayout(false);
             this.tableLayoutPanel4.PerformLayout();
             this.tableLayoutPanel5.ResumeLayout(false);
@@ -1186,8 +1201,7 @@
             this.tableLayoutPanel7.PerformLayout();
             this.tableLayoutPanel8.ResumeLayout(false);
             this.tableLayoutPanel8.PerformLayout();
-            this.tableLayoutPanel9.ResumeLayout(false);
-            this.tableLayoutPanel9.PerformLayout();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1263,5 +1277,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel9;
         private System.Windows.Forms.CheckBox chkCname;
         private System.Windows.Forms.CheckBox chkConfigYml;
+        private System.Windows.Forms.Panel panel1;
     }
 }
