@@ -1,7 +1,6 @@
 ﻿using ACMESharp.Vault.Model;
 using System;
 using System.Drawing;
-using System.IO;
 using System.Windows.Forms;
 
 namespace LetsEncryptAcmeReg
@@ -116,6 +115,7 @@ namespace LetsEncryptAcmeReg
             mo.CanAddDomain.Changed += v => this.btnAddDomain.Enabled = v;
             mo.CanCreateChallenge.Changed += v => this.btnCreateChallenge.Enabled = v;
             mo.CanSaveChallenge.Changed += v => this.btnSaveChallenge.Enabled = v;
+            mo.CanCommitChallenge.Changed += v => this.btnCommitChallenge.Enabled = v;
 
             mo.Files.Changed += this.UpdateFiles;
 

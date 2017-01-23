@@ -75,11 +75,15 @@ namespace LetsEncryptAcmeReg
             init += mo.CanAddDomain.BindExpression(() => mo.IsDomainValid.Value && !mo.IsDomainCreated.Value);
             init += mo.CanCreateChallenge.BindExpression(() => mo.IsChallengeValid.Value);
             init += mo.CanSaveChallenge.BindExpression(() => mo.ChallengeHasFile.Value);
+            init += mo.CanCommitChallenge.BindExpression(() => this.CanCommitChallenge_Value(this.Model.SiteRoot.Value));
 
             init += mo.Files.BindExpression(() => this.Files_Value(mo.SiteRoot.Value, mo.FileRelativePath.Value, mo.UpdateCname.Value, mo.UpdateConfigYml.Value));
 
             return init;
         }
+
+        private bool CanCommitChallenge_Value(string siteRoot)
+            => CatchError(() => Repository.IsValid(siteRoot));
 
         private string FilePath_Value(bool hasFile, string siteRoot, string indexRelativePath)
             => CatchError(() => hasFile ? Path.Combine(siteRoot, indexRelativePath) : "");
@@ -318,24 +322,32 @@ include:      ["".well-known""]
                 this.Model.AutoCommitChallengeTimer,
                 () =>
                 {
-                    try
+                    using (var repo = new Repository(this.Model.SiteRoot.Value))
                     {
-                        using (var repo = new Repository(this.Model.FilePath.Value))
-                        {
-                            // Stage the file
-                            repo.Index.Add(Path.Combine(this.Model.FilePath.Value, "index.html"));
+                        var username = "masbicudo";
+                        var password = "";
+                        var email = "masbicudo@gmail.com";
 
-                            // Create the committer's signature and commit
-                            Signature author = new Signature("James", "@jugglingnutcase", DateTime.Now);
-                            Signature committer = author;
+                        // Stage the file
+                        repo.Index.Add(Path.Combine(this.Model.FilePath.Value, "index.html"));
 
-                            // Commit to the repository
-                            Commit commit = repo.Commit("Here's a commit i made!", author, committer);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("Exception:RepoActions:StageChanges " + ex.Message);
+                        // Create the committer's signature and commit
+                        Signature author = new Signature("Let's Encrypt Wizard", email, DateTime.Now);
+                        Signature committer = author;
+
+                        // Commit to the repository
+                        Commit commit = repo.Commit(
+                            "Let's Encrypt files!",
+                            author,
+                            committer);
+
+                        // Push to origin
+                        var remote = repo.Network.Remotes["origin"];
+                        var options = new PushOptions();
+                        var credentials = new UsernamePasswordCredentials { Username = username, Password = password };
+                        options.CredentialsProvider = (url, usernameFromUrl, types) => credentials;
+                        var pushRefSpec = @"refs/heads/master";
+                        repo.Network.Push(remote, pushRefSpec, options);
                     }
                 },
                 this.Model.AutoTestChallenge,
