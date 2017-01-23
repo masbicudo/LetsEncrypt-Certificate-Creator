@@ -115,7 +115,20 @@ namespace LetsEncryptAcmeReg
             // finding all bindables in the expression
             var finder = new BindableFinder<T>(bindable, valueExpression, init);
             finder.Visit(valueExpression);
-            return finder.InitAction;
+
+            var initAction = finder.InitAction;
+            if (initAction == null)
+            {
+                var expr = valueExpression.Compile();
+                initAction = () => bindable.Value = expr();
+                if (init)
+                {
+                    initAction();
+                    initAction = null;
+                }
+            }
+
+            return initAction;
         }
 
         /// <summary>
