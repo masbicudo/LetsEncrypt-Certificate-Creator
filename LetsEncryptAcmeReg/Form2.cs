@@ -24,6 +24,10 @@ namespace LetsEncryptAcmeReg
                 .AutoPopup("Updates or creates a ` _config.yml ` file,\r\nwith instructions to _**not ignore**_ the\r\npath ` .well-known\\ `.", useMarkdown: true);
             tt.BorderColor = Color.DodgerBlue;
 
+            var tt2 = this.tooltip.ToolTipFor(this.chkCname)
+                .AutoPopup($"Updates or creates a ` CNAME ` file,\r\nwith the name of the ***selected domain***.", useMarkdown: true);
+            tt2.BorderColor = Color.DodgerBlue;
+
             this.controller = new Controller(this.acme)
             {
                 Error = this.Error,
