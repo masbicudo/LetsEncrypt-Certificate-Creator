@@ -65,8 +65,10 @@
     <Compile Include="Acme.cs" />
     <Compile Include="Bindable.cs" />
     <Compile Include="BindableFinder.cs" />
+    <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="ManagerBindableModel.cs" />
     <Compile Include="Messages.cs" />
+    <Compile Include="ObjectExtensions.cs" />
     <Compile Include="RegistrationItem.cs" />
     <Compile Include="ToolTipForm.cs">
       <SubType>Form</SubType>
