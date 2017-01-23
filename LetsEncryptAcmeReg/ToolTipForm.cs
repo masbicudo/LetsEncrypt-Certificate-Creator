@@ -420,21 +420,36 @@ namespace LetsEncryptAcmeReg
                 }
         }
 
-        protected override CreateParams CreateParams
+        //protected override CreateParams CreateParams
+        //{
+        //    get
+        //    {
+        //        CreateParams baseParams = base.CreateParams;
+        //        var exstyle = (WindowStyles)baseParams.ExStyle;
+        //        exstyle |= WindowStyles.WS_EX_NOACTIVATE | WindowStyles.WS_EX_TOOLWINDOW | WindowStyles.WS_EX_PALETTEWINDOW;
+        //        baseParams.ExStyle = (int)exstyle;
+        //        return baseParams;
+        //    }
+        //}
+
+        //protected override bool ShowWithoutActivation => true;
+
+        void ShowInactiveTopmost()
         {
-            get
-            {
-                CreateParams baseParams = base.CreateParams;
+            const int HWND_TOPMOST = -1;
+            const uint SWP_NOACTIVATE = 0x0010;
 
-                const int WS_EX_NOACTIVATE = 0x08000000;
-                const int WS_EX_TOOLWINDOW = 0x00000080;
-                baseParams.ExStyle |= WS_EX_NOACTIVATE | WS_EX_TOOLWINDOW;
+            var active = Form.ActiveForm;
 
-                return baseParams;
-            }
+            var frm = this;
+            User32.ShowWindow(frm.Handle, ShowWindowCommands.ShowNoActivate);
+            User32.SetWindowPos(frm.Handle.ToInt32(), HWND_TOPMOST,
+                frm.Left, frm.Top, frm.Width, frm.Height,
+                SWP_NOACTIVATE);
+
+            if (active != null)
+                this.control.FindForm()?.Activate();
         }
-
-        protected override bool ShowWithoutActivation => true;
 
         private IntPtr GetRootWindow(IntPtr hWnd)
         {

@@ -68,6 +68,7 @@
     <Compile Include="BindableFinder.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="ManagerBindableModel.cs" />
+    <Compile Include="MessagePart.cs" />
     <Compile Include="Messages.cs" />
     <Compile Include="ObjectExtensions.cs" />
     <Compile Include="RegistrationItem.cs" />
