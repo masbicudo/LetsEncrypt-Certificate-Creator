@@ -116,6 +116,8 @@ namespace LetsEncryptAcmeReg
             mo.CanCreateChallenge.Changed += v => this.btnCreateChallenge.Enabled = v;
             mo.CanSaveChallenge.Changed += v => this.btnSaveChallenge.Enabled = v;
             mo.CanCommitChallenge.Changed += v => this.btnCommitChallenge.Enabled = v;
+            mo.CanValidateChallenge.Changed += v => this.btnValidate.Enabled = v;
+            mo.CanTestChallenge.Changed += v => this.btnTestChallenge.Enabled = v;
 
             mo.Files.Changed += this.UpdateFiles;
 

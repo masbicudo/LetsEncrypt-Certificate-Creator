@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Management.Automation;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using ACMESharp;
@@ -76,8 +77,12 @@ namespace LetsEncryptAcmeReg
             init += mo.CanCreateChallenge.BindExpression(() => mo.IsChallengeValid.Value);
             init += mo.CanSaveChallenge.BindExpression(() => mo.ChallengeHasFile.Value);
             init += mo.CanCommitChallenge.BindExpression(() => this.CanCommitChallenge_Value(this.Model.SiteRoot.Value));
+            init += mo.CanTestChallenge.BindExpression(() => mo.IsTargetValid.Value && mo.IsKeyValid.Value);
 
             init += mo.Files.BindExpression(() => this.Files_Value(mo.SiteRoot.Value, mo.FileRelativePath.Value, mo.UpdateCname.Value, mo.UpdateConfigYml.Value));
+
+            // when the key changes, the domain must be tested again
+            mo.Key.Changed += s => mo.CanValidateChallenge.Value = false;
 
             return init;
         }
@@ -363,7 +368,42 @@ include:      ["".well-known""]
                 this.Model.AutoTestChallengeTimer,
                 () =>
                 {
-                    throw new NotImplementedException();
+                    var wrGetUrl = WebRequest.Create($"{(this.Model.CurrentChallenge.Value?.Challenge as HttpChallenge)?.FileUrl}/index.html") as HttpWebRequest;
+
+                    if (wrGetUrl == null)
+                        throw new Exception("Could not create web request object.");
+
+                    //WebProxy myProxy = new WebProxy("myproxy", 80);
+                    //myProxy.BypassProxyOnLocal = true;
+                    //wrGETURL.Proxy = myProxy;
+                    wrGetUrl.Proxy = WebRequest.GetSystemWebProxy();
+
+                    HttpWebResponse response;
+                    try
+                    {
+                        response = wrGetUrl.GetResponse() as HttpWebResponse;
+                    }
+                    catch (WebException ex)
+                    {
+                        response = ex.Response as HttpWebResponse;
+                        this.Warn?.Invoke(ex.Message);
+                    }
+
+                    if (response?.StatusCode == HttpStatusCode.OK)
+                        using (Stream objStream = response.GetResponseStream())
+                            if (objStream != null)
+                            {
+                                var objReader = new StreamReader(objStream);
+                                var str = objReader.ReadToEnd();
+
+                                if (str == this.Model.Key.Value)
+                                {
+                                    this.Model.CanValidateChallenge.Value = true;
+                                    return;
+                                }
+                            }
+
+                    throw new Exception("Waiting for file to be uploaded.");
                 },
                 this.Model.AutoValidateChallenge,
                 this.Validate);
