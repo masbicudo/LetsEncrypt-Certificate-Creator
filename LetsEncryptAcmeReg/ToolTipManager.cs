@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace LetsEncryptAcmeReg
@@ -21,11 +22,22 @@ namespace LetsEncryptAcmeReg
                 ToolTipForm form;
                 if (!dic2.TryGetValue(key ?? control, out form))
                 {
-                    form = new ToolTipForm(control);
+                    form = new ToolTipForm(this, control);
                     dic2.Add(key ?? control, form);
                 }
 
                 return form;
+            }
+        }
+
+        public ToolTipForm[] GetToolTipsFor(Control control)
+        {
+            lock (dic)
+            {
+                Dictionary<object, ToolTipForm> dic2;
+                this.dic.TryGetValue(control, out dic2);
+
+                return dic2?.Values.ToArray();
             }
         }
     }

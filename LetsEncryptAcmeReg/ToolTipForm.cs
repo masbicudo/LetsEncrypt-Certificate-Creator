@@ -10,6 +10,7 @@ namespace LetsEncryptAcmeReg
 {
     public partial class ToolTipForm : Form
     {
+        private readonly ToolTipManager manager;
         private readonly Control control;
         private string currentMessage;
         private MessagePart[] messageItems;
@@ -21,8 +22,9 @@ namespace LetsEncryptAcmeReg
         private bool useMarkdown;
         private Point? fixedLocation;
 
-        public ToolTipForm(Control control)
+        public ToolTipForm(ToolTipManager manager, Control control)
         {
+            this.manager = manager;
             this.control = control;
             InitializeComponent();
         }
@@ -31,6 +33,7 @@ namespace LetsEncryptAcmeReg
         public new int Margin { get; set; } = -1;
         public new int Padding { get; set; } = 6;
         public Color BorderColor { get; set; } = Color.LightSlateGray;
+        public int Priority { get; set; }
 
         /// <summary>
         /// Indicates that the tool tip should show up automatically when the mouse is over the designated control.
@@ -267,9 +270,16 @@ namespace LetsEncryptAcmeReg
 
             var ownerHandle = GetRootWindow(this.control.Handle);
 
-            int max = 0;
+            int max = int.MinValue;
             Rectangle choice = Rectangle.Empty;
             if (size != Size.Empty)
+            {
+                var others = this.manager.GetToolTipsFor(this.control)
+                    .Where(tt => tt != this)
+                    .Where(tt => tt.Visible)
+                    .Where(tt => tt.Priority < this.Priority)
+                    .ToArray();
+
                 foreach (var r2 in rects)
                 {
                     var r = this.fixedLocation == null ? r2 : new Rectangle(this.fixedLocation.Value + (Size)r2.Location, r2.Size);
@@ -286,6 +296,7 @@ namespace LetsEncryptAcmeReg
                     var rect = new Rectangle(a, new Size(d.X - a.X, d.Y - a.Y));
 
                     var val = 0;
+
                     val += (sa.Bounds.Contains(a) ? 4 : 0)
                          + (sb.Bounds.Contains(b) ? 4 : 0)
                          + (sc.Bounds.Contains(c) ? 4 : 0)
@@ -295,19 +306,31 @@ namespace LetsEncryptAcmeReg
                          + (sa.DeviceName == sc.DeviceName ? 1 : 0)
                          + (sa.DeviceName == sd.DeviceName ? 1 : 0);
 
+                    // counting the number of other tooltip forms under the current region
+                    var overlapArea = others.Sum(tt =>
+                    {
+                        var i = rect;
+                        i.Intersect(tt.Bounds);
+                        return i.Width * i.Height;
+                    });
+                    val -= overlapArea >> 8;
+
                     var wndA = GetRootWindow(User32.WindowFromPoint(a));
                     var wndB = GetRootWindow(User32.WindowFromPoint(b));
                     var wndC = GetRootWindow(User32.WindowFromPoint(c));
                     var wndD = GetRootWindow(User32.WindowFromPoint(d));
 
-                    // must at least be over the owner window
-                    if (ownerHandle == wndA || ownerHandle == wndB || ownerHandle == wndC || ownerHandle == wndD)
-                        if (val > max && !rect.Contains(Cursor.Position))
-                        {
-                            max = val;
-                            choice = rect;
-                        }
+                    if (val > max)
+                        // must at least be over the owner window
+                        if (ownerHandle == wndA || ownerHandle == wndB || ownerHandle == wndC || ownerHandle == wndD)
+                            // avoid mouse cursor
+                            if (!rect.Contains(Cursor.Position))
+                            {
+                                max = val;
+                                choice = rect;
+                            }
                 }
+            }
 
             this.canShow = max > 0 && choice != Rectangle.Empty;
             if (this.canShow)
@@ -348,6 +371,16 @@ namespace LetsEncryptAcmeReg
                     }
 
                     this.ShowInactiveTopmost();
+
+                    // moving other tooltips out of the way
+                    var othersToMove = this.manager.GetToolTipsFor(this.control)
+                        .Where(tt => tt != this)
+                        .Where(tt => tt.Visible)
+                        .Where(tt => tt.Priority > this.Priority)
+                        .ToArray();
+
+                    foreach (var toolTipForm in othersToMove)
+                        toolTipForm.UpdateFormLocation();
                 }
             }
             else
