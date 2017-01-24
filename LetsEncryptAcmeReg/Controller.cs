@@ -148,7 +148,7 @@ namespace LetsEncryptAcmeReg
             if (!enabled.Value)
                 return;
 
-            for (retry.Value = 1; retry.Value <= MaxRetries; retry.Value++)
+            for (retry.Value = 0; ;)
             {
                 try
                 {
@@ -162,6 +162,11 @@ namespace LetsEncryptAcmeReg
                     timer.Value = 30000 - 1; // an exception starts a timer to wait until the next automatic retry
                 }
 
+                // stop when the maximum number of retries is reached
+                if (retry.Value >= MaxRetries)
+                    break;
+                retry.Value++;
+
                 while (timer.Value.HasValue && timer.Value.Value > 0)
                 {
                     if (!isAuto.Value)
@@ -170,14 +175,25 @@ namespace LetsEncryptAcmeReg
                         break;
                     }
 
+                    // Using a stopwatch to measure the elapsed time more perfectly.
+                    // If too much time passes, it indicates that the program was suspended:
+                    //  - debugging the software
+                    //  - computer sleeping
+                    // in this case the stopwatch will indicate a very large delay,
+                    // but we will not use the default amount of time instead.
+                    var start = Stopwatch.GetTimestamp();
                     var waitTime = Math.Min(50, timer.Value.Value);
                     await Task.Delay(waitTime);
-                    timer.Value -= waitTime;
+                    var total = (int)((double)(Stopwatch.GetTimestamp() - start) / Stopwatch.Frequency * 1000);
+                    var dec = total < waitTime * 2 ? total : waitTime;
+                    timer.Value -= dec;
                 }
 
                 if (!isAuto.Value || timer.Value == null)
                     break;
             }
+
+            retry.Value = null; // indicates that there is no more retries
 
             if (isNextAuto?.Value == true && next != null)
             {
