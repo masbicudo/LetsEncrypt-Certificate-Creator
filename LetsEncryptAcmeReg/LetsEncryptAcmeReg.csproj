@@ -62,6 +62,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BindableChanging.cs" />
+    <Compile Include="BindableOptions.cs" />
     <Compile Include="CmdLetExtensions.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="DynamicExtensions.cs" />

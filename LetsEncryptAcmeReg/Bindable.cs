@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 
 namespace LetsEncryptAcmeReg
@@ -9,30 +10,52 @@ namespace LetsEncryptAcmeReg
     {
         private static int lastId;
 
+        const int FALSE = 0;
+        const int TRUE = -1;
+
         private readonly int id;
+        private readonly BindableOptions flags;
+        private sbyte isChanging;
+        private sbyte isInit;
+        private sbyte isAsync;
         private readonly string name;
-        private bool isChanging;
-        private bool isInit;
+        private readonly EqualityComparer<T> equalityComparer;
+
         private T value;
         private Func<T> getter;
-        private Action<T> changed;
+        private BindableChanging<T> changingHandler;
+        private Action<T> changedHandler;
+        private Func<T, Task> changedAsyncHandler;
 
-        public Bindable()
+        /// <summary>
+        /// Gets the number of times this bindable object has been changed.
+        /// </summary>
+        public int Version { get; private set; }
+
+        public Bindable(string name = "", EqualityComparer<T> equalityComparer = null, BindableOptions flags = 0)
         {
-            this.name = "";
             this.id = Interlocked.Increment(ref lastId);
+            this.flags = flags;
+            this.name = name ?? "";
+            this.equalityComparer = equalityComparer;
         }
 
-        public Bindable(string name)
+        /// <summary>
+        /// Occurs when the value of this bindable object is changed.
+        /// </summary>
+        public event BindableChanging<T> Changing
         {
-            this.name = name;
-            this.id = Interlocked.Increment(ref lastId);
+            add { this.changingHandler += value; }
+            remove { this.changingHandler -= value; }
         }
 
+        /// <summary>
+        /// Occurs when the value of this bindable object is changed.
+        /// </summary>
         public event Action<T> Changed
         {
-            add { this.changed += value; }
-            remove { this.changed -= value; }
+            add { this.changedHandler += value; }
+            remove { this.changedHandler -= value; }
         }
 
         /// <summary>
@@ -44,28 +67,50 @@ namespace LetsEncryptAcmeReg
             get { return value; }
             set
             {
-                if (!this.isChanging)
+                //if (isAsync != FALSE)
+                //    throw new InvalidOperationException($"To set an async bindable object use the `{nameof(this.SetValueAsync)}` method.");
+
+                if ((flags & BindableOptions.EqualMeansUnchanged) != 0)
+                    if ((this.equalityComparer ?? EqualityComparer<T>.Default).Equals(this.value, value))
+                        return;
+
+                if (this.isChanging == FALSE)
                 {
-                    this.value = value;
-                    this.isInit = true;
-                    this.isChanging = true;
                     try
                     {
-                        if (this.changed != null)
-                            foreach (Action<T> @delegate in this.changed.GetInvocationList())
-                                @delegate(value);
+                        this.isChanging = TRUE;
+                        if (this.changingHandler != null)
+                        {
+                            bool cancel = false;
+                            this.changingHandler.Invoke(this, this.value, value, ref cancel);
+                            if (cancel)
+                                return;
+                        }
+
+                        this.value = value;
+                        this.Version++;
+                        this.isInit = TRUE;
+
+                        this.changedHandler?.Invoke(value);
+                        //if (this.changed != null)
+                        //    foreach (Action<T> @delegate in this.changed.GetInvocationList())
+                        //        @delegate(value);
                     }
                     finally
                     {
-                        this.isChanging = false;
+                        this.isChanging = FALSE;
                     }
                 }
-                else if (!EqualityComparer<T>.Default.Equals(this.value, value))
+                else if ((flags & BindableOptions.AllowRecursiveSets) == 0)
                 {
                     throw new InvalidOperationException("Recursively defining the value of a bindable object to different values is not allowed.");
                 }
             }
         }
+
+        //public Task SetValueAsync(T value)
+        //{
+        //}
 
         /// <summary>
         /// Update the value of the bindable object with values from the registered external sources.
@@ -192,7 +237,7 @@ namespace LetsEncryptAcmeReg
 
         private void PostInitialize([CanBeNull] Func<T> getter, [CanBeNull] Action<T> setter)
         {
-            if (this.isInit) setter?.Invoke(this.Value);
+            if (this.isInit != FALSE) setter?.Invoke(this.Value);
             else if (getter != null) this.Value = getter();
         }
 
