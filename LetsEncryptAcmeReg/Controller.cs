@@ -160,7 +160,10 @@ namespace LetsEncryptAcmeReg
             if (!enabled.Value)
                 return;
 
-            for (retry.Value = 0; ;)
+            if (retry.Value == null)
+                retry.Value = MaxRetries;
+
+            while (retry.Value != null)
             {
                 try
                 {
@@ -171,15 +174,16 @@ namespace LetsEncryptAcmeReg
                 catch (Exception ex)
                 {
                     this.Error(ex);
-                    timer.Value = 30000 - 1; // an exception starts a timer to wait until the next automatic retry
+                    timer.Value = 3000 - 1; // an exception starts a timer to wait until the next automatic retry
                 }
 
-                // stop when the maximum number of retries is reached
-                if (retry.Value >= MaxRetries)
+                // stop when there is no more remaining retries
+                if (retry.Value == 0)
                     break;
-                retry.Value++;
+                int retryCount = (int)retry.Value;
+                retry.Value = Interlocked.Decrement(ref retryCount);
 
-                while (timer.Value.HasValue && timer.Value.Value > 0)
+                while (timer.Value.HasValue && timer.Value > 0)
                 {
                     if (!isAuto.Value)
                     {
