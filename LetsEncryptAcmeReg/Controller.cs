@@ -424,7 +424,12 @@ include:      ["".well-known""]
                 this.Model.AutoValidateChallengeTimer,
                 () =>
                 {
-                    throw new NotImplementedException();
+                    var idref = this.Model.CurrentAuthState.Value.Identifier;
+                    var state = new SubmitChallenge { IdentifierRef = idref, ChallengeType = "http-01" }.GetValue<AuthorizationState>();
+                    this.Model.CurrentAuthState.Value = state;
+
+                    // number of times to retry updating the status
+                    this.Model.AutoUpdateStatusRetry.Value = 5;
                 },
                 this.Model.AutoCreateCertificate,
                 this.CreateCertificate);
