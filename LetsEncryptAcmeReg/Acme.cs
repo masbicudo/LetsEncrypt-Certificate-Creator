@@ -227,7 +227,7 @@ namespace LetsEncryptAcmeReg
                     return new AuthorizationState[0];
 
                 if (iis.Any())
-                    throw new InvalidOperationException("Cannot create identifier. The alias or domain is already used by another identifier.");
+                    throw new InvalidOperationException(Messages.CannotCreateIdentifierDomainAlreadyUsed);
 
                 // if alias was not provided, get a valid one that is not used alrady
                 var count = v.Identifiers.Values.Count();

@@ -18,18 +18,16 @@ namespace LetsEncryptAcmeReg
         {
             InitializeComponent();
 
+            // Tool tips
+            this.ToolTipFor(this.chkConfigYml, Messages.ToolTipForConfigYml);
+            this.ToolTipFor(this.chkCname, Messages.ToolTipForCname);
+            this.ToolTipFor(this.btnUpdateStatus, Messages.ToolTipForUpdateStatus);
+
             this.txtSiteRoot.MouseMove += this.txtSiteRoot_MouseMove;
             this.txtSiteRoot.MouseEnter += this.txtSiteRoot_MouseEnter;
             this.txtSiteRoot.MouseLeave += this.txtSiteRoot_MouseLeave;
 
-            this.ToolTipFor(
-                this.chkConfigYml,
-                "Updates or creates a ` _config.yml ` file,\r\nwith instructions to _**not ignore**_ the\r\npath ` .well-known\\ `.");
-
-            this.ToolTipFor(
-                this.chkCname,
-                $"Updates or creates a ` CNAME ` file,\r\nwith the name of the ***selected domain***.");
-
+            // Controller
             this.controller = new Controller(this.acme)
             {
                 Error = this.Error,
@@ -38,6 +36,7 @@ namespace LetsEncryptAcmeReg
                 Success = this.Success,
             };
 
+            // Model bindings
             var mo = this.controller.Model;
             var ma = this.controller.ManagerModel;
 
