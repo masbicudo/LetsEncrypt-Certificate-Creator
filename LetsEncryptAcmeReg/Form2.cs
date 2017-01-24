@@ -182,8 +182,10 @@ namespace LetsEncryptAcmeReg
             {
                 if ((string)this.tooltip.Tag != msg)
                 {
-                    var tt = this.tooltip.ToolTipFor(ctl, "Action").ShowMessage(msg, useMarkdown: true);
+                    var tt = this.tooltip.ToolTipFor(ctl, "Action");
                     tt.BorderColor = Color.Gold;
+                    tt.Priority = -1; // less = more priority
+                    tt.ShowMessage(msg, useMarkdown: true);
                 }
                 this.tooltip.Tag = msg;
             }
