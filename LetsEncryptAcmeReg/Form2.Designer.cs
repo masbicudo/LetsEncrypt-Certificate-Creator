@@ -98,6 +98,8 @@
             this.label12 = new System.Windows.Forms.Label();
             this.lstDomains = new System.Windows.Forms.ListBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.chkAutoUpdateStatus = new System.Windows.Forms.CheckBox();
+            this.btnUpdateStatus = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -172,6 +174,8 @@
             this.tableLayoutPanel1.Controls.Add(this.btnAcceptTos, 3, 1);
             this.tableLayoutPanel1.Controls.Add(this.btnRegister, 3, 0);
             this.tableLayoutPanel1.Controls.Add(this.chkAutoRegister, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.chkAutoUpdateStatus, 2, 4);
+            this.tableLayoutPanel1.Controls.Add(this.btnUpdateStatus, 3, 4);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -1169,6 +1173,36 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(586, 186);
             this.panel1.TabIndex = 2;
+            // chkAutoUpdateStatus
+            // 
+            this.chkAutoUpdateStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkAutoUpdateStatus.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkAutoUpdateStatus.AutoSize = true;
+            this.chkAutoUpdateStatus.Checked = true;
+            this.chkAutoUpdateStatus.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkAutoUpdateStatus.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.chkAutoUpdateStatus.Location = new System.Drawing.Point(510, 147);
+            this.chkAutoUpdateStatus.Margin = new System.Windows.Forms.Padding(1);
+            this.chkAutoUpdateStatus.Name = "chkAutoUpdateStatus";
+            this.chkAutoUpdateStatus.Size = new System.Drawing.Size(23, 23);
+            this.chkAutoUpdateStatus.TabIndex = 11;
+            this.chkAutoUpdateStatus.Text = ">";
+            this.chkAutoUpdateStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.chkAutoUpdateStatus.UseVisualStyleBackColor = true;
+            // 
+            // btnUpdateStatus
+            // 
+            this.btnUpdateStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnUpdateStatus.AutoSize = true;
+            this.btnUpdateStatus.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnUpdateStatus.Location = new System.Drawing.Point(535, 147);
+            this.btnUpdateStatus.Margin = new System.Windows.Forms.Padding(1);
+            this.btnUpdateStatus.Name = "btnUpdateStatus";
+            this.btnUpdateStatus.Size = new System.Drawing.Size(56, 23);
+            this.btnUpdateStatus.TabIndex = 10;
+            this.btnUpdateStatus.Text = "Update";
+            this.btnUpdateStatus.UseVisualStyleBackColor = true;
+            this.btnUpdateStatus.Click += new System.EventHandler(this.btnUpdateStatus_Click);
             // 
             // Form2
             // 
@@ -1278,5 +1312,7 @@
         private System.Windows.Forms.CheckBox chkCname;
         private System.Windows.Forms.CheckBox chkConfigYml;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.CheckBox chkAutoUpdateStatus;
+        private System.Windows.Forms.Button btnUpdateStatus;
     }
 }

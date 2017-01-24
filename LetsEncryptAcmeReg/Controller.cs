@@ -6,6 +6,7 @@ using System.Linq;
 using System.Management.Automation;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using ACMESharp;
 using ACMESharp.ACME;
@@ -88,8 +89,6 @@ namespace LetsEncryptAcmeReg
             // when the key changes, the domain must be tested again
             mo.Key.Changed += s => mo.CanValidateChallenge.Value = false;
 
-            mo.AutoUpdateStatusRetry.Changed += this.AutoUpdateStatusRetry_Changed;
-
             return init;
         }
 
@@ -123,7 +122,7 @@ namespace LetsEncryptAcmeReg
         private AuthorizeChallenge CurrentChallenge_Value(AuthorizationState authState, string challengeType)
             => CatchError(() => authState?.Challenges?.SingleOrDefault(x => x.Type == challengeType));
 
-        private T CatchError<T>(Func<T> func)
+        public T CatchError<T>(Func<T> func)
         {
             try
             {
@@ -134,6 +133,18 @@ namespace LetsEncryptAcmeReg
                 this.Error(ex);
             }
             return default(T);
+        }
+
+        public void CatchError(Action action)
+        {
+            try
+            {
+                action();
+            }
+            catch (Exception ex)
+            {
+                this.Error(ex);
+            }
         }
 
         public async Task TosLink()
@@ -447,6 +458,18 @@ include:      ["".well-known""]
                     // number of times to retry updating the status
                     this.Model.AutoUpdateStatusRetry.Value = 5;
                 },
+                this.Model.AutoUpdateStatus,
+                this.UpdateStatus);
+        }
+
+        public async Task UpdateStatus()
+        {
+            await AutoCaller(
+                this.Model.CanUpdateStatus,
+                this.Model.AutoUpdateStatus,
+                this.Model.AutoUpdateStatusRetry,
+                this.Model.AutoUpdateStatusTimer,
+                this.UpdateStatusOnce,
                 this.Model.AutoCreateCertificate,
                 this.CreateCertificate);
         }
@@ -533,49 +556,14 @@ include:      ["".well-known""]
         /// Updates the authorization status to know whether the submission succeded or not.
         /// Though this is intended for after submission, it can be called before without side effects.
         /// </summary>
-        private void UpdateAuthStatus()
+        public void UpdateStatusOnce()
         {
             if (this.Model.CurrentAuthState.Value == null)
                 return;
 
             var idref = this.Model.CurrentAuthState.Value.Identifier;
-
             var newState = new UpdateIdentifier { IdentifierRef = idref }.GetValue<AuthorizationState>();
-
-            // The only change that can happen is from "pending" to something else
-            if (newState.Status != "pending")
-                this.Model.CurrentAuthState.Value = newState;
-        }
-
-        private async void AutoUpdateStatusRetry_Changed(int retries)
-        {
-            if (retries == 0)
-                return;
-
-            // executing operation one time
-            this.UpdateAuthStatus();
-
-            if (retries == 1)
-            {
-                this.Model.AutoUpdateStatusRetry.Value = 0;
-                return;
-            }
-
-            var timer = this.Model.AutoUpdateStatusTimer;
-            timer.Value = 30000;
-            while (timer.Value.HasValue && timer.Value.Value > 0)
-            {
-                var start = Stopwatch.GetTimestamp();
-                var waitTime = Math.Min(50, timer.Value.Value);
-                await Task.Delay(waitTime);
-                var total = (int)((double)(Stopwatch.GetTimestamp() - start) / Stopwatch.Frequency * 1000);
-                var dec = total < waitTime * 2 ? total : waitTime;
-                timer.Value -= dec;
-            }
-            timer.Value = null;
-
-            // decreasing this number of retries will recursively call this method
-            this.Model.AutoUpdateStatusRetry.Value--;
+            this.Model.CurrentAuthState.Value = newState;
         }
     }
 }
