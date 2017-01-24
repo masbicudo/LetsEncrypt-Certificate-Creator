@@ -1,6 +1,9 @@
 ﻿using ACMESharp.Vault.Model;
 using System;
+using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LetsEncryptAcmeReg
@@ -19,13 +22,13 @@ namespace LetsEncryptAcmeReg
             this.txtSiteRoot.MouseEnter += this.txtSiteRoot_MouseEnter;
             this.txtSiteRoot.MouseLeave += this.txtSiteRoot_MouseLeave;
 
-            var tt = this.tooltip.ToolTipFor(this.chkConfigYml)
-                .AutoPopup("Updates or creates a ` _config.yml ` file,\r\nwith instructions to _**not ignore**_ the\r\npath ` .well-known\\ `.", useMarkdown: true);
-            tt.BorderColor = Color.DodgerBlue;
+            this.ToolTipFor(
+                this.chkConfigYml,
+                "Updates or creates a ` _config.yml ` file,\r\nwith instructions to _**not ignore**_ the\r\npath ` .well-known\\ `.");
 
-            var tt2 = this.tooltip.ToolTipFor(this.chkCname)
-                .AutoPopup($"Updates or creates a ` CNAME ` file,\r\nwith the name of the ***selected domain***.", useMarkdown: true);
-            tt2.BorderColor = Color.DodgerBlue;
+            this.ToolTipFor(
+                this.chkCname,
+                $"Updates or creates a ` CNAME ` file,\r\nwith the name of the ***selected domain***.");
 
             this.controller = new Controller(this.acme)
             {
@@ -116,12 +119,48 @@ namespace LetsEncryptAcmeReg
             mo.CanCreateChallenge.Changed += v => this.btnCreateChallenge.Enabled = v;
             mo.CanSaveChallenge.Changed += v => this.btnSaveChallenge.Enabled = v;
             mo.CanCommitChallenge.Changed += v => this.btnCommitChallenge.Enabled = v;
-            mo.CanValidateChallenge.Changed += v => this.btnValidate.Enabled = v;
             mo.CanTestChallenge.Changed += v => this.btnTestChallenge.Enabled = v;
+            mo.CanValidateChallenge.Changed += v => this.btnValidate.Enabled = v;
+            mo.CanCreateCertificate.Changed += v => this.btnCreateCertificate.Enabled = v;
+            mo.CanSubmitCertificate.Changed += v => this.btnSubmit.Enabled = v;
+            mo.CanSaveCertificate.Changed += v => this.btnShowCertificate.Enabled = this.btnSaveCertificate.Enabled = v;
 
             mo.Files.Changed += this.UpdateFiles;
 
+            mo.CurrentAuthState.Changing += CurrentAuthState_Changing;
+            mo.CurrentAuthState.Changed += CurrentAuthState_Changed;
+
             init();
+        }
+
+        private void CurrentAuthState_Changed(ACMESharp.AuthorizationState obj)
+        {
+            // if the value has changed, then it means that we must try to update the value
+            // but only if it has been submited already
+            if (this.controller.Model.CurrentChallenge.Value?.SubmitDate != null)
+                this.BeginInvoke((Action)(() => { this.controller.Model.AutoUpdateStatusRetry.Value = 1; }));
+        }
+
+        private void CurrentAuthState_Changing(Bindable<ACMESharp.AuthorizationState> sender, ACMESharp.AuthorizationState value, ACMESharp.AuthorizationState prev, ref bool cancel)
+        {
+            // if values are equal, then we must cancel the change
+            cancel = sender.Version > 0
+                     && (value == prev
+                         ||
+                         value != null && prev != null
+                         && value.Status == prev.Status
+                         && value.Challenges.All(c => prev.Challenges.Any(pc =>
+                             c.Type == pc.Type
+                             && c.Token == pc.Token
+                             && c.SubmitDate == pc.SubmitDate)));
+        }
+
+        private void ToolTipFor(CheckBox ctl, string message)
+        {
+            var tt = this.tooltip.ToolTipFor(ctl)
+                .AutoPopup(message, useMarkdown: true);
+            tt.BorderColor = Color.DodgerBlue;
+            tt.Margin = 1;
         }
 
         private void UpdateFiles(string[] v)

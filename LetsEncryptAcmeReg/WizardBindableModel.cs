@@ -30,6 +30,9 @@ namespace LetsEncryptAcmeReg
         public Bindable<bool> UpdateConfigYml { get; } = new Bindable<bool>(nameof(UpdateConfigYml));
         public Bindable<bool> UpdateCname { get; } = new Bindable<bool>(nameof(UpdateCname));
 
+        public Bindable<int> AutoUpdateStatusRetry { get; } = new Bindable<int>(nameof(AutoUpdateStatusRetry), flags: BindableOptions.AllowRecursiveSets);
+        public Bindable<int?> AutoUpdateStatusTimer { get; } = new Bindable<int?>(nameof(AutoUpdateStatusTimer));
+
         public Bindable<bool> IsRegistrationCreated { get; } = new Bindable<bool>(nameof(IsRegistrationCreated));
         public Bindable<bool> IsDomainCreated { get; } = new Bindable<bool>(nameof(IsDomainCreated));
         public Bindable<bool> IsChallengeCreated { get; } = new Bindable<bool>(nameof(IsChallengeCreated));

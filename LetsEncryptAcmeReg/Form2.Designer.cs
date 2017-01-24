@@ -1018,7 +1018,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(598, 397);
+            this.tabPage2.Size = new System.Drawing.Size(598, 557);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Manager";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -1043,7 +1043,7 @@
             this.tableLayoutPanel7.RowCount = 2;
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(592, 391);
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(592, 551);
             this.tableLayoutPanel7.TabIndex = 1;
             // 
             // tableLayoutPanel8
@@ -1064,7 +1064,7 @@
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(148, 391);
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(148, 551);
             this.tableLayoutPanel8.TabIndex = 3;
             // 
             // lstCertificates
@@ -1074,16 +1074,16 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lstCertificates.FormattingEnabled = true;
             this.lstCertificates.IntegralHeight = false;
-            this.lstCertificates.Location = new System.Drawing.Point(3, 211);
+            this.lstCertificates.Location = new System.Drawing.Point(3, 291);
             this.lstCertificates.Name = "lstCertificates";
-            this.lstCertificates.Size = new System.Drawing.Size(142, 177);
+            this.lstCertificates.Size = new System.Drawing.Size(142, 257);
             this.lstCertificates.TabIndex = 3;
             // 
             // label14
             // 
             this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(3, 195);
+            this.label14.Location = new System.Drawing.Point(3, 275);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(142, 13);
             this.label14.TabIndex = 4;
@@ -1108,7 +1108,7 @@
             this.lstChallenges.IntegralHeight = false;
             this.lstChallenges.Location = new System.Drawing.Point(3, 16);
             this.lstChallenges.Name = "lstChallenges";
-            this.lstChallenges.Size = new System.Drawing.Size(142, 176);
+            this.lstChallenges.Size = new System.Drawing.Size(142, 256);
             this.lstChallenges.TabIndex = 0;
             // 
             // label11
@@ -1130,7 +1130,7 @@
             this.lstRegistrations.IntegralHeight = false;
             this.lstRegistrations.Location = new System.Drawing.Point(3, 16);
             this.lstRegistrations.Name = "lstRegistrations";
-            this.lstRegistrations.Size = new System.Drawing.Size(142, 372);
+            this.lstRegistrations.Size = new System.Drawing.Size(142, 532);
             this.lstRegistrations.TabIndex = 0;
             this.lstRegistrations.SelectedIndexChanged += new System.EventHandler(this.lstRegistrations_SelectedIndexChanged);
             // 
@@ -1153,7 +1153,7 @@
             this.lstDomains.IntegralHeight = false;
             this.lstDomains.Location = new System.Drawing.Point(151, 16);
             this.lstDomains.Name = "lstDomains";
-            this.lstDomains.Size = new System.Drawing.Size(290, 372);
+            this.lstDomains.Size = new System.Drawing.Size(290, 532);
             this.lstDomains.TabIndex = 0;
             this.lstDomains.SelectedIndexChanged += new System.EventHandler(this.lstDomains_SelectedIndexChanged);
             // 

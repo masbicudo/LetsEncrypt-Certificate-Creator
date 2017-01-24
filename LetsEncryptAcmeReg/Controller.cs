@@ -78,17 +78,23 @@ namespace LetsEncryptAcmeReg
             init += mo.CanSaveChallenge.BindExpression(() => mo.ChallengeHasFile.Value);
             init += mo.CanCommitChallenge.BindExpression(() => this.CanCommitChallenge_Value(this.Model.SiteRoot.Value));
             init += mo.CanTestChallenge.BindExpression(() => mo.IsTargetValid.Value && mo.IsKeyValid.Value);
+            init += mo.CanValidateChallenge.BindExpression(() => false);
+            init += mo.CanCreateCertificate.BindExpression(() => false);
+            init += mo.CanSubmitCertificate.BindExpression(() => false);
+            init += mo.CanSaveCertificate.BindExpression(() => false);
 
             init += mo.Files.BindExpression(() => this.Files_Value(mo.SiteRoot.Value, mo.FileRelativePath.Value, mo.UpdateCname.Value, mo.UpdateConfigYml.Value));
 
             // when the key changes, the domain must be tested again
             mo.Key.Changed += s => mo.CanValidateChallenge.Value = false;
 
+            mo.AutoUpdateStatusRetry.Changed += this.AutoUpdateStatusRetry_Changed;
+
             return init;
         }
 
         private bool CanCommitChallenge_Value(string siteRoot)
-            => CatchError(() => Repository.IsValid(siteRoot));
+            => CatchError(() => Path.IsPathRooted(siteRoot) && Repository.IsValid(siteRoot));
 
         private string FilePath_Value(bool hasFile, string siteRoot, string indexRelativePath)
             => CatchError(() => hasFile ? Path.Combine(siteRoot, indexRelativePath) : "");
@@ -500,6 +506,55 @@ include:      ["".well-known""]
                     .ToArray();
                 this.ManagerModel.Certificates.Value = certs;
             }
+        }
+
+        /// <summary>
+        /// Updates the authorization status to know whether the submission succeded or not.
+        /// Though this is intended for after submission, it can be called before without side effects.
+        /// </summary>
+        private void UpdateAuthStatus()
+        {
+            if (this.Model.CurrentAuthState.Value == null)
+                return;
+
+            var idref = this.Model.CurrentAuthState.Value.Identifier;
+
+            var newState = new UpdateIdentifier { IdentifierRef = idref }.GetValue<AuthorizationState>();
+
+            // The only change that can happen is from "pending" to something else
+            if (newState.Status != "pending")
+                this.Model.CurrentAuthState.Value = newState;
+        }
+
+        private async void AutoUpdateStatusRetry_Changed(int retries)
+        {
+            if (retries == 0)
+                return;
+
+            // executing operation one time
+            this.UpdateAuthStatus();
+
+            if (retries == 1)
+            {
+                this.Model.AutoUpdateStatusRetry.Value = 0;
+                return;
+            }
+
+            var timer = this.Model.AutoUpdateStatusTimer;
+            timer.Value = 30000;
+            while (timer.Value.HasValue && timer.Value.Value > 0)
+            {
+                var start = Stopwatch.GetTimestamp();
+                var waitTime = Math.Min(50, timer.Value.Value);
+                await Task.Delay(waitTime);
+                var total = (int)((double)(Stopwatch.GetTimestamp() - start) / Stopwatch.Frequency * 1000);
+                var dec = total < waitTime * 2 ? total : waitTime;
+                timer.Value -= dec;
+            }
+            timer.Value = null;
+
+            // decreasing this number of retries will recursively call this method
+            this.Model.AutoUpdateStatusRetry.Value--;
         }
     }
 }
