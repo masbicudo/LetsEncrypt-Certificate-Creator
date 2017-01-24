@@ -19,6 +19,7 @@ namespace LetsEncryptAcmeReg
         private SizeF currentTextSize;
         private bool canShow;
         private bool useMarkdown;
+        private Point? fixedLocation;
 
         public ToolTipForm(Control control)
         {
@@ -69,6 +70,16 @@ namespace LetsEncryptAcmeReg
 
         public ToolTipForm ShowMessage(string message, bool useMarkdown = false)
         {
+            this.fixedLocation = null;
+            this.useMarkdown = useMarkdown;
+            this.shouldShow = this.ShouldShowFixed;
+            this.ShowMessageInternal(message);
+            return this;
+        }
+
+        public ToolTipForm ShowMessageAt(string message, Point location, bool useMarkdown = false)
+        {
+            this.fixedLocation = location;
             this.useMarkdown = useMarkdown;
             this.shouldShow = this.ShouldShowFixed;
             this.ShowMessageInternal(message);
@@ -228,8 +239,8 @@ namespace LetsEncryptAcmeReg
         {
             var size = this.currentTextSize.ToSize();
 
-            var cw = this.control.Width;
-            var ch = this.control.Height;
+            var cw = this.fixedLocation == null ? this.control.Width : 0;
+            var ch = this.fixedLocation == null ? this.control.Height : 0;
 
             var padding = this.Padding;
             var tw = size.Width + 2 * padding;
@@ -259,8 +270,10 @@ namespace LetsEncryptAcmeReg
             int max = 0;
             Rectangle choice = Rectangle.Empty;
             if (size != Size.Empty)
-                foreach (var r in rects)
+                foreach (var r2 in rects)
                 {
+                    var r = this.fixedLocation == null ? r2 : new Rectangle(this.fixedLocation.Value + (Size)r2.Location, r2.Size);
+
                     var a = this.control.PointToScreen(new Point(r.Left, r.Top));
                     var b = this.control.PointToScreen(new Point(r.Left, r.Bottom));
                     var c = this.control.PointToScreen(new Point(r.Right, r.Top));
