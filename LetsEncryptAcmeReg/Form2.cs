@@ -65,6 +65,7 @@ namespace LetsEncryptAcmeReg
             init += mo.AutoCommitChallenge.Bind(this.chkAutoCommit);
             init += mo.AutoTestChallenge.Bind(this.chkAutoTest);
             init += mo.AutoValidateChallenge.Bind(this.chkAutoValidate);
+            init += mo.AutoUpdateStatus.Bind(this.chkAutoUpdateStatus);
             init += mo.AutoCreateCertificate.Bind(this.chkAutoCreateCertificate);
             init += mo.AutoSubmitCertificate.Bind(this.chkAutoSubmit);
             init += mo.AutoSaveCertificate.Bind(this.chkAutoSaveCertificate);
@@ -86,6 +87,7 @@ namespace LetsEncryptAcmeReg
             init += BindHelper.BindExpression(() => RetryToolTip(this.btnCommitChallenge, mo.AutoCommitChallengeRetry.Value, mo.AutoCommitChallengeTimer.Value));
             init += BindHelper.BindExpression(() => RetryToolTip(this.btnTestChallenge, mo.AutoTestChallengeRetry.Value, mo.AutoTestChallengeTimer.Value));
             init += BindHelper.BindExpression(() => RetryToolTip(this.btnValidate, mo.AutoValidateChallengeRetry.Value, mo.AutoValidateChallengeTimer.Value));
+            init += BindHelper.BindExpression(() => RetryToolTip(this.btnUpdateStatus, mo.AutoUpdateStatusRetry.Value, mo.AutoUpdateStatusTimer.Value));
             init += BindHelper.BindExpression(() => RetryToolTip(this.btnCreateCertificate, mo.AutoCreateCertificateRetry.Value, mo.AutoCreateCertificateTimer.Value));
             init += BindHelper.BindExpression(() => RetryToolTip(this.btnSubmit, mo.AutoSubmitCertificateRetry.Value, mo.AutoSubmitCertificateTimer.Value));
             init += BindHelper.BindExpression(() => RetryToolTip(this.btnSaveCertificate, mo.AutoSaveCertificateRetry.Value, mo.AutoSaveCertificateTimer.Value));
@@ -120,6 +122,7 @@ namespace LetsEncryptAcmeReg
             mo.CanCommitChallenge.Changed += v => this.btnCommitChallenge.Enabled = v;
             mo.CanTestChallenge.Changed += v => this.btnTestChallenge.Enabled = v;
             mo.CanValidateChallenge.Changed += v => this.btnValidate.Enabled = v;
+            mo.CanUpdateStatus.Changed += v => this.btnUpdateStatus.Enabled = v;
             mo.CanCreateCertificate.Changed += v => this.btnCreateCertificate.Enabled = v;
             mo.CanSubmitCertificate.Changed += v => this.btnSubmit.Enabled = v;
             mo.CanSaveCertificate.Changed += v => this.btnShowCertificate.Enabled = this.btnSaveCertificate.Enabled = v;

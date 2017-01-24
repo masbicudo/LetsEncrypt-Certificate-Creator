@@ -79,6 +79,7 @@ namespace LetsEncryptAcmeReg
             init += mo.CanSaveChallenge.BindExpression(() => mo.ChallengeHasFile.Value);
             init += mo.CanCommitChallenge.BindExpression(() => this.CanCommitChallenge_Value(this.Model.SiteRoot.Value));
             init += mo.CanTestChallenge.BindExpression(() => mo.IsTargetValid.Value && mo.IsKeyValid.Value);
+            init += mo.CanUpdateStatus.BindExpression(() => mo.CurrentAuthState.Value != null);
             init += mo.CanValidateChallenge.BindExpression(() => false);
             init += mo.CanCreateCertificate.BindExpression(() => false);
             init += mo.CanSubmitCertificate.BindExpression(() => false);
