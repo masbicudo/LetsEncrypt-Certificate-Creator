@@ -161,7 +161,7 @@ namespace LetsEncryptAcmeReg
         //                     && c.SubmitDate == pc.SubmitDate)));
         //}
 
-        private void ToolTipFor(CheckBox ctl, string message)
+        private void ToolTipFor(Control ctl, string message)
         {
             var tt = this.tooltip.ToolTipFor(ctl)
                 .AutoPopup(message, useMarkdown: true);
@@ -176,27 +176,27 @@ namespace LetsEncryptAcmeReg
             this.UpdateFiles();
         }
 
-        private void SetToolTip(Control ctl, string msg)
+        private void SetActionToolTip(Control ctl, string msg)
         {
             if (msg != null)
             {
                 if ((string)this.tooltip.Tag != msg)
                 {
-                    var tt = this.tooltip.ToolTipFor(ctl).ShowMessage(msg, useMarkdown: true);
+                    var tt = this.tooltip.ToolTipFor(ctl, "Action").ShowMessage(msg, useMarkdown: true);
                     tt.BorderColor = Color.Gold;
                 }
                 this.tooltip.Tag = msg;
             }
             else
-                this.tooltip.ToolTipFor(ctl).Hide();
+                this.tooltip.ToolTipFor(ctl, "Action").Hide();
         }
 
         private void RetryToolTip(Control ctl, int? retry, int? timer)
         {
-            if (retry.HasValue && timer.HasValue && retry <= Controller.MaxRetries && timer / 1000 + 1 > 0)
-                SetToolTip(ctl, $"Retry {retry}/{Controller.MaxRetries} in {timer / 1000 + 1}s");
+            if (retry.HasValue && timer.HasValue && timer / 1000 + 1 > 0)
+                SetActionToolTip(ctl, $"Retry #{retry + 1} in {timer / 1000 + 1}s");
             else
-                SetToolTip(ctl, null);
+                SetActionToolTip(ctl, null);
         }
 
         private void Error(Exception ex)
@@ -302,6 +302,36 @@ namespace LetsEncryptAcmeReg
             tt.BorderColor = Color.Crimson;
             tt.PositionPreferences = ">,v,^,<";
             tt.ShowMessage((string)this.txtSiteRoot.Tag, useMarkdown: false);
+        }
+
+        private void richTextBox1_MouseMove(object sender, MouseEventArgs e)
+        {
+            var rtb = (RichTextBox)sender;
+            var pos = rtb.GetCharIndexFromPosition(e.Location);
+            var line = rtb.GetLineFromCharIndex(pos);
+            var start = rtb.GetFirstCharIndexFromLine(line);
+            var end = rtb.GetFirstCharIndexFromLine(line + 1) - 1;
+
+            if (end - start < 0)
+                return;
+
+            //if (rtb.SelectionStart != start)
+            //    rtb.SelectionStart = start;
+            //if (rtb.SelectionLength != end - start)
+            //    rtb.SelectionLength = end - start;
+            var text = rtb.Text.Substring(start, end - start);
+            var pt = rtb.GetPositionFromCharIndex(end);
+            var tt = this.tooltip.ToolTipFor(rtb)
+                .ShowMessageAt(Messages.MapMessageToExplanation(text), pt);
+            tt.PositionPreferences = ">,^";
+            tt.Margin = 1;
+        }
+
+        private void richTextBox1_MouseLeave(object sender, EventArgs e)
+        {
+            var rtb = (RichTextBox)sender;
+            this.tooltip.ToolTipFor(rtb)
+                .Hide();
         }
     }
 }
