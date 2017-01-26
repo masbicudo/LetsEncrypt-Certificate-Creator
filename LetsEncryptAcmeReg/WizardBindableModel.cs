@@ -9,7 +9,7 @@ namespace LetsEncryptAcmeReg
         // public Bindable(<(?><(?<c>)|[^<>)]+|(?:>|$)(?<-c>))*(?:>|$))\s(\S*)\s\{ get; \} = new Bindable\1\(nameof\(\2\)\);
 
         public Bindable<string> Email { get; } = new Bindable<string>(nameof(Email));
-        public Bindable<string> Domain { get; } = new Bindable<string>(nameof(Domain));
+        public Bindable<string> Domain { get; } = new Bindable<string>(nameof(Domain), flags: BindableOptions.EqualMeansUnchanged);
         public Bindable<string> Challenge { get; } = new Bindable<string>(nameof(Challenge));
         public Bindable<string> Target { get; } = new Bindable<string>(nameof(Target));
         public Bindable<string> Key { get; } = new Bindable<string>(nameof(Key));
@@ -23,7 +23,7 @@ namespace LetsEncryptAcmeReg
         public Bindable<string> FileRelativePath { get; } = new Bindable<string>(nameof(FileRelativePath));
         public Bindable<string> FilePath { get; } = new Bindable<string>(nameof(FilePath));
         public Bindable<string[]> Files { get; } = new Bindable<string[]>(nameof(Files));
-        public Bindable<RegistrationInfo> CurrentRegistration { get; } = new Bindable<RegistrationInfo>(nameof(CurrentRegistration));
+        public Bindable<RegistrationInfo> CurrentRegistration { get; } = new Bindable<RegistrationInfo>(nameof(CurrentRegistration), flags: BindableOptions.EqualMeansUnchanged);
         public Bindable<AuthorizationState> CurrentAuthState { get; } = new Bindable<AuthorizationState>(nameof(CurrentAuthState));
         public Bindable<AuthorizeChallenge> CurrentChallenge { get; } = new Bindable<AuthorizeChallenge>(nameof(CurrentChallenge));
 

@@ -15,7 +15,7 @@ namespace LetsEncryptAcmeReg
                 if (checkBox.Checked != b)
                     checkBox.Checked = b;
             };
-            checkBox.CheckedChanged += (sender, args) => bindable.Update();
+            checkBox.CheckedChanged += (sender, args) => bindable.Value = getter();
             return bindable.Bind(getter, setter);
         }
 
@@ -27,7 +27,7 @@ namespace LetsEncryptAcmeReg
                 if (control.Text != b)
                     control.Text = b;
             };
-            control.TextChanged += (sender, args) => bindable.Update();
+            control.TextChanged += (sender, args) => bindable.Value = getter();
             return bindable.Bind(getter, setter);
         }
 
@@ -39,7 +39,19 @@ namespace LetsEncryptAcmeReg
                 if (!EqualityComparer<T>.Default.Equals(convert((T2)cmb.SelectedItem), b))
                     cmb.SelectedItem = b;
             };
-            cmb.TextChanged += (sender, args) => bindable.Update();
+            cmb.TextChanged += (sender, args) => bindable.Value = getter();
+            return bindable.Bind(getter, setter);
+        }
+
+        public static Action Bind<T>(this Bindable<T> bindable, ListBox lst)
+        {
+            Func<T> getter = () => (T)lst.SelectedItem;
+            Action<T> setter = b =>
+            {
+                if (!EqualityComparer<T>.Default.Equals((T)lst.SelectedItem, b))
+                    lst.SelectedItem = b;
+            };
+            lst.SelectedIndexChanged += (sender, args) => bindable.Value = getter();
             return bindable.Bind(getter, setter);
         }
 
@@ -51,7 +63,7 @@ namespace LetsEncryptAcmeReg
                 if (!EqualityComparer<T>.Default.Equals(convert((T2)lst.SelectedItem), b))
                     lst.SelectedItem = b;
             };
-            lst.SelectedIndexChanged += (sender, args) => bindable.Update();
+            lst.SelectedIndexChanged += (sender, args) => bindable.Value = getter();
             return bindable.Bind(getter, setter);
         }
 
@@ -70,7 +82,7 @@ namespace LetsEncryptAcmeReg
                     txt.SelectionLength = oldSelLength;
                 }
             };
-            txt.TextChanged += (sender, args) => bindable.Update();
+            txt.TextChanged += (sender, args) => bindable.Value = getter();
             return bindable.Bind(getter, setter);
         }
 
@@ -89,7 +101,7 @@ namespace LetsEncryptAcmeReg
                     cmb.SelectionLength = oldSelLength;
                 }
             };
-            cmb.TextChanged += (sender, args) => bindable.Update();
+            cmb.TextChanged += (sender, args) => bindable.Value = getter();
             return bindable.Bind(getter, setter);
         }
 

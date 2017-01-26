@@ -73,6 +73,8 @@ namespace LetsEncryptAcmeReg
             init += mo.CurrentRegistration.Bind(this.lstRegistrations, (RegistrationItem i) => i?.RegistrationInfo);
             init += mo.CurrentRegistration.Bind(this.cmbRegistration, (RegistrationItem i) => i?.RegistrationInfo);
 
+            init += mo.Domain.Bind(this.lstDomains);
+
             init += ma.Challenge.Bind(this.lstChallenges);
 
             init += mo.UpdateConfigYml.Bind(this.chkConfigYml);
