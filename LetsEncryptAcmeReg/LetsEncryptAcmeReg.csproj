@@ -75,6 +75,11 @@
     <Compile Include="MessagePart.cs" />
     <Compile Include="Messages.cs" />
     <Compile Include="ObjectExtensions.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="RegistrationItem.cs" />
     <Compile Include="WinAPI\ShowWindowCommands.cs" />
     <Compile Include="ToolTipForm.cs">
@@ -119,6 +124,10 @@
     <EmbeddedResource Include="frmText.resx">
       <DependentUpon>frmText.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="ToolTipForm.resx">
       <DependentUpon>ToolTipForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -146,7 +155,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Properties\" />
+    <None Include="Resources\1485384074_Add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1485384352_Delete.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
