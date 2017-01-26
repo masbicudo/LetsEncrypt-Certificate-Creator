@@ -1,5 +1,10 @@
+using ACMESharp;
+using ACMESharp.ACME;
+using ACMESharp.POSH;
+using ACMESharp.Vault.Model;
+using JetBrains.Annotations;
+using LibGit2Sharp;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -8,12 +13,6 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using ACMESharp;
-using ACMESharp.ACME;
-using ACMESharp.POSH;
-using ACMESharp.Vault.Model;
-using JetBrains.Annotations;
-using LibGit2Sharp;
 using Signature = LibGit2Sharp.Signature;
 
 namespace LetsEncryptAcmeReg
@@ -21,7 +20,6 @@ namespace LetsEncryptAcmeReg
     public class Controller
     {
         private readonly Acme acme;
-        public static int MaxRetries = 3;
 
         public Controller(Acme acme)
         {
@@ -118,11 +116,14 @@ namespace LetsEncryptAcmeReg
             => CatchError(() => regInfo?.Registration != null && regInfo.Registration.TosAgreementUri == null);
 
         private AuthorizationState CurrentAuthState_Value([CanBeNull] RegistrationInfo regInfo, [CanBeNull] string dns)
-            => CatchError(() => regInfo == null || string.IsNullOrWhiteSpace(dns) ? null : this.acme.GetIdentifiers(regInfo, dns)?.SingleOrDefault());
+            => CatchError(() => regInfo == null || string.IsNullOrWhiteSpace(dns) ? null : this.acme.GetIdentifiers(regInfo, dns).Select(ii => ii.Authorization).SingleOrDefault());
 
         private AuthorizeChallenge CurrentChallenge_Value(AuthorizationState authState, string challengeType)
             => CatchError(() => authState?.Challenges?.SingleOrDefault(x => x.Type == challengeType));
 
+        /// <summary>
+        /// Runs the given delegate inside a try/catch block and logs the exception if any.
+        /// </summary>
         public T CatchError<T>(Func<T> func)
         {
             try
@@ -136,6 +137,9 @@ namespace LetsEncryptAcmeReg
             return default(T);
         }
 
+        /// <summary>
+        /// Runs the given delegate inside a try/catch block and logs the exception if any.
+        /// </summary>
         public void CatchError(Action action)
         {
             try
@@ -161,7 +165,7 @@ namespace LetsEncryptAcmeReg
                 return;
 
             if (retry.Value == null)
-                retry.Value = MaxRetries;
+                retry.Value = 3;
 
             while (retry.Value != null)
             {
@@ -174,7 +178,7 @@ namespace LetsEncryptAcmeReg
                 catch (Exception ex)
                 {
                     this.Error(ex);
-                    timer.Value = 3000 - 1; // an exception starts a timer to wait until the next automatic retry
+                    timer.Value = 30000 - 1; // an exception starts a timer to wait until the next automatic retry
                 }
 
                 // stop when there is no more remaining retries
@@ -273,7 +277,7 @@ namespace LetsEncryptAcmeReg
                         );
 
                     if (states.Length == 1)
-                        this.Model.CurrentAuthState.Value = states[0];
+                        this.Model.CurrentAuthState.Value = states[0].Authorization;
 
                     if (states.Length == 0)
                         throw new Exception("Identity could not be created.");
@@ -281,7 +285,7 @@ namespace LetsEncryptAcmeReg
                     if (states.Length > 1)
                         this.Warn(Messages.MultipleIdentities);
 
-                    this.Model.CurrentAuthState.Value = states[0];
+                    this.Model.CurrentAuthState.Value = states[0].Authorization;
                 },
                 this.Model.AutoCreateChallenge,
                 this.CreateChallenge);
@@ -569,6 +573,18 @@ include:      ["".well-known""]
             var idref = this.Model.CurrentAuthState.Value.Identifier;
             var newState = new UpdateIdentifier { IdentifierRef = idref }.GetValue<AuthorizationState>();
             this.Model.CurrentAuthState.Value = newState;
+        }
+
+        public void DeleteCurrentRegistration()
+        {
+            this.acme.DeleteRegistration(this.Model.CurrentRegistration.Value);
+            this.Model.Registrations.Value = this.acme.GetRegistrations();
+        }
+
+        public void DeleteCurrentDomain()
+        {
+            this.acme.DeleteDomain(this.Model.CurrentRegistration.Value, this.Model.Domain.Value);
+            this.Model.Domains.Value = this.acme.GetDomainsByRegistration(this.Model.CurrentRegistration.Value);
         }
     }
 }

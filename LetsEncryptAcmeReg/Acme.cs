@@ -184,17 +184,19 @@ namespace LetsEncryptAcmeReg
         }
 
         [NotNull]
-        public AuthorizationState[] GetIdentifiers([NotNull] RegistrationInfo regInfo, [NotNull] string domain)
+        [ItemNotNull]
+        public IdentifierInfo[] GetIdentifiers([NotNull] RegistrationInfo regInfo, [NotNull] string domain)
         {
             if (regInfo == null) throw new ArgumentNullException(nameof(regInfo));
             if (domain == null) throw new ArgumentNullException(nameof(domain));
 
-            var states = this.GetOrCreateIdentifiers(regInfo, null, domain, false);
+            var states = this.GetOrCreateIdentifiers(regInfo, null, domain, allowCreation: false);
             return states;
         }
 
         [NotNull]
-        public AuthorizationState[] GetOrCreateIdentifier([NotNull] RegistrationInfo regInfo, [NotNull] string domain)
+        [ItemNotNull]
+        public IdentifierInfo[] GetOrCreateIdentifier([NotNull] RegistrationInfo regInfo, [NotNull] string domain)
         {
             if (regInfo == null) throw new ArgumentNullException(nameof(regInfo));
             if (domain == null) throw new ArgumentNullException(nameof(domain));
@@ -204,7 +206,8 @@ namespace LetsEncryptAcmeReg
         }
 
         [NotNull]
-        private AuthorizationState[] GetOrCreateIdentifiers([CanBeNull] RegistrationInfo regInfo, [CanBeNull] string alias, [CanBeNull] string dns, bool allowCreation = true)
+        [ItemNotNull]
+        private IdentifierInfo[] GetOrCreateIdentifiers([CanBeNull] RegistrationInfo regInfo, [CanBeNull] string alias, [CanBeNull] string dns, bool allowCreation = true)
         {
             using (var vlt = VaultHelper.GetVault(null))
             {
@@ -214,17 +217,17 @@ namespace LetsEncryptAcmeReg
                 var alias2 = alias;
                 var iis = v.Identifiers.Values.Where(x => (alias2 == null || x.Alias == alias2) && (dns == null || x.Dns == dns));
                 if (regInfo == null)
-                    return iis.Select(ii => ii.Authorization).ToArray();
+                    return iis.ToArray();
 
                 var iisOfReg = iis.Where(ii => ii.RegistrationRef == regInfo.Id);
                 var iisOfRegArray = iisOfReg as IdentifierInfo[] ?? iisOfReg.ToArray();
                 if (iisOfRegArray.Any())
-                    return iisOfRegArray.Select(ii => ii.Authorization).ToArray();
+                    return iisOfRegArray.ToArray();
 
                 iis = v.Identifiers.Values.Where(x => x.Alias == alias2 || x.Dns == dns);
 
                 if (!allowCreation)
-                    return new AuthorizationState[0];
+                    return new IdentifierInfo[0];
 
                 if (iis.Any())
                     throw new InvalidOperationException(Messages.CannotCreateIdentifierDomainAlreadyUsed);
@@ -264,7 +267,7 @@ namespace LetsEncryptAcmeReg
 
                 vlt.SaveVault(v);
 
-                return new[] { authzState };
+                return new[] { iiNew };
             }
         }
 
@@ -280,7 +283,7 @@ namespace LetsEncryptAcmeReg
 
         public AuthorizeChallenge[] GetChallengesByDomain(RegistrationInfo regInfo, string domain)
         {
-            var states = this.GetOrCreateIdentifiers(regInfo, null, domain, false);
+            var states = this.GetOrCreateIdentifiers(regInfo, null, domain, false).Select(ii => ii.Authorization);
             return states.FirstOrDefault()?.Challenges.ToArray() ?? new AuthorizeChallenge[0];
         }
 
@@ -294,6 +297,77 @@ namespace LetsEncryptAcmeReg
 
             var result = v.Certificates?.Values?.Where(c => c.IdentifierRef == identifierInfo.Id).ToArray();
             return result ?? new CertificateInfo[0];
+        }
+
+        public void DeleteRegistration(RegistrationInfo value)
+        {
+            if (value == null)
+                return;
+
+            using (var vlt = VaultHelper.GetVault(null))
+            {
+                vlt.OpenStorage();
+                var v = vlt.LoadVault();
+
+                // removing the associated identifiers
+                var identsToRemove = v.Identifiers.Values?
+                    .Where(x => x.RegistrationRef == value.Id);
+                if (identsToRemove != null)
+                    foreach (var ident in identsToRemove)
+                    {
+                        // removing associated certificates
+                        var certsToRemove = v.Certificates.Values?
+                            .Where(x => x.IdentifierRef == ident.Id);
+                        if (certsToRemove != null)
+                            foreach (var cert in certsToRemove)
+                            {
+                                // removing the certificate
+                                v.Certificates?.Remove(cert.Id);
+                            }
+
+                        // removing the domain
+                        v.Identifiers?.Remove(ident.Id);
+                    }
+
+                // removing the registration
+                v.Registrations?.Remove(value.Id);
+
+                vlt.SaveVault(v);
+            }
+        }
+
+        public void DeleteDomain(RegistrationInfo regInfo, string domain)
+        {
+            if (domain == null)
+                return;
+
+            if (regInfo == null)
+                return;
+
+            using (var vlt = VaultHelper.GetVault(null))
+            {
+                vlt.OpenStorage();
+                var v = vlt.LoadVault();
+
+                var idents = this.GetIdentifiers(regInfo, domain);
+                foreach (var ident in idents)
+                {
+                    // removing associated certificates
+                    var certsToRemove = v.Certificates?.Values?
+                        .Where(x => x.IdentifierRef == ident.Id);
+                    if (certsToRemove != null)
+                        foreach (var cert in certsToRemove)
+                        {
+                            // removing the certificate
+                            v.Certificates.Remove(cert.Id);
+                        }
+
+                    // removing the domain
+                    v.Identifiers?.Remove(ident.Id);
+                }
+
+                vlt.SaveVault(v);
+            }
         }
     }
 }

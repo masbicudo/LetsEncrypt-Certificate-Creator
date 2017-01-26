@@ -335,5 +335,15 @@ namespace LetsEncryptAcmeReg
             this.tooltip.ToolTipFor(rtb)
                 .Hide();
         }
+
+        private void btnDeleteRegistration_Click(object sender, EventArgs e)
+        {
+            this.controller.DeleteCurrentRegistration();
+        }
+
+        private void btnDeleteDomain_Click(object sender, EventArgs e)
+        {
+            this.controller.DeleteCurrentDomain();
+        }
     }
 }
