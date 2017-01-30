@@ -43,6 +43,10 @@ namespace LetsEncryptAcmeReg
                         "There is another registration that alrady contains the domain you are trying to use.\n" +
                         "This is not an error, but can be a source of confusion when creating certificates."
                     },
+                    {
+                        "Too many redirects or authentication replays",
+                        "This could mean that either your git username or git password is wrong."
+                    }
                 };
 
             string result;

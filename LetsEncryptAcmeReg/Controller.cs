@@ -367,26 +367,39 @@ include:      ["".well-known""]
                 this.Model.AutoCommitChallenge,
                 this.Model.AutoCommitChallengeRetry,
                 this.Model.AutoCommitChallengeTimer,
-                () =>
+                async () =>
                 {
                     using (var repo = new Repository(this.Model.SiteRoot.Value))
                     {
-                        var username = "masbicudo";
-                        var password = "";
-                        var email = "masbicudo@gmail.com";
+                        var username = this.Model.GitUserName.Value;
+                        var password = this.Model.GitPassword.Value;
+                        var email = this.Model.Email.Value;
 
                         // Stage the file
-                        repo.Index.Add(Path.Combine(this.Model.FilePath.Value, "index.html"));
+                        repo.Index.Add(Path.Combine(this.Model.FileRelativePath.Value, "index.html"));
+
+                        if (this.Model.UpdateCname.Value)
+                            repo.Index.Add("CNAME");
+
+                        if (this.Model.UpdateConfigYml.Value)
+                            repo.Index.Add("_config.yml");
 
                         // Create the committer's signature and commit
-                        Signature author = new Signature("Let's Encrypt Wizard", email, DateTime.Now);
+                        Signature author = new Signature(username, email, DateTime.Now);
                         Signature committer = author;
 
-                        // Commit to the repository
-                        Commit commit = repo.Commit(
-                            "Let's Encrypt files!",
-                            author,
-                            committer);
+                        try
+                        {
+                            // Commit to the repository
+                            Commit commit = repo.Commit(
+                                "Let's Encrypt HTTP challenge files.",
+                                author,
+                                committer);
+                        }
+                        catch (EmptyCommitException)
+                        {
+                            // ignore empty commit exception
+                        }
 
                         // Push to origin
                         var remote = repo.Network.Remotes["origin"];

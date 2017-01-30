@@ -19,6 +19,8 @@ namespace LetsEncryptAcmeReg
         public Bindable<string> CertificateType { get; } = new Bindable<string>(nameof(CertificateType));
         public Bindable<string> Password { get; } = new Bindable<string>(nameof(Password));
         public Bindable<bool> ShowPassword { get; } = new Bindable<bool>(nameof(ShowPassword));
+        public Bindable<string> GitUserName { get; } = new Bindable<string>(nameof(GitUserName));
+        public Bindable<string> GitPassword { get; } = new Bindable<string>(nameof(GitPassword));
 
         public Bindable<string> FileRelativePath { get; } = new Bindable<string>(nameof(FileRelativePath));
         public Bindable<string> FilePath { get; } = new Bindable<string>(nameof(FilePath));

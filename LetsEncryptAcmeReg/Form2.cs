@@ -56,6 +56,8 @@ namespace LetsEncryptAcmeReg
             init += mo.CertificateType.Bind(this.cmbCertificateType);
             init += mo.Password.Bind(this.txtPassword);
             init += mo.ShowPassword.Bind(this.chkShowPassword);
+            init += mo.GitUserName.Bind(this.txtGitUserName);
+            init += mo.GitPassword.Bind(this.txtGitPassword);
 
             init += mo.AutoRegister.Bind(this.chkAutoRegister);
             init += mo.AutoAcceptTos.Bind(this.chkAutoAcceptTos);
