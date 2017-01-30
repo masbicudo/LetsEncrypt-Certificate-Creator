@@ -142,7 +142,7 @@ namespace LetsEncryptAcmeReg
 
             mo.Files.Changed += this.UpdateFiles;
 
-            //mo.CurrentAuthState.Changing += CurrentAuthState_Changing;
+            mo.CurrentAuthState.Changing += CurrentAuthState_Changing;
             mo.CurrentAuthState.Changed += CurrentAuthState_Changed;
 
             init();
@@ -152,27 +152,32 @@ namespace LetsEncryptAcmeReg
         {
             // if the value has changed, then it means that we must try to update the value
             // but only if it has been submited already
-            Action whatToDo = () => this.controller.CatchError(() => { this.controller.UpdateStatusOnce(); });
-            if (this.IsHandleCreated)
-                //if (this.controller.Model.CurrentChallenge.Value?.SubmitDate != null)
-                this.BeginInvoke(whatToDo);
-            else
-                whatToDo();
+            Action whatToDo = async () =>
+            {
+                await this.controller.CatchError(async () => { await this.controller.UpdateStatusOnce(); });
+            };
+
+            if (this.controller.Model.CurrentChallenge.Value?.SubmitDate != null
+                && this.controller.Model.CurrentChallenge.Value?.IsPending() == true)
+                if (this.IsHandleCreated)
+                    this.BeginInvoke(whatToDo);
+                else
+                    whatToDo();
         }
 
-        //private void CurrentAuthState_Changing(Bindable<ACMESharp.AuthorizationState> sender, ACMESharp.AuthorizationState value, ACMESharp.AuthorizationState prev, ref bool cancel)
-        //{
-        //    // if values are equal, then we must cancel the change event from happening
-        //    cancel = sender.Version > 0
-        //             && (value == prev
-        //                 ||
-        //                 value != null && prev != null
-        //                 && value.Status == prev.Status
-        //                 && value.Challenges.All(c => prev.Challenges.Any(pc =>
-        //                     c.Type == pc.Type
-        //                     && c.Token == pc.Token
-        //                     && c.SubmitDate == pc.SubmitDate)));
-        //}
+        private void CurrentAuthState_Changing(Bindable<ACMESharp.AuthorizationState> sender, ACMESharp.AuthorizationState value, ACMESharp.AuthorizationState prev, ref bool cancel)
+        {
+            // if values are equal, then we must cancel the change event from happening
+            cancel |= sender.Version > 0
+                     && (value == prev
+                         ||
+                         value != null && prev != null
+                         && value.Status == prev.Status
+                         && value.Challenges.All(c => prev.Challenges.Any(pc =>
+                             c.Type == pc.Type
+                             && c.Token == pc.Token
+                             && c.SubmitDate == pc.SubmitDate)));
+        }
 
         private void ToolTipFor(Control ctl, string message)
         {

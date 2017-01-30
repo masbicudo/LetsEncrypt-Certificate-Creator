@@ -662,7 +662,8 @@ include:      ["".well-known""]
 
             var idref = this.acme.GetIdentifierAlias(this.Model.CurrentRegistration.Value, this.Model.CurrentAuthState.Value.Identifier);
             var newState = new UpdateIdentifier { IdentifierRef = idref }.GetValue<AuthorizationState>();
-            this.Model.CurrentAuthState.Value = newState;
+
+            this.Model.CurrentAuthState.SetOnce(newState);
         }
 
         public void DeleteCurrentRegistration()
