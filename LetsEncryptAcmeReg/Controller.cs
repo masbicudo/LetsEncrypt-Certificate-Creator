@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Signature = LibGit2Sharp.Signature;
+#pragma warning disable 1998
 
 namespace LetsEncryptAcmeReg
 {
@@ -46,7 +47,7 @@ namespace LetsEncryptAcmeReg
 
             // Complex relations:
             //      These relations are built by using expressions.
-            //      Every bindable object in the right hand side will
+            //      Every bindable reference in the right hand side
             //      have a changed event added automatically.
             init += mo.IsEmailValid.BindExpression(() => !string.IsNullOrWhiteSpace(mo.Email.Value));
             init += mo.IsRegistrationCreated.BindExpression(() => mo.CurrentRegistration.Value != null);
@@ -79,7 +80,7 @@ namespace LetsEncryptAcmeReg
             init += mo.CanCommitChallenge.BindExpression(() => this.CanCommitChallenge_Value(this.Model.SiteRoot.Value));
             init += mo.CanTestChallenge.BindExpression(() => mo.IsTargetValid.Value && mo.IsKeyValid.Value);
             init += mo.CanUpdateStatus.BindExpression(() => mo.CurrentAuthState.Value != null);
-            init += mo.CanValidateChallenge.BindExpression(() => false);
+            init += mo.CanValidateChallenge.BindExpression(() => false); // this value is changed after testing the challenge (it's not bound to anything)
             init += mo.CanCreateCertificate.BindExpression(() => mo.CurrentAuthState.Value != null && mo.CurrentAuthState.Value.Status == "valid");
             init += mo.CanSubmitCertificate.BindExpression(() => false);
             init += mo.CanGetIssuerCertificate.BindExpression(() => false);
@@ -170,7 +171,7 @@ namespace LetsEncryptAcmeReg
             Process.Start(this.acme.GetTos(this.Model.Email.Value));
         }
 
-        private async Task AutoCaller(Bindable<bool> enabled, Bindable<bool> isAuto, Bindable<int?> retry, Bindable<int?> timer, Action action, [CanBeNull] Bindable<bool> isNextAuto, [CanBeNull] Func<Task> next)
+        private async Task AutoCaller(Bindable<bool> enabled, Bindable<bool> isAuto, Bindable<int?> retry, Bindable<int?> timer, Func<Task> action, [CanBeNull] Bindable<bool> isNextAuto, [CanBeNull] Func<Task> next)
         {
             if (!enabled.Value)
                 return;
@@ -178,12 +179,18 @@ namespace LetsEncryptAcmeReg
             if (retry.Value == null)
                 retry.Value = 3;
 
+            if (timer.Value != null)
+            {
+                timer.Value = 0;
+                return;
+            }
+
             while (retry.Value != null)
             {
                 try
                 {
                     timer.Value = 0; // this indicates that the action is running
-                    action();
+                    await action();
                     timer.Value = null; // stop timer, indicating that this is not running
                 }
                 catch (Exception ex)
@@ -240,7 +247,7 @@ namespace LetsEncryptAcmeReg
                 this.Model.AutoRegister,
                 this.Model.AutoRegisterRetry,
                 this.Model.AutoRegisterTimer,
-                () =>
+                async () =>
                 {
                     var newRegistration = this.acme.Register(this.Model.Email.Value);
                     if (newRegistration != null)
@@ -263,7 +270,7 @@ namespace LetsEncryptAcmeReg
                 this.Model.AutoAcceptTos,
                 this.Model.AutoAcceptTosRetry,
                 this.Model.AutoAcceptTosTimer,
-                () =>
+                async () =>
                 {
                     this.Model.CurrentRegistration.Value = this.acme.AcceptTos(this.Model.CurrentRegistration.Value);
                 },
@@ -278,7 +285,7 @@ namespace LetsEncryptAcmeReg
                 this.Model.AutoAddDomain,
                 this.Model.AutoAddDomainRetry,
                 this.Model.AutoAddDomainTimer,
-                () =>
+                async () =>
                 {
                     // the btnAddDomain should be disabled when something already exists,
                     // so the following function is always used to create a new identity
@@ -309,7 +316,7 @@ namespace LetsEncryptAcmeReg
                 this.Model.AutoCreateChallenge,
                 this.Model.AutoCreateChallengeRetry,
                 this.Model.AutoCreateChallengeTimer,
-                () =>
+                async () =>
                 {
                     var idref = this.acme.GetIdentifierAlias(
                         this.Model.CurrentRegistration.Value,
@@ -339,7 +346,7 @@ namespace LetsEncryptAcmeReg
                 this.Model.AutoSaveChallenge,
                 this.Model.AutoSaveChallengeRetry,
                 this.Model.AutoSaveChallengeTimer,
-                () =>
+                async () =>
                 {
                     Directory.CreateDirectory(this.Model.FilePath.Value);
 
@@ -432,7 +439,7 @@ include:      ["".well-known""]
                 this.Model.AutoTestChallenge,
                 this.Model.AutoTestChallengeRetry,
                 this.Model.AutoTestChallengeTimer,
-                () =>
+                async () =>
                 {
                     var wrGetUrl = WebRequest.Create($"{(this.Model.CurrentChallenge.Value?.Challenge as HttpChallenge)?.FileUrl}/index.html") as HttpWebRequest;
 
@@ -465,8 +472,10 @@ include:      ["".well-known""]
                                 if (str == this.Model.Key.Value)
                                 {
                                     this.Model.CanValidateChallenge.Value = true;
+                                    this.Success?.Invoke("Test: Ok - Challenge file is publicly visible.");
                                     return;
                                 }
+                                this.Model.CanValidateChallenge.Value = false;
                             }
 
                     throw new Exception("Waiting for file to be uploaded.");
@@ -482,14 +491,11 @@ include:      ["".well-known""]
                 this.Model.AutoValidateChallenge,
                 this.Model.AutoValidateChallengeRetry,
                 this.Model.AutoValidateChallengeTimer,
-                () =>
+                async () =>
                 {
-                    var idref = this.Model.CurrentAuthState.Value.Identifier;
+                    var idref = this.acme.GetIdentifierAlias(this.Model.CurrentRegistration.Value, this.Model.CurrentAuthState.Value.Identifier);
                     var state = new SubmitChallenge { IdentifierRef = idref, ChallengeType = "http-01" }.GetValue<AuthorizationState>();
                     this.Model.CurrentAuthState.Value = state;
-
-                    // number of times to retry updating the status
-                    this.Model.AutoUpdateStatusRetry.Value = 5;
                 },
                 this.Model.AutoUpdateStatus,
                 this.UpdateStatus);
@@ -604,7 +610,7 @@ include:      ["".well-known""]
                 this.Model.AutoSaveCertificate,
                 this.Model.AutoSaveCertificateRetry,
                 this.Model.AutoSaveCertificateTimer,
-                () =>
+                async () =>
                 {
                     throw new NotImplementedException();
                 },
@@ -649,12 +655,12 @@ include:      ["".well-known""]
         /// Updates the authorization status to know whether the submission succeded or not.
         /// Though this is intended for after submission, it can be called before without side effects.
         /// </summary>
-        public void UpdateStatusOnce()
+        public async Task UpdateStatusOnce()
         {
             if (this.Model.CurrentAuthState.Value == null)
                 return;
 
-            var idref = this.Model.CurrentAuthState.Value.Identifier;
+            var idref = this.acme.GetIdentifierAlias(this.Model.CurrentRegistration.Value, this.Model.CurrentAuthState.Value.Identifier);
             var newState = new UpdateIdentifier { IdentifierRef = idref }.GetValue<AuthorizationState>();
             this.Model.CurrentAuthState.Value = newState;
         }

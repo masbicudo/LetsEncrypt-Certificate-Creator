@@ -148,12 +148,14 @@ namespace LetsEncryptAcmeReg
                 if (certificateInfo == null)
                     new NewCertificate { IdentifierRef = idref, Alias = "cert1", Generate = SwitchParameter.Present }
                         .GetValue<CertificateInfo>();
+
                 // NOTE: If you have existing keys you can use them as well, this is good to do if you want to use HPKP
                 // new NewCertificate { IdentifierRef = idref, Alias = "cert1", KeyPemFile = "path\\to\\key.pem", CsrPemFile = "path\\to\\csr.pem" }.Run();
                 //certificateInfo = new SubmitCertificate { PkiTool = BouncyCastleProvider.PROVIDER_NAME, CertificateRef = "cert1" }.GetValue<CertificateInfo>();
                 certificateInfo =
                     new SubmitCertificate { CertificateRef = "cert1", Force = SwitchParameter.Present }
                         .GetValue<CertificateInfo>();
+
                 while (string.IsNullOrEmpty(certificateInfo.IssuerSerialNumber))
                 {
                     await Task.Delay(1000);

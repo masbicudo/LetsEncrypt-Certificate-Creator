@@ -9,80 +9,161 @@ namespace LetsEncryptAcmeReg
     {
         public static Action Bind(this Bindable<bool> bindable, CheckBox checkBox)
         {
+            bool isSetting = false;
             Func<bool> getter = () => checkBox.Checked;
             Action<bool> setter = b =>
             {
-                if (checkBox.Checked != b)
-                    checkBox.Checked = b;
+                isSetting = true;
+                try
+                {
+                    if (checkBox.Checked != b)
+                        checkBox.Checked = b;
+                }
+                finally
+                {
+                    isSetting = false;
+                }
             };
-            checkBox.CheckedChanged += (sender, args) => bindable.Value = getter();
+            checkBox.CheckedChanged += (sender, args) =>
+            {
+                if (!isSetting)
+                    bindable.Value = getter();
+            };
             return bindable.Bind(getter, setter);
         }
 
         public static Action Bind(this Bindable<string> bindable, Control control)
         {
+            bool isSetting = false;
             Func<string> getter = () => control.Text;
             Action<string> setter = b =>
             {
-                if (control.Text != b)
-                    control.Text = b;
+                isSetting = true;
+                try
+                {
+                    if (control.Text != b)
+                        control.Text = b;
+                }
+                finally
+                {
+                    isSetting = false;
+                }
             };
-            control.TextChanged += (sender, args) => bindable.Value = getter();
+            control.TextChanged += (sender, args) =>
+            {
+                if (!isSetting)
+                    bindable.Value = getter();
+            };
             return bindable.Bind(getter, setter);
         }
 
         public static Action Bind<T, T2>(this Bindable<T> bindable, ComboBox cmb, Func<T2, T> convert)
         {
+            bool isSetting = false;
             Func<T> getter = () => convert((T2)cmb.SelectedItem);
             Action<T> setter = b =>
             {
-                if (!EqualityComparer<T>.Default.Equals(convert((T2)cmb.SelectedItem), b))
-                    cmb.SelectedItem = b;
+                isSetting = true;
+                try
+                {
+                    if (!EqualityComparer<T>.Default.Equals(convert((T2)cmb.SelectedItem), b))
+                        cmb.SelectedItem = b;
+                }
+                finally
+                {
+                    isSetting = false;
+                }
             };
-            cmb.TextChanged += (sender, args) => bindable.Value = getter();
+            cmb.TextChanged += (sender, args) =>
+            {
+                if (!isSetting)
+                    bindable.Value = getter();
+            };
             return bindable.Bind(getter, setter);
         }
 
         public static Action Bind<T>(this Bindable<T> bindable, ListBox lst)
         {
+            bool isSetting = false;
             Func<T> getter = () => (T)lst.SelectedItem;
             Action<T> setter = b =>
             {
-                if (!EqualityComparer<T>.Default.Equals((T)lst.SelectedItem, b))
-                    lst.SelectedItem = b;
+                isSetting = true;
+                try
+                {
+                    if (!EqualityComparer<T>.Default.Equals((T)lst.SelectedItem, b))
+                        lst.SelectedItem = b;
+                }
+                finally
+                {
+                    isSetting = false;
+                }
             };
-            lst.SelectedIndexChanged += (sender, args) => bindable.Value = getter();
+            lst.SelectedIndexChanged += (sender, args) =>
+            {
+                if (!isSetting)
+                    bindable.Value = getter();
+            };
             return bindable.Bind(getter, setter);
         }
 
         public static Action Bind<T, T2>(this Bindable<T> bindable, ListBox lst, Func<T2, T> convert)
         {
+            bool isSetting = false;
             Func<T> getter = () => convert((T2)lst.SelectedItem);
             Action<T> setter = b =>
             {
-                if (!EqualityComparer<T>.Default.Equals(convert((T2)lst.SelectedItem), b))
-                    lst.SelectedItem = b;
+                isSetting = true;
+                try
+                {
+                    if (!EqualityComparer<T>.Default.Equals(convert((T2)lst.SelectedItem), b))
+                        lst.SelectedItem = b;
+                }
+                finally
+                {
+                    isSetting = false;
+                }
             };
-            lst.SelectedIndexChanged += (sender, args) => bindable.Value = getter();
+            lst.SelectedIndexChanged += (sender, args) =>
+            {
+                if (!isSetting)
+                    bindable.Value = getter();
+            };
             return bindable.Bind(getter, setter);
         }
 
         public static Action Bind(this Bindable<string> bindable, TextBox txt)
         {
+            bool isSetting = false;
             Func<string> getter = () => txt.Text;
             Action<string> setter = b =>
             {
-                int oldSelStart = txt.SelectionStart;
-                int oldSelLength = txt.SelectionLength;
-                var areEqual = txt.Text == b;
-                txt.Text = b;
-                if (areEqual)
+                isSetting = true;
+                try
                 {
-                    txt.SelectionStart = oldSelStart;
-                    txt.SelectionLength = oldSelLength;
+                    int oldSelStart = txt.SelectionStart;
+                    int oldSelLength = txt.SelectionLength;
+                    var areEqual = txt.Text == b;
+
+                    if (txt.Text != b)
+                        txt.Text = b;
+
+                    if (areEqual)
+                    {
+                        txt.SelectionStart = oldSelStart;
+                        txt.SelectionLength = oldSelLength;
+                    }
+                }
+                finally
+                {
+                    isSetting = false;
                 }
             };
-            txt.TextChanged += (sender, args) => bindable.Value = getter();
+            txt.TextChanged += (sender, args) =>
+            {
+                if (!isSetting)
+                    bindable.Value = getter();
+            };
             return bindable.Bind(getter, setter);
         }
 

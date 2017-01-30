@@ -100,22 +100,28 @@ namespace LetsEncryptAcmeReg
             //init += BindHelper.BindExpression(() => RetryToolTip(this.btnShowCertificate, null, null));
 
             // Custom collection bindings:
-            init += mo.Registrations.Bind(() => this.cmbRegistration.Items.AsArray((RegistrationItem x) => x.RegistrationInfo),
+            init += mo.Registrations.Bind(
+                () => this.cmbRegistration.Items.AsArray((RegistrationItem x) => x.RegistrationInfo),
                 v => this.cmbRegistration.SetItems(v.AsArray((RegistrationInfo x) => new RegistrationItem(x))));
 
-            init += mo.Registrations.Bind(() => this.lstRegistrations.Items.AsArray((RegistrationItem x) => x.RegistrationInfo),
+            init += mo.Registrations.Bind(
+                () => this.lstRegistrations.Items.AsArray((RegistrationItem x) => x.RegistrationInfo),
                 v => this.lstRegistrations.SetItems(v.AsArray((RegistrationInfo x) => new RegistrationItem(x))));
 
-            init += mo.Domains.Bind(() => this.cmbDomain.Items.AsArray((object o) => o.ToString()),
+            init += mo.Domains.Bind
+                (() => this.cmbDomain.Items.AsArray((object o) => o.ToString()),
                 v => this.cmbDomain.SetItems(v));
 
-            init += mo.Domains.Bind(() => this.lstDomains.Items.AsArray((object o) => o.ToString()),
+            init += mo.Domains.Bind(
+                () => this.lstDomains.Items.AsArray((object o) => o.ToString()),
                 v => this.lstDomains.SetItems(v));
 
-            init += ma.Challenges.Bind(() => this.lstChallenges.Items.AsArray((object o) => o.ToString()),
+            init += ma.Challenges.Bind(
+                () => this.lstChallenges.Items.AsArray((object o) => o.ToString()),
                 v => this.lstChallenges.SetItems(v));
 
-            init += ma.Certificates.Bind(() => this.lstCertificates.Items.AsArray((object o) => o.ToString()),
+            init += ma.Certificates.Bind(
+                () => this.lstCertificates.Items.AsArray((object o) => o.ToString()),
                 v => this.lstCertificates.SetItems(v));
 
             // Manual changed events:
@@ -211,7 +217,7 @@ namespace LetsEncryptAcmeReg
         private void Error(Exception ex)
         {
             this.richTextBox1.SelectionStart = this.richTextBox1.TextLength;
-            this.richTextBox1.ForeColor = Color.Crimson;
+            this.richTextBox1.SelectionColor = Color.Crimson;
             this.richTextBox1.SelectedText = ex.Message.Trim() + "\n";
             this.richTextBox1.ScrollToCaret();
         }
@@ -219,7 +225,7 @@ namespace LetsEncryptAcmeReg
         private void Warn(string message)
         {
             this.richTextBox1.SelectionStart = this.richTextBox1.TextLength;
-            this.richTextBox1.ForeColor = Color.DarkOrange;
+            this.richTextBox1.SelectionColor = Color.DarkOrange;
             this.richTextBox1.SelectedText = message.Trim() + "\n";
             this.richTextBox1.ScrollToCaret();
         }
@@ -227,7 +233,7 @@ namespace LetsEncryptAcmeReg
         private void Success(string message)
         {
             this.richTextBox1.SelectionStart = this.richTextBox1.TextLength;
-            this.richTextBox1.ForeColor = Color.ForestGreen;
+            this.richTextBox1.SelectionColor = Color.ForestGreen;
             this.richTextBox1.SelectedText = message.Trim() + "\n";
             this.richTextBox1.ScrollToCaret();
         }
@@ -235,7 +241,7 @@ namespace LetsEncryptAcmeReg
         private void Log(string message)
         {
             this.richTextBox1.SelectionStart = this.richTextBox1.TextLength;
-            this.richTextBox1.ForeColor = Color.DarkSlateGray;
+            this.richTextBox1.SelectionColor = Color.DarkSlateGray;
             this.richTextBox1.SelectedText = message.Trim() + "\n";
             this.richTextBox1.ScrollToCaret();
         }
@@ -284,6 +290,7 @@ namespace LetsEncryptAcmeReg
 
         private async void btnGetIssuerCert_Click(object sender, EventArgs e)
             => await this.controller.GetIssuerCertificate();
+
         private async void btnSaveCertificate_Click(object sender, EventArgs e)
             => await this.controller.SaveCertificate();
 

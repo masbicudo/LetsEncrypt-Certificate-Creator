@@ -287,6 +287,8 @@ namespace LetsEncryptAcmeReg
             return states.FirstOrDefault()?.Challenges.ToArray() ?? new AuthorizeChallenge[0];
         }
 
+        [NotNull]
+        [ItemNotNull]
         public CertificateInfo[] GetCertificates(RegistrationInfo regInfo, string domain)
         {
             var v = this.Vault();
@@ -294,6 +296,9 @@ namespace LetsEncryptAcmeReg
             var allIds = this.GetAllIdentifiers(regInfo);
 
             var identifierInfo = allIds.SingleOrDefault(x => x != null && (x.Dns ?? "") == domain);
+
+            if (identifierInfo == null)
+                return new CertificateInfo[0];
 
             var result = v.Certificates?.Values?.Where(c => c.IdentifierRef == identifierInfo.Id).ToArray();
             return result ?? new CertificateInfo[0];
