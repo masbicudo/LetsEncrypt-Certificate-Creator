@@ -70,6 +70,7 @@ namespace LetsEncryptAcmeReg
             init += mo.AutoUpdateStatus.Bind(this.chkAutoUpdateStatus);
             init += mo.AutoCreateCertificate.Bind(this.chkAutoCreateCertificate);
             init += mo.AutoSubmitCertificate.Bind(this.chkAutoSubmit);
+            init += mo.AutoGetIssuerCertificate.Bind(this.chkAutoGetIssuerCert);
             init += mo.AutoSaveCertificate.Bind(this.chkAutoSaveCertificate);
 
             init += mo.CurrentRegistration.Bind(this.lstRegistrations, (RegistrationItem i) => i?.RegistrationInfo);
@@ -94,6 +95,7 @@ namespace LetsEncryptAcmeReg
             init += BindHelper.BindExpression(() => RetryToolTip(this.btnUpdateStatus, mo.AutoUpdateStatusRetry.Value, mo.AutoUpdateStatusTimer.Value));
             init += BindHelper.BindExpression(() => RetryToolTip(this.btnCreateCertificate, mo.AutoCreateCertificateRetry.Value, mo.AutoCreateCertificateTimer.Value));
             init += BindHelper.BindExpression(() => RetryToolTip(this.btnSubmit, mo.AutoSubmitCertificateRetry.Value, mo.AutoSubmitCertificateTimer.Value));
+            init += BindHelper.BindExpression(() => RetryToolTip(this.btnGetIssuerCert, mo.AutoGetIssuerCertificateRetry.Value, mo.AutoGetIssuerCertificateTimer.Value));
             init += BindHelper.BindExpression(() => RetryToolTip(this.btnSaveCertificate, mo.AutoSaveCertificateRetry.Value, mo.AutoSaveCertificateTimer.Value));
             //init += BindHelper.BindExpression(() => RetryToolTip(this.btnShowCertificate, null, null));
 
@@ -129,6 +131,7 @@ namespace LetsEncryptAcmeReg
             mo.CanUpdateStatus.Changed += v => this.btnUpdateStatus.Enabled = v;
             mo.CanCreateCertificate.Changed += v => this.btnCreateCertificate.Enabled = v;
             mo.CanSubmitCertificate.Changed += v => this.btnSubmit.Enabled = v;
+            mo.CanGetIssuerCertificate.Changed += v => this.btnGetIssuerCert.Enabled = v;
             mo.CanSaveCertificate.Changed += v => this.btnShowCertificate.Enabled = this.btnSaveCertificate.Enabled = v;
 
             mo.Files.Changed += this.UpdateFiles;
@@ -279,6 +282,8 @@ namespace LetsEncryptAcmeReg
         private async void btnSubmit_Click(object sender, EventArgs e)
             => await this.controller.SubmitCertificate();
 
+        private async void btnGetIssuerCert_Click(object sender, EventArgs e)
+            => await this.controller.GetIssuerCertificate();
         private async void btnSaveCertificate_Click(object sender, EventArgs e)
             => await this.controller.SaveCertificate();
 

@@ -63,6 +63,7 @@ namespace LetsEncryptAcmeReg
 
             init += mo.CurrentAuthState.BindExpression(() => this.CurrentAuthState_Value(mo.CurrentRegistration.Value, mo.Domain.Value));
             init += mo.CurrentChallenge.BindExpression(() => this.CurrentChallenge_Value(mo.CurrentAuthState.Value, mo.Challenge.Value));
+            init += mo.CurrentCertificate.BindExpression(() => this.CurrentCertificate_Value(mo.CurrentRegistration.Value, mo.Domain.Value, mo.Certificate.Value));
 
             init += mo.Target.BindExpression(() => mo.CurrentChallenge.Value._(v => (v.Challenge as HttpChallenge)._(c => c.FileUrl)) ?? "");
             init += mo.Key.BindExpression(() => mo.CurrentChallenge.Value._(v => v.Challenge._(c => (c.Answer as HttpChallengeAnswer)._(a => a.KeyAuthorization))) ?? "");
@@ -79,8 +80,9 @@ namespace LetsEncryptAcmeReg
             init += mo.CanTestChallenge.BindExpression(() => mo.IsTargetValid.Value && mo.IsKeyValid.Value);
             init += mo.CanUpdateStatus.BindExpression(() => mo.CurrentAuthState.Value != null);
             init += mo.CanValidateChallenge.BindExpression(() => false);
-            init += mo.CanCreateCertificate.BindExpression(() => false);
+            init += mo.CanCreateCertificate.BindExpression(() => mo.CurrentAuthState.Value != null && mo.CurrentAuthState.Value.Status == "valid");
             init += mo.CanSubmitCertificate.BindExpression(() => false);
+            init += mo.CanGetIssuerCertificate.BindExpression(() => false);
             init += mo.CanSaveCertificate.BindExpression(() => false);
 
             init += mo.Files.BindExpression(() => this.Files_Value(mo.SiteRoot.Value, mo.FileRelativePath.Value, mo.UpdateCname.Value, mo.UpdateConfigYml.Value));
@@ -89,6 +91,15 @@ namespace LetsEncryptAcmeReg
             mo.Key.Changed += s => mo.CanValidateChallenge.Value = false;
 
             return init;
+        }
+
+        private CertificateInfo CurrentCertificate_Value(RegistrationInfo regInfo, string domain, string certRef)
+        {
+            var result = this.acme
+                .GetCertificates(regInfo, domain)
+                .SingleOrDefault(x => x.Alias == certRef);
+
+            return result;
         }
 
         private bool CanCommitChallenge_Value(string siteRoot)
@@ -503,9 +514,29 @@ include:      ["".well-known""]
                 this.Model.AutoCreateCertificate,
                 this.Model.AutoCreateCertificateRetry,
                 this.Model.AutoCreateCertificateTimer,
-                () =>
+                async () =>
                 {
-                    throw new NotImplementedException();
+                    if (this.Model.CurrentAuthState.Value.Status == "valid")
+                    {
+                        var certificateInfo =
+                            new GetCertificate { CertificateRef = this.Model.Certificate.Value }.GetValue<CertificateInfo>();
+                        var idref = this.Model.CurrentAuthState.Value.Identifier;
+
+                        if (certificateInfo == null)
+                            new NewCertificate
+                            {
+                                IdentifierRef = idref,
+                                Alias = this.Model.Certificate.Value,
+                                Generate = SwitchParameter.Present
+                            }
+                            .GetValue<CertificateInfo>();
+                    }
+                    else
+                    {
+                        // cannot retry after this error: an invalid status can never be undone
+                        this.Model.AutoCreateCertificateRetry.Value = 0;
+                        throw new Exception($"Status is '{this.Model.CurrentAuthState.Value.Status}', can't continue as it is not 'valid'.");
+                    }
                 },
                 this.Model.AutoSubmitCertificate,
                 this.SubmitCertificate);
@@ -518,9 +549,49 @@ include:      ["".well-known""]
                 this.Model.AutoSubmitCertificate,
                 this.Model.AutoSubmitCertificateRetry,
                 this.Model.AutoSubmitCertificateTimer,
-                () =>
+                async () =>
                 {
-                    throw new NotImplementedException();
+                    if (this.Model.CurrentAuthState.Value.Status == "valid")
+                    {
+                        var certificateInfo = new GetCertificate { CertificateRef = this.Model.Certificate.Value }.GetValue<CertificateInfo>();
+                        // NOTE: If you have existing keys you can use them as well, this is good to do if you want to use HPKP
+                        // new NewCertificate { IdentifierRef = idref, Alias = "cert1", KeyPemFile = "path\\to\\key.pem", CsrPemFile = "path\\to\\csr.pem" }.Run();
+                        //certificateInfo = new SubmitCertificate { PkiTool = BouncyCastleProvider.PROVIDER_NAME, CertificateRef = "cert1" }.GetValue<CertificateInfo>();
+                        if (certificateInfo.CertificateRequest == null)
+                            certificateInfo =
+                                new SubmitCertificate
+                                {
+                                    CertificateRef = this.Model.Certificate.Value,
+                                    Force = SwitchParameter.Present
+                                }
+                                .GetValue<CertificateInfo>();
+                    }
+                },
+                this.Model.AutoGetIssuerCertificate,
+                this.GetIssuerCertificate);
+        }
+
+        public async Task GetIssuerCertificate()
+        {
+            await AutoCaller(
+                this.Model.CanGetIssuerCertificate,
+                this.Model.AutoGetIssuerCertificate,
+                this.Model.AutoGetIssuerCertificateRetry,
+                this.Model.AutoGetIssuerCertificateTimer,
+                async () =>
+                {
+                    if (this.Model.CurrentAuthState.Value.Status == "valid")
+                    {
+                        var certificateInfo =
+                            new UpdateCertificate { CertificateRef = this.Model.Certificate.Value }
+                                .GetValue<CertificateInfo>();
+
+                        if (string.IsNullOrEmpty(certificateInfo.IssuerSerialNumber))
+                            throw new Exception("IssuerSerialNumber was not set.");
+
+                        this.Success?.Invoke(
+                            $"The certificate information was generated by LetsEncrypt and stored.");
+                    }
                 },
                 this.Model.AutoSaveCertificate,
                 this.SaveCertificate);

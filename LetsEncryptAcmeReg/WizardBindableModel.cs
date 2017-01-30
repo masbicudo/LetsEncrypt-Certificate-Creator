@@ -28,6 +28,7 @@ namespace LetsEncryptAcmeReg
         public Bindable<RegistrationInfo> CurrentRegistration { get; } = new Bindable<RegistrationInfo>(nameof(CurrentRegistration), flags: BindableOptions.EqualMeansUnchanged);
         public Bindable<AuthorizationState> CurrentAuthState { get; } = new Bindable<AuthorizationState>(nameof(CurrentAuthState));
         public Bindable<AuthorizeChallenge> CurrentChallenge { get; } = new Bindable<AuthorizeChallenge>(nameof(CurrentChallenge));
+        public Bindable<CertificateInfo> CurrentCertificate { get; } = new Bindable<CertificateInfo>(nameof(CurrentCertificate));
 
         public Bindable<bool> UpdateConfigYml { get; } = new Bindable<bool>(nameof(UpdateConfigYml));
         public Bindable<bool> UpdateCname { get; } = new Bindable<bool>(nameof(UpdateCname));
@@ -61,6 +62,7 @@ namespace LetsEncryptAcmeReg
         public Bindable<bool> AutoUpdateStatus { get; } = new Bindable<bool>(nameof(AutoUpdateStatus));
         public Bindable<bool> AutoCreateCertificate { get; } = new Bindable<bool>(nameof(AutoCreateCertificate));
         public Bindable<bool> AutoSubmitCertificate { get; } = new Bindable<bool>(nameof(AutoSubmitCertificate));
+        public Bindable<bool> AutoGetIssuerCertificate { get; } = new Bindable<bool>(nameof(AutoGetIssuerCertificate));
         public Bindable<bool> AutoSaveCertificate { get; } = new Bindable<bool>(nameof(AutoSaveCertificate));
 
         public Bindable<int?> AutoRegisterTimer { get; } = new Bindable<int?>(nameof(AutoRegisterTimer));
@@ -74,6 +76,7 @@ namespace LetsEncryptAcmeReg
         public Bindable<int?> AutoUpdateStatusTimer { get; } = new Bindable<int?>(nameof(AutoUpdateStatusTimer));
         public Bindable<int?> AutoCreateCertificateTimer { get; } = new Bindable<int?>(nameof(AutoCreateCertificateTimer));
         public Bindable<int?> AutoSubmitCertificateTimer { get; } = new Bindable<int?>(nameof(AutoSubmitCertificateTimer));
+        public Bindable<int?> AutoGetIssuerCertificateTimer { get; } = new Bindable<int?>(nameof(AutoGetIssuerCertificateTimer));
         public Bindable<int?> AutoSaveCertificateTimer { get; } = new Bindable<int?>(nameof(AutoSaveCertificateTimer));
 
         public Bindable<int?> AutoRegisterRetry { get; } = new Bindable<int?>(nameof(AutoRegisterRetry));
@@ -87,6 +90,7 @@ namespace LetsEncryptAcmeReg
         public Bindable<int?> AutoUpdateStatusRetry { get; } = new Bindable<int?>(nameof(AutoUpdateStatusRetry), flags: BindableOptions.AllowRecursiveSets);
         public Bindable<int?> AutoCreateCertificateRetry { get; } = new Bindable<int?>(nameof(AutoCreateCertificateRetry));
         public Bindable<int?> AutoSubmitCertificateRetry { get; } = new Bindable<int?>(nameof(AutoSubmitCertificateRetry));
+        public Bindable<int?> AutoGetIssuerCertificateRetry { get; } = new Bindable<int?>(nameof(AutoGetIssuerCertificateRetry));
         public Bindable<int?> AutoSaveCertificateRetry { get; } = new Bindable<int?>(nameof(AutoSaveCertificateRetry));
 
         public Bindable<bool> CanRegister { get; } = new Bindable<bool>(nameof(CanRegister));
@@ -100,6 +104,7 @@ namespace LetsEncryptAcmeReg
         public Bindable<bool> CanUpdateStatus { get; } = new Bindable<bool>(nameof(CanUpdateStatus));
         public Bindable<bool> CanCreateCertificate { get; } = new Bindable<bool>(nameof(CanCreateCertificate));
         public Bindable<bool> CanSubmitCertificate { get; } = new Bindable<bool>(nameof(CanSubmitCertificate));
+        public Bindable<bool> CanGetIssuerCertificate { get; } = new Bindable<bool>(nameof(CanGetIssuerCertificate));
         public Bindable<bool> CanSaveCertificate { get; } = new Bindable<bool>(nameof(CanSaveCertificate));
 
     }
