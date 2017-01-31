@@ -171,27 +171,60 @@ namespace LetsEncryptAcmeReg
             Process.Start(this.acme.GetTos(this.Model.Email.Value));
         }
 
+        /// <summary>
+        /// Takes care of the automatic execution of the action, retries, timer between retries, and calling the next actions.
+        /// </summary>
+        /// <param name="enabled">
+        /// Indicates whether the action can be executed or not.
+        /// Note that this will not prevent the next action from being executed.
+        /// </param>
+        /// <param name="isAuto">
+        /// Indicates whether the action should retry automatically.
+        /// </param>
+        /// <param name="retry">
+        /// Number of retries for this action.
+        /// If null, the default value will be used.
+        /// </param>
+        /// <param name="timer">
+        /// Timer used between retries to indicate the amount of time remaining until next retry.
+        /// </param>
+        /// <param name="action">
+        /// The delegate of the action to be executed.
+        /// </param>
+        /// <param name="isNextAuto">
+        /// Indicates whether the next action should be executed automatically when the current action succeeds.
+        /// If the current action is disabled the execution does not happen, but it is considered as a success,
+        /// and thus the next action is called.
+        /// </param>
+        /// <param name="next">
+        /// The next action to execute when the current action succeeds.
+        /// </param>
+        /// <returns></returns>
         private async Task AutoCaller(Bindable<bool> enabled, Bindable<bool> isAuto, Bindable<int?> retry, Bindable<int?> timer, Func<Task> action, [CanBeNull] Bindable<bool> isNextAuto, [CanBeNull] Func<Task> next)
         {
-            if (!enabled.Value)
-                return;
-
+            // If the number of retries is already set use it.
+            // Otherwsie use the default value.
             if (retry.Value == null)
                 retry.Value = 3;
 
+            // If the timer is already set, then there is another task in place.
+            // Aborting current task, and leaving a message for the other task to restart as soon as possible.
             if (timer.Value != null)
             {
                 timer.Value = 0;
                 return;
             }
 
-            while (retry.Value != null)
+            bool ok = false;
+            while (enabled.Value && retry.Value != null)
             {
                 try
                 {
                     timer.Value = 0; // this indicates that the action is running
                     await action();
                     timer.Value = null; // stop timer, indicating that this is not running
+                    ok = true;
+                    break;
                 }
                 catch (Exception ex)
                 {
@@ -202,6 +235,7 @@ namespace LetsEncryptAcmeReg
                 // stop when there is no more remaining retries
                 if (retry.Value == 0)
                     break;
+
                 int retryCount = (int)retry.Value;
                 retry.Value = Interlocked.Decrement(ref retryCount);
 
@@ -221,7 +255,9 @@ namespace LetsEncryptAcmeReg
                     // but we will not use the default amount of time instead.
                     var start = Stopwatch.GetTimestamp();
                     var waitTime = Math.Min(50, timer.Value.Value);
+
                     await Task.Delay(waitTime);
+
                     var total = (int)((double)(Stopwatch.GetTimestamp() - start) / Stopwatch.Frequency * 1000);
                     var dec = total < waitTime * 2 ? total : waitTime;
                     timer.Value -= dec;
@@ -231,9 +267,10 @@ namespace LetsEncryptAcmeReg
                     break;
             }
 
+            timer.Value = null; // stop timer
             retry.Value = null; // indicates that there is no more retries
 
-            if (isNextAuto?.Value == true && next != null)
+            if (ok && isNextAuto?.Value == true && next != null)
             {
                 await Task.Delay(1);
                 await next();
@@ -522,27 +559,30 @@ include:      ["".well-known""]
                 this.Model.AutoCreateCertificateTimer,
                 async () =>
                 {
-                    if (this.Model.CurrentAuthState.Value.Status == "valid")
-                    {
-                        var certificateInfo =
-                            new GetCertificate { CertificateRef = this.Model.Certificate.Value }.GetValue<CertificateInfo>();
-                        var idref = this.Model.CurrentAuthState.Value.Identifier;
-
-                        if (certificateInfo == null)
-                            new NewCertificate
-                            {
-                                IdentifierRef = idref,
-                                Alias = this.Model.Certificate.Value,
-                                Generate = SwitchParameter.Present
-                            }
-                            .GetValue<CertificateInfo>();
-                    }
-                    else
+                    if (this.Model.CurrentAuthState.Value.Status != "valid")
                     {
                         // cannot retry after this error: an invalid status can never be undone
                         this.Model.AutoCreateCertificateRetry.Value = 0;
                         throw new Exception($"Status is '{this.Model.CurrentAuthState.Value.Status}', can't continue as it is not 'valid'.");
                     }
+
+                    if (string.IsNullOrWhiteSpace(this.Model.Certificate.Value))
+                    {
+                        throw new Exception($"Certificate name is empty.");
+                    }
+
+                    var certificateInfo =
+                        new GetCertificate { CertificateRef = this.Model.Certificate.Value }.GetValue<CertificateInfo>();
+                    var idref = this.Model.CurrentAuthState.Value.Identifier;
+
+                    if (certificateInfo == null)
+                        new NewCertificate
+                        {
+                            IdentifierRef = idref,
+                            Alias = this.Model.Certificate.Value,
+                            Generate = SwitchParameter.Present
+                        }
+                        .GetValue<CertificateInfo>();
                 },
                 this.Model.AutoSubmitCertificate,
                 this.SubmitCertificate);
