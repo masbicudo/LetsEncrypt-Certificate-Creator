@@ -567,12 +567,12 @@ include:      ["".well-known""]
                     }
 
                     if (string.IsNullOrWhiteSpace(this.Model.Certificate.Value))
-                    {
                         throw new Exception($"Certificate name is empty.");
-                    }
 
-                    var certificateInfo =
-                        new GetCertificate { CertificateRef = this.Model.Certificate.Value }.GetValue<CertificateInfo>();
+                    var certificateInfo = this.acme.GetCertificate(this.Model.Certificate.Value);
+                    if (certificateInfo?.IdentifierDns != this.Model.Domain.Value)
+                        throw new Exception($"Certificate name is already used by another domain.");
+
                     var idref = this.Model.CurrentAuthState.Value.Identifier;
 
                     if (certificateInfo == null)

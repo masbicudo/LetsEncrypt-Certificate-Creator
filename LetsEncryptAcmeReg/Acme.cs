@@ -304,6 +304,17 @@ namespace LetsEncryptAcmeReg
             return result ?? new CertificateInfo[0];
         }
 
+        [CanBeNull]
+        public CertificateInfo GetCertificate(string certRef)
+        {
+            var v = this.Vault();
+            if (v.Certificates == null || v.Certificates.Count < 1)
+                return null;
+
+            var ci = v.Certificates.GetByRef(certRef, throwOnMissing: false);
+            return ci;
+        }
+
         public void DeleteRegistration(RegistrationInfo value)
         {
             if (value == null)
