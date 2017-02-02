@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Management.Automation;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -47,13 +48,18 @@ namespace LetsEncryptAcmeReg
             init += () => mo.Now.Value = DateTime.Now;
             init += mo.Date.BindExpression(() => mo.Now.Value.Date);
 
+            // Collections
+            init += mo.Domains.BindExpression(() => this.acme.GetDomainsByEmail(mo.Email.Value).OrderBy(x => x).ToArray());
+            init += mo.Certificates.BindExpression(() => this.acme.GetCertificates(this.Model.CurrentRegistration.Value, this.Model.Domain.Value)
+                .Select(c => c.Alias)
+                .ToArray());
+
             // Complex relations:
             //      These relations are built by using expressions.
             //      Every bindable reference in the right hand side
             //      have a changed event added automatically.
             init += mo.IsEmailValid.BindExpression(() => !string.IsNullOrWhiteSpace(mo.Email.Value));
             init += mo.IsRegistrationCreated.BindExpression(() => mo.CurrentRegistration.Value != null);
-            init += mo.Domains.BindExpression(() => this.acme.GetDomainsByEmail(mo.Email.Value).OrderBy(x => x).ToArray());
             init += mo.IsDomainValid.BindExpression(() => !string.IsNullOrWhiteSpace(mo.Domain.Value) && mo.IsEmailValid.Value);
             init += mo.IsDomainCreated.BindExpression(() => mo.Domains.Value._S(v => v.Any(i => i == mo.Domain.Value)) ?? false);
             init += mo.IsChallengeValid.BindExpression(() => !string.IsNullOrWhiteSpace(mo.Challenge.Value) && mo.IsDomainValid.Value);
@@ -74,6 +80,8 @@ namespace LetsEncryptAcmeReg
 
             init += mo.FilePath.BindExpression(() => this.FilePath_Value(mo.ChallengeHasFile.Value, mo.SiteRoot.Value, mo.FileRelativePath.Value));
 
+            init += mo.Issuer.BindExpression(() => mo.CurrentCertificate.Value.With(v => v != null ? v.IssuerSerialNumber : ""));
+
             init += mo.CanRegister.BindExpression(() => mo.IsEmailValid.Value);
             init += mo.CanAcceptTos.BindExpression(() => this.CanAcceptTos_Value(mo.CurrentRegistration.Value));
             init += mo.CanAddDomain.BindExpression(() => mo.IsDomainValid.Value && !mo.IsDomainCreated.Value);
@@ -83,17 +91,95 @@ namespace LetsEncryptAcmeReg
             init += mo.CanTestChallenge.BindExpression(() => mo.IsTargetValid.Value && mo.IsKeyValid.Value);
             init += mo.CanUpdateStatus.BindExpression(() => mo.CurrentAuthState.Value != null);
             init += mo.CanValidateChallenge.BindExpression(() => false); // this value is changed after testing the challenge (it's not bound to anything)
-            init += mo.CanCreateCertificate.BindExpression(() => mo.CurrentAuthState.Value != null && mo.CurrentAuthState.Value.Status == "valid");
-            init += mo.CanSubmitCertificate.BindExpression(() => false);
-            init += mo.CanGetIssuerCertificate.BindExpression(() => false);
-            init += mo.CanSaveCertificate.BindExpression(() => false);
+            init += mo.CanCreateCertificate.BindExpression(() => mo.CurrentAuthState.Value.With(v => v != null && v.Status == "valid"));
+            init += mo.CanSubmitCertificate.BindExpression(() => mo.CurrentCertificate.Value.With(v => v != null && v.CertificateRequest == null && string.IsNullOrWhiteSpace(v.IssuerSerialNumber)));
+            init += mo.CanGetIssuerCertificate.BindExpression(() => mo.CurrentCertificate.Value.With(v => v != null && v.CertificateRequest != null && string.IsNullOrWhiteSpace(v.IssuerSerialNumber)));
+            init += mo.CanSaveCertificate.BindExpression(() => mo.CurrentCertificate.Value.With(v => v != null && !string.IsNullOrWhiteSpace(v.IssuerSerialNumber)) && this.Model.CertificateType.Value != 0);
+
+            init += mo.IsPasswordEnabled.BindExpression(() => mo.CertificateType.Value == CertType.Pkcs12);
 
             init += mo.Files.BindExpression(() => this.Files_Value(mo.SiteRoot.Value, mo.FileRelativePath.Value, mo.UpdateCname.Value, mo.UpdateConfigYml.Value));
+
+            init += mo.ExpandedSavePath.BindExpression(() => this.ExpandedSavePath_Value(mo.SavePath.Value, mo.CertificateType.Value, mo.Certificate.Value));
 
             // when the key changes, the domain must be tested again
             mo.Key.Changed += s => mo.CanValidateChallenge.Value = false;
 
             return init;
+        }
+
+        private string ExpandedSavePath_Value(string savePath, CertType certType, string cert)
+        {
+            if (string.IsNullOrWhiteSpace(savePath))
+                savePath = Environment.CurrentDirectory;
+
+            if (certType == 0)
+                return null;
+
+            if (string.IsNullOrWhiteSpace(cert))
+                return null;
+
+            var ext = GetExt(certType);
+
+            var pathExpanded = Environment.ExpandEnvironmentVariables(savePath);
+            string path;
+            string fname;
+            if (!Directory.Exists(pathExpanded))
+            {
+                path = Path.GetDirectoryName(pathExpanded) + "\\";
+                fname = Path.GetFileName(pathExpanded);
+                if (string.IsNullOrWhiteSpace(fname))
+                    fname = cert + "." + ext;
+                else if (Path.GetExtension(fname) != "." + ext)
+                    fname += "." + ext;
+            }
+            else if (!pathExpanded.EndsWith("\\"))
+            {
+                path = pathExpanded + "\\";
+                fname = cert + "." + ext;
+            }
+            else
+            {
+                path = pathExpanded;
+                fname = cert + "." + ext;
+            }
+
+            var fullName = Path.Combine(path, fname);
+
+            return fullName;
+        }
+
+        internal static string GetExt(CertType certType)
+        {
+            string ext;
+            switch (certType)
+            {
+                case CertType.KeyPEM:
+                    ext = "pem";
+                    break;
+                case CertType.CsrPEM:
+                    ext = "pem";
+                    break;
+                case CertType.CertificatePEM:
+                    ext = "pem";
+                    break;
+                case CertType.CertificateDER:
+                    ext = "der";
+                    break;
+                case CertType.IssuerPEM:
+                    ext = "pem";
+                    break;
+                case CertType.IssuerDER:
+                    ext = "der";
+                    break;
+                case CertType.Pkcs12:
+                    ext = "pfx";
+                    break;
+                default:
+                    ext = "";
+                    break;
+            }
+            return ext;
         }
 
         private CertificateInfo CurrentCertificate_Value(RegistrationInfo regInfo, string domain, string certRef)
@@ -585,6 +671,10 @@ include:      ["".well-known""]
                             Generate = SwitchParameter.Present
                         }
                         .GetValue<CertificateInfo>();
+
+                    // updates the certificate value
+                    // force is used because the bindable object is flagged not to fire events if value does not chage.
+                    this.Model.Certificate.Update(force: true);
                 },
                 this.Model.AutoSubmitCertificate,
                 this.SubmitCertificate);
@@ -606,7 +696,7 @@ include:      ["".well-known""]
                         // new NewCertificate { IdentifierRef = idref, Alias = "cert1", KeyPemFile = "path\\to\\key.pem", CsrPemFile = "path\\to\\csr.pem" }.Run();
                         //certificateInfo = new SubmitCertificate { PkiTool = BouncyCastleProvider.PROVIDER_NAME, CertificateRef = "cert1" }.GetValue<CertificateInfo>();
                         if (certificateInfo.CertificateRequest == null)
-                            certificateInfo =
+                            this.Model.CurrentCertificate.Value =
                                 new SubmitCertificate
                                 {
                                     CertificateRef = this.Model.Certificate.Value,
@@ -634,6 +724,8 @@ include:      ["".well-known""]
                             new UpdateCertificate { CertificateRef = this.Model.Certificate.Value }
                                 .GetValue<CertificateInfo>();
 
+                        this.Model.CurrentCertificate.Value = certificateInfo;
+
                         if (string.IsNullOrEmpty(certificateInfo.IssuerSerialNumber))
                             throw new Exception("IssuerSerialNumber was not set.");
 
@@ -641,7 +733,7 @@ include:      ["".well-known""]
                             $"The certificate information was generated by LetsEncrypt and stored.");
                     }
                 },
-                this.Model.AutoSaveCertificate,
+                this.Model.AutoSaveOrShowCertificate,
                 this.SaveCertificate);
         }
 
@@ -649,15 +741,54 @@ include:      ["".well-known""]
         {
             await AutoCaller(
                 this.Model.CanSaveCertificate,
-                this.Model.AutoSaveCertificate,
-                this.Model.AutoSaveCertificateRetry,
-                this.Model.AutoSaveCertificateTimer,
+                this.Model.AutoSaveOrShowCertificate,
+                this.Model.AutoSaveOrShowCertificateRetry,
+                this.Model.AutoSaveOrShowCertificateTimer,
                 async () =>
                 {
-                    throw new NotImplementedException();
-                },
-                null,
-                null);
+                    var cmd = new GetCertificate
+                    {
+                        CertificateRef = this.Model.Certificate.Value,
+                        Overwrite = SwitchParameter.Present
+                    };
+
+                    var path = this.Model.ExpandedSavePath.Value;
+                    var dir = Path.GetDirectoryName(path);
+                    if (!string.IsNullOrWhiteSpace(dir) && !Directory.Exists(dir))
+                        this.CatchError(() => Directory.CreateDirectory(dir));
+
+                    switch (this.Model.CertificateType.Value)
+                    {
+                        case CertType.KeyPEM:
+                            cmd.ExportKeyPEM = path;
+                            break;
+                        case CertType.CsrPEM:
+                            cmd.ExportCsrPEM = path;
+                            break;
+                        case CertType.CertificatePEM:
+                            cmd.ExportCertificatePEM = path;
+                            break;
+                        case CertType.CertificateDER:
+                            cmd.ExportCertificateDER = path;
+                            break;
+                        case CertType.IssuerPEM:
+                            cmd.ExportIssuerPEM = path;
+                            break;
+                        case CertType.IssuerDER:
+                            cmd.ExportIssuerDER = path;
+                            break;
+                        case CertType.Pkcs12:
+                            cmd.ExportPkcs12 = path;
+                            cmd.CertificatePassword = this.Model.Password.Value;
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException(nameof(this.Model.CertificateType));
+                    }
+
+                    cmd.Run();
+
+                    this.Success?.Invoke("Certificate file saved.");
+                }, null, null);
         }
 
         public async Task RegistrationListChanged()

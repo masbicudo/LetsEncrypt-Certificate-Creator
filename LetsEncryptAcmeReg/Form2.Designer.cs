@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -74,14 +75,17 @@
             this.cmbCertificate = new System.Windows.Forms.ComboBox();
             this.btnCreateCertificate = new System.Windows.Forms.Button();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnChangeSavePath = new System.Windows.Forms.Button();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.btnShowCertificate = new System.Windows.Forms.Button();
             this.btnSaveCertificate = new System.Windows.Forms.Button();
-            this.chkAutoSaveCertificate = new System.Windows.Forms.CheckBox();
+            this.chkAutoSaveOrShowCertificate = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
             this.cmbCertificateType = new System.Windows.Forms.ComboBox();
             this.label9 = new System.Windows.Forms.Label();
             this.txtIssuer = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.txtSavePath = new System.Windows.Forms.TextBox();
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.chkShowPassword = new System.Windows.Forms.CheckBox();
             this.label10 = new System.Windows.Forms.Label();
@@ -236,9 +240,9 @@
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tableLayoutPanel1.SetColumnSpan(this.panel1, 4);
             this.panel1.Controls.Add(this.richTextBox1);
-            this.panel1.Location = new System.Drawing.Point(3, 384);
+            this.panel1.Location = new System.Drawing.Point(3, 409);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(586, 164);
+            this.panel1.Size = new System.Drawing.Size(586, 139);
             this.panel1.TabIndex = 2;
             // 
             // richTextBox1
@@ -250,7 +254,7 @@
             this.richTextBox1.Location = new System.Drawing.Point(0, 0);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(584, 162);
+            this.richTextBox1.Size = new System.Drawing.Size(584, 137);
             this.richTextBox1.TabIndex = 14;
             this.richTextBox1.Text = "";
             this.richTextBox1.MouseLeave += new System.EventHandler(this.richTextBox1_MouseLeave);
@@ -863,29 +867,48 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel4.AutoSize = true;
             this.tableLayoutPanel4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanel4.ColumnCount = 3;
+            this.tableLayoutPanel4.ColumnCount = 4;
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel4.Controls.Add(this.tableLayoutPanel5, 0, 3);
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel4.Controls.Add(this.btnChangeSavePath, 3, 3);
+            this.tableLayoutPanel4.Controls.Add(this.tableLayoutPanel5, 0, 4);
             this.tableLayoutPanel4.Controls.Add(this.label8, 0, 1);
             this.tableLayoutPanel4.Controls.Add(this.cmbCertificateType, 1, 1);
             this.tableLayoutPanel4.Controls.Add(this.label9, 0, 2);
             this.tableLayoutPanel4.Controls.Add(this.txtIssuer, 1, 0);
+            this.tableLayoutPanel4.Controls.Add(this.label17, 0, 3);
+            this.tableLayoutPanel4.Controls.Add(this.txtSavePath, 1, 3);
             this.tableLayoutPanel4.Controls.Add(this.txtPassword, 1, 2);
             this.tableLayoutPanel4.Controls.Add(this.chkShowPassword, 2, 2);
             this.tableLayoutPanel4.Controls.Add(this.label10, 0, 0);
             this.tableLayoutPanel4.Location = new System.Drawing.Point(96, 289);
             this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-            this.tableLayoutPanel4.RowCount = 5;
+            this.tableLayoutPanel4.RowCount = 6;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(413, 92);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(413, 117);
             this.tableLayoutPanel4.TabIndex = 13;
+            // 
+            // btnChangeSavePath
+            // 
+            this.btnChangeSavePath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnChangeSavePath.AutoSize = true;
+            this.btnChangeSavePath.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnChangeSavePath.Location = new System.Drawing.Point(386, 68);
+            this.btnChangeSavePath.Margin = new System.Windows.Forms.Padding(1);
+            this.btnChangeSavePath.Name = "btnChangeSavePath";
+            this.btnChangeSavePath.Size = new System.Drawing.Size(26, 23);
+            this.btnChangeSavePath.TabIndex = 10;
+            this.btnChangeSavePath.Text = "...";
+            this.btnChangeSavePath.UseVisualStyleBackColor = true;
+            this.btnChangeSavePath.Click += new System.EventHandler(this.btnChangeSavePath_Click);
             // 
             // tableLayoutPanel5
             // 
@@ -895,15 +918,15 @@
             this.tableLayoutPanel5.AutoSize = true;
             this.tableLayoutPanel5.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.tableLayoutPanel5.ColumnCount = 4;
-            this.tableLayoutPanel4.SetColumnSpan(this.tableLayoutPanel5, 3);
+            this.tableLayoutPanel4.SetColumnSpan(this.tableLayoutPanel5, 4);
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel5.Controls.Add(this.btnShowCertificate, 3, 0);
             this.tableLayoutPanel5.Controls.Add(this.btnSaveCertificate, 2, 0);
-            this.tableLayoutPanel5.Controls.Add(this.chkAutoSaveCertificate, 1, 0);
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(0, 67);
+            this.tableLayoutPanel5.Controls.Add(this.chkAutoSaveOrShowCertificate, 1, 0);
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(0, 92);
             this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 1;
@@ -939,22 +962,22 @@
             this.btnSaveCertificate.UseVisualStyleBackColor = true;
             this.btnSaveCertificate.Click += new System.EventHandler(this.btnSaveCertificate_Click);
             // 
-            // chkAutoSaveCertificate
+            // chkAutoSaveOrShowCertificate
             // 
-            this.chkAutoSaveCertificate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkAutoSaveCertificate.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkAutoSaveCertificate.AutoSize = true;
-            this.chkAutoSaveCertificate.Checked = true;
-            this.chkAutoSaveCertificate.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkAutoSaveCertificate.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkAutoSaveCertificate.Location = new System.Drawing.Point(299, 1);
-            this.chkAutoSaveCertificate.Margin = new System.Windows.Forms.Padding(1);
-            this.chkAutoSaveCertificate.Name = "chkAutoSaveCertificate";
-            this.chkAutoSaveCertificate.Size = new System.Drawing.Size(23, 23);
-            this.chkAutoSaveCertificate.TabIndex = 11;
-            this.chkAutoSaveCertificate.Text = ">";
-            this.chkAutoSaveCertificate.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.chkAutoSaveCertificate.UseVisualStyleBackColor = true;
+            this.chkAutoSaveOrShowCertificate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkAutoSaveOrShowCertificate.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkAutoSaveOrShowCertificate.AutoSize = true;
+            this.chkAutoSaveOrShowCertificate.Checked = true;
+            this.chkAutoSaveOrShowCertificate.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkAutoSaveOrShowCertificate.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.chkAutoSaveOrShowCertificate.Location = new System.Drawing.Point(299, 1);
+            this.chkAutoSaveOrShowCertificate.Margin = new System.Windows.Forms.Padding(1);
+            this.chkAutoSaveOrShowCertificate.Name = "chkAutoSaveOrShowCertificate";
+            this.chkAutoSaveOrShowCertificate.Size = new System.Drawing.Size(23, 23);
+            this.chkAutoSaveOrShowCertificate.TabIndex = 11;
+            this.chkAutoSaveOrShowCertificate.Text = ">";
+            this.chkAutoSaveOrShowCertificate.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.chkAutoSaveOrShowCertificate.UseVisualStyleBackColor = true;
             // 
             // label8
             // 
@@ -963,7 +986,7 @@
             this.label8.Location = new System.Drawing.Point(1, 27);
             this.label8.Margin = new System.Windows.Forms.Padding(1);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(53, 13);
+            this.label8.Size = new System.Drawing.Size(56, 13);
             this.label8.TabIndex = 12;
             this.label8.Text = "Type";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -971,15 +994,21 @@
             // cmbCertificateType
             // 
             this.cmbCertificateType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel4.SetColumnSpan(this.cmbCertificateType, 2);
+            this.tableLayoutPanel4.SetColumnSpan(this.cmbCertificateType, 3);
             this.cmbCertificateType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbCertificateType.FormattingEnabled = true;
             this.cmbCertificateType.Items.AddRange(new object[] {
-            "http-01"});
-            this.cmbCertificateType.Location = new System.Drawing.Point(56, 23);
+            "Key PEM",
+            "Csr PEM",
+            "Certificate PEM",
+            "Certificate DER",
+            "Issuer PEM",
+            "Issuer DER",
+            "Pkcs12"});
+            this.cmbCertificateType.Location = new System.Drawing.Point(59, 23);
             this.cmbCertificateType.Margin = new System.Windows.Forms.Padding(1);
             this.cmbCertificateType.Name = "cmbCertificateType";
-            this.cmbCertificateType.Size = new System.Drawing.Size(356, 21);
+            this.cmbCertificateType.Size = new System.Drawing.Size(353, 21);
             this.cmbCertificateType.TabIndex = 9;
             // 
             // label9
@@ -989,7 +1018,7 @@
             this.label9.Location = new System.Drawing.Point(1, 49);
             this.label9.Margin = new System.Windows.Forms.Padding(1);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(53, 13);
+            this.label9.Size = new System.Drawing.Size(56, 13);
             this.label9.TabIndex = 12;
             this.label9.Text = "Password";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -997,21 +1026,46 @@
             // txtIssuer
             // 
             this.txtIssuer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel4.SetColumnSpan(this.txtIssuer, 2);
-            this.txtIssuer.Location = new System.Drawing.Point(56, 1);
+            this.tableLayoutPanel4.SetColumnSpan(this.txtIssuer, 3);
+            this.txtIssuer.Location = new System.Drawing.Point(59, 1);
             this.txtIssuer.Margin = new System.Windows.Forms.Padding(1);
             this.txtIssuer.Name = "txtIssuer";
             this.txtIssuer.ReadOnly = true;
-            this.txtIssuer.Size = new System.Drawing.Size(356, 20);
+            this.txtIssuer.Size = new System.Drawing.Size(353, 20);
             this.txtIssuer.TabIndex = 13;
+            // 
+            // label17
+            // 
+            this.label17.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(1, 73);
+            this.label17.Margin = new System.Windows.Forms.Padding(1);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(56, 13);
+            this.label17.TabIndex = 16;
+            this.label17.Text = "Save path";
+            this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // txtSavePath
+            // 
+            this.txtSavePath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSavePath.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.txtSavePath.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystemDirectories;
+            this.tableLayoutPanel4.SetColumnSpan(this.txtSavePath, 2);
+            this.txtSavePath.Location = new System.Drawing.Point(59, 69);
+            this.txtSavePath.Margin = new System.Windows.Forms.Padding(1);
+            this.txtSavePath.Name = "txtSavePath";
+            this.txtSavePath.Size = new System.Drawing.Size(325, 20);
+            this.txtSavePath.TabIndex = 15;
+            this.txtSavePath.Text = "%Desktop%";
             // 
             // txtPassword
             // 
             this.txtPassword.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtPassword.Location = new System.Drawing.Point(56, 46);
+            this.txtPassword.Location = new System.Drawing.Point(59, 46);
             this.txtPassword.Margin = new System.Windows.Forms.Padding(1);
             this.txtPassword.Name = "txtPassword";
-            this.txtPassword.Size = new System.Drawing.Size(253, 20);
+            this.txtPassword.Size = new System.Drawing.Size(250, 20);
             this.txtPassword.TabIndex = 15;
             this.txtPassword.UseSystemPasswordChar = true;
             // 
@@ -1019,6 +1073,7 @@
             // 
             this.chkShowPassword.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.chkShowPassword.AutoSize = true;
+            this.tableLayoutPanel4.SetColumnSpan(this.chkShowPassword, 2);
             this.chkShowPassword.Location = new System.Drawing.Point(311, 47);
             this.chkShowPassword.Margin = new System.Windows.Forms.Padding(1);
             this.chkShowPassword.Name = "chkShowPassword";
@@ -1034,7 +1089,7 @@
             this.label10.Location = new System.Drawing.Point(1, 4);
             this.label10.Margin = new System.Windows.Forms.Padding(1);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(53, 13);
+            this.label10.Size = new System.Drawing.Size(56, 13);
             this.label10.TabIndex = 12;
             this.label10.Text = "Issuer";
             this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1615,7 +1670,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         private System.Windows.Forms.Button btnShowCertificate;
         private System.Windows.Forms.Button btnSaveCertificate;
-        private System.Windows.Forms.CheckBox chkAutoSaveCertificate;
+        private System.Windows.Forms.CheckBox chkAutoSaveOrShowCertificate;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.ComboBox cmbCertificateType;
         private System.Windows.Forms.Label label9;
@@ -1671,6 +1726,9 @@
         private System.Windows.Forms.CheckBox chkAutoGetIssuerCert;
         private System.Windows.Forms.Button btnGetIssuerCert;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
+        private System.Windows.Forms.Button btnChangeSavePath;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.TextBox txtSavePath;
     }
 }

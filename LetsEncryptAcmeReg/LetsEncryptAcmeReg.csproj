@@ -65,6 +65,7 @@
     <Compile Include="BindableChanging.cs" />
     <Compile Include="BindableExtensions.cs" />
     <Compile Include="BindableOptions.cs" />
+    <Compile Include="CertType.cs" />
     <Compile Include="CmdLetExtensions.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="DynamicExtensions.cs" />

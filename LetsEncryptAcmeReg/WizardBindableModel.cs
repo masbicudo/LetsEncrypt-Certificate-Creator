@@ -1,3 +1,4 @@
+using System;
 using ACMESharp;
 using ACMESharp.Vault.Model;
 
@@ -17,14 +18,16 @@ namespace LetsEncryptAcmeReg
         public Bindable<string> Target { get; } = new Bindable<string>(nameof(Target));
         public Bindable<string> Key { get; } = new Bindable<string>(nameof(Key));
         public Bindable<string> SiteRoot { get; } = new Bindable<string>(nameof(SiteRoot));
-        public Bindable<string> Certificate { get; } = new Bindable<string>(nameof(Certificate));
+        public Bindable<string> Certificate { get; } = new Bindable<string>(nameof(Certificate), flags: BindableOptions.EqualMeansUnchanged);
         public Bindable<string> Issuer { get; } = new Bindable<string>(nameof(Issuer));
-        public Bindable<string> CertificateType { get; } = new Bindable<string>(nameof(CertificateType));
+        public Bindable<CertType> CertificateType { get; } = new Bindable<CertType>(nameof(CertificateType));
         public Bindable<string> Password { get; } = new Bindable<string>(nameof(Password));
         public Bindable<bool> ShowPassword { get; } = new Bindable<bool>(nameof(ShowPassword));
         public Bindable<string> GitUserName { get; } = new Bindable<string>(nameof(GitUserName));
         public Bindable<string> GitPassword { get; } = new Bindable<string>(nameof(GitPassword));
+        public Bindable<string> SavePath { get; } = new Bindable<string>(nameof(SavePath));
 
+        public Bindable<string> ExpandedSavePath { get; } = new Bindable<string>(nameof(ExpandedSavePath));
         public Bindable<string> FileRelativePath { get; } = new Bindable<string>(nameof(FileRelativePath));
         public Bindable<string> FilePath { get; } = new Bindable<string>(nameof(FilePath));
         public Bindable<string[]> Files { get; } = new Bindable<string[]>(nameof(Files));
@@ -32,6 +35,7 @@ namespace LetsEncryptAcmeReg
         public Bindable<AuthorizationState> CurrentAuthState { get; } = new Bindable<AuthorizationState>(nameof(CurrentAuthState));
         public Bindable<AuthorizeChallenge> CurrentChallenge { get; } = new Bindable<AuthorizeChallenge>(nameof(CurrentChallenge));
         public Bindable<CertificateInfo> CurrentCertificate { get; } = new Bindable<CertificateInfo>(nameof(CurrentCertificate));
+        public Bindable<string[]> Certificates { get; } = new Bindable<string[]>(nameof(Certificates));
 
         public Bindable<bool> UpdateConfigYml { get; } = new Bindable<bool>(nameof(UpdateConfigYml));
         public Bindable<bool> UpdateCname { get; } = new Bindable<bool>(nameof(UpdateCname));
@@ -53,6 +57,7 @@ namespace LetsEncryptAcmeReg
         public Bindable<bool> IsIssuerValid { get; } = new Bindable<bool>(nameof(IsIssuerValid));
         public Bindable<bool> IsTypeValid { get; } = new Bindable<bool>(nameof(IsTypeValid));
         public Bindable<bool> IsPasswordValid { get; } = new Bindable<bool>(nameof(IsPasswordValid));
+        public Bindable<bool> IsPasswordEnabled { get; } = new Bindable<bool>(nameof(IsPasswordEnabled));
 
         public Bindable<bool> AutoRegister { get; } = new Bindable<bool>(nameof(AutoRegister));
         public Bindable<bool> AutoAcceptTos { get; } = new Bindable<bool>(nameof(AutoAcceptTos));
@@ -66,7 +71,7 @@ namespace LetsEncryptAcmeReg
         public Bindable<bool> AutoCreateCertificate { get; } = new Bindable<bool>(nameof(AutoCreateCertificate));
         public Bindable<bool> AutoSubmitCertificate { get; } = new Bindable<bool>(nameof(AutoSubmitCertificate));
         public Bindable<bool> AutoGetIssuerCertificate { get; } = new Bindable<bool>(nameof(AutoGetIssuerCertificate));
-        public Bindable<bool> AutoSaveCertificate { get; } = new Bindable<bool>(nameof(AutoSaveCertificate));
+        public Bindable<bool> AutoSaveOrShowCertificate { get; } = new Bindable<bool>(nameof(AutoSaveOrShowCertificate));
 
         public Bindable<int?> AutoRegisterTimer { get; } = new Bindable<int?>(nameof(AutoRegisterTimer));
         public Bindable<int?> AutoAcceptTosTimer { get; } = new Bindable<int?>(nameof(AutoAcceptTosTimer));
@@ -80,7 +85,7 @@ namespace LetsEncryptAcmeReg
         public Bindable<int?> AutoCreateCertificateTimer { get; } = new Bindable<int?>(nameof(AutoCreateCertificateTimer));
         public Bindable<int?> AutoSubmitCertificateTimer { get; } = new Bindable<int?>(nameof(AutoSubmitCertificateTimer));
         public Bindable<int?> AutoGetIssuerCertificateTimer { get; } = new Bindable<int?>(nameof(AutoGetIssuerCertificateTimer));
-        public Bindable<int?> AutoSaveCertificateTimer { get; } = new Bindable<int?>(nameof(AutoSaveCertificateTimer));
+        public Bindable<int?> AutoSaveOrShowCertificateTimer { get; } = new Bindable<int?>(nameof(AutoSaveOrShowCertificateTimer));
 
         public Bindable<int?> AutoRegisterRetry { get; } = new Bindable<int?>(nameof(AutoRegisterRetry));
         public Bindable<int?> AutoAcceptTosRetry { get; } = new Bindable<int?>(nameof(AutoAcceptTosRetry));
@@ -94,7 +99,7 @@ namespace LetsEncryptAcmeReg
         public Bindable<int?> AutoCreateCertificateRetry { get; } = new Bindable<int?>(nameof(AutoCreateCertificateRetry));
         public Bindable<int?> AutoSubmitCertificateRetry { get; } = new Bindable<int?>(nameof(AutoSubmitCertificateRetry));
         public Bindable<int?> AutoGetIssuerCertificateRetry { get; } = new Bindable<int?>(nameof(AutoGetIssuerCertificateRetry));
-        public Bindable<int?> AutoSaveCertificateRetry { get; } = new Bindable<int?>(nameof(AutoSaveCertificateRetry));
+        public Bindable<int?> AutoSaveOrShowCertificateRetry { get; } = new Bindable<int?>(nameof(AutoSaveOrShowCertificateRetry));
 
         public Bindable<bool> CanRegister { get; } = new Bindable<bool>(nameof(CanRegister));
         public Bindable<bool> CanAcceptTos { get; } = new Bindable<bool>(nameof(CanAcceptTos));
@@ -109,6 +114,6 @@ namespace LetsEncryptAcmeReg
         public Bindable<bool> CanSubmitCertificate { get; } = new Bindable<bool>(nameof(CanSubmitCertificate));
         public Bindable<bool> CanGetIssuerCertificate { get; } = new Bindable<bool>(nameof(CanGetIssuerCertificate));
         public Bindable<bool> CanSaveCertificate { get; } = new Bindable<bool>(nameof(CanSaveCertificate));
-
+        public Bindable<bool> CanShowCertificate { get; } = new Bindable<bool>(nameof(CanShowCertificate));
     }
 }

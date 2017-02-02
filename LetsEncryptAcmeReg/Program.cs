@@ -15,6 +15,8 @@ namespace LetsEncryptAcmeReg
             if (Environment.OSVersion.Version.Major >= 6)
                 SetProcessDpiAwareness(_Process_DPI_Awareness.Process_Per_Monitor_DPI_Aware);
 
+            Environment.SetEnvironmentVariable("Desktop", Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new frm());

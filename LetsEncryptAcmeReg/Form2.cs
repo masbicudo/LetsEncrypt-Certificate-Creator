@@ -1,9 +1,9 @@
 ﻿using ACMESharp.Vault.Model;
 using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LetsEncryptAcmeReg
@@ -51,13 +51,14 @@ namespace LetsEncryptAcmeReg
             init += mo.Target.Bind(this.txtChallengeTarget);
             init += mo.Key.Bind(this.txtChallengeKey);
             init += mo.SiteRoot.Bind(this.txtSiteRoot);
-            init += mo.Certificate.Bind(this.cmbCertificate);
+            init += mo.Certificate.Bind(this.cmbCertificate, s => s?.StartsWith("[new] ") == true ? s.Substring(6) : s);
             init += mo.Issuer.Bind(this.txtIssuer);
-            init += mo.CertificateType.Bind(this.cmbCertificateType);
+            init += mo.CertificateType.Bind(this.cmbCertificateType, StringToCertTypeEnum, CertTypeEnumToString);
             init += mo.Password.Bind(this.txtPassword);
             init += mo.ShowPassword.Bind(this.chkShowPassword);
             init += mo.GitUserName.Bind(this.txtGitUserName);
             init += mo.GitPassword.Bind(this.txtGitPassword);
+            init += mo.SavePath.Bind(this.txtSavePath);
 
             init += mo.AutoRegister.Bind(this.chkAutoRegister);
             init += mo.AutoAcceptTos.Bind(this.chkAutoAcceptTos);
@@ -71,7 +72,7 @@ namespace LetsEncryptAcmeReg
             init += mo.AutoCreateCertificate.Bind(this.chkAutoCreateCertificate);
             init += mo.AutoSubmitCertificate.Bind(this.chkAutoSubmit);
             init += mo.AutoGetIssuerCertificate.Bind(this.chkAutoGetIssuerCert);
-            init += mo.AutoSaveCertificate.Bind(this.chkAutoSaveCertificate);
+            init += mo.AutoSaveOrShowCertificate.Bind(this.chkAutoSaveOrShowCertificate);
 
             init += mo.CurrentRegistration.Bind(this.lstRegistrations, (RegistrationItem i) => i?.RegistrationInfo);
             init += mo.CurrentRegistration.Bind(this.cmbRegistration, (RegistrationItem i) => i?.RegistrationInfo);
@@ -96,7 +97,7 @@ namespace LetsEncryptAcmeReg
             init += BindHelper.BindExpression(() => RetryToolTip(this.btnCreateCertificate, mo.AutoCreateCertificateRetry.Value, mo.AutoCreateCertificateTimer.Value));
             init += BindHelper.BindExpression(() => RetryToolTip(this.btnSubmit, mo.AutoSubmitCertificateRetry.Value, mo.AutoSubmitCertificateTimer.Value));
             init += BindHelper.BindExpression(() => RetryToolTip(this.btnGetIssuerCert, mo.AutoGetIssuerCertificateRetry.Value, mo.AutoGetIssuerCertificateTimer.Value));
-            init += BindHelper.BindExpression(() => RetryToolTip(this.btnSaveCertificate, mo.AutoSaveCertificateRetry.Value, mo.AutoSaveCertificateTimer.Value));
+            init += BindHelper.BindExpression(() => RetryToolTip(this.btnSaveCertificate, mo.AutoSaveOrShowCertificateRetry.Value, mo.AutoSaveOrShowCertificateTimer.Value));
             //init += BindHelper.BindExpression(() => RetryToolTip(this.btnShowCertificate, null, null));
 
             // Custom collection bindings:
@@ -121,8 +122,11 @@ namespace LetsEncryptAcmeReg
                 v => this.lstChallenges.SetItems(v));
 
             init += ma.Certificates.Bind(
-                () => this.lstCertificates.Items.AsArray((object o) => o.ToString()),
+                () => this.lstCertificates.Items.OfType<string>().ToArray(),
                 v => this.lstCertificates.SetItems(v));
+
+            init += mo.Certificates.Bind(() => this.cmbCertificate.Items.OfType<string>().ToArray());
+            init += BindHelper.BindExpression(() => this.SetItemsOf_cmbCertificate(mo.Certificates.Value, mo.Domain.Value, mo.Date.Value));
 
             // Manual changed events:
             mo.CanRegister.Changed += v => this.btnRegister.Enabled = v;
@@ -138,7 +142,11 @@ namespace LetsEncryptAcmeReg
             mo.CanCreateCertificate.Changed += v => this.btnCreateCertificate.Enabled = v;
             mo.CanSubmitCertificate.Changed += v => this.btnSubmit.Enabled = v;
             mo.CanGetIssuerCertificate.Changed += v => this.btnGetIssuerCert.Enabled = v;
-            mo.CanSaveCertificate.Changed += v => this.btnShowCertificate.Enabled = this.btnSaveCertificate.Enabled = v;
+            mo.CanSaveCertificate.Changed += v => this.btnSaveCertificate.Enabled = v;
+            mo.CanShowCertificate.Changed += v => this.btnShowCertificate.Enabled = v;
+            mo.ShowPassword.Changed += b => this.txtPassword.UseSystemPasswordChar = !b;
+
+            mo.IsPasswordEnabled.Changed += v => this.txtPassword.Enabled = this.chkShowPassword.Enabled = v;
 
             mo.Files.Changed += this.UpdateFiles;
 
@@ -146,6 +154,36 @@ namespace LetsEncryptAcmeReg
             mo.CurrentAuthState.Changed += CurrentAuthState_Changed;
 
             init();
+        }
+
+        private void SetItemsOf_cmbCertificate(string[] certList, string domain, DateTime now)
+        {
+            var newItem = new CreateNewCertItem(domain, now);
+
+            if (certList == null)
+                return;
+
+            // ReSharper disable once RedundantEnumerableCastCall
+            var items = certList.Cast<object>();
+            if (!certList.Contains(newItem.Name))
+                items = items.Append(newItem);
+
+            this.cmbCertificate.SetItems(items.ToArray());
+        }
+
+        private static string CertTypeEnumToString(CertType arg)
+        {
+            var str = arg.ToString();
+            str = string.Join(" ", str.Select(c => char.IsUpper(c) ? " " + c : c.ToString()));
+            return str;
+        }
+
+        private static CertType StringToCertTypeEnum(string li)
+        {
+            var str = li?.Replace(" ", "");
+            CertType val;
+            Enum.TryParse(str, false, out val);
+            return val;
         }
 
         private void CurrentAuthState_Changed(ACMESharp.AuthorizationState obj)
@@ -371,5 +409,45 @@ namespace LetsEncryptAcmeReg
             this.controller.Model.Now.Value = DateTime.Now;
         }
 
+
+        private void btnChangeSavePath_Click(object sender, EventArgs e)
+        {
+            var path = this.controller.Model.ExpandedSavePath.Value;
+            var fname = Path.GetFileName(path);
+            var ext = Controller.GetExt(this.controller.Model.CertificateType.Value);
+
+            var save = new SaveFileDialog
+            {
+                CheckPathExists = true,
+                InitialDirectory = Path.GetDirectoryName(path),
+                FileName = fname,
+                CreatePrompt = false,
+                DefaultExt = ext,
+                Filter = $"Certificate | *.{ext}",
+                RestoreDirectory = true,
+            };
+
+            if (save.ShowDialog(this) == DialogResult.OK)
+                this.controller.Model.SavePath.Value = save.FileName;
+        }
+    }
+
+    public class CreateNewCertItem
+    {
+        private readonly string domain;
+        private readonly DateTime now;
+
+        public CreateNewCertItem(string domain, DateTime now)
+        {
+            this.domain = domain;
+            this.now = now;
+        }
+
+        public override string ToString()
+        {
+            return $"[new] {this.Name}";
+        }
+
+        public string Name => $"{this.domain} - {this.now.Date.ToString("yyyy-MM-dd")}";
     }
 }

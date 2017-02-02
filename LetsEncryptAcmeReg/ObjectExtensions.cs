@@ -27,5 +27,16 @@ namespace LetsEncryptAcmeReg
         {
             return obj;
         }
+
+        public static T With<T>(this T obj, Action<T> action)
+        {
+            action(obj);
+            return obj;
+        }
+
+        public static TResult With<T, TResult>(this T obj, Func<T, TResult> func)
+        {
+            return func(obj);
+        }
     }
 }
