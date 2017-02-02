@@ -1,31 +1,47 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 
 namespace LetsEncryptAcmeReg
 {
-    public class Bindable<T>
+    public abstract class Bindable
     {
-        private static int lastId;
+        private static int _lastId;
+
+        private readonly int id;
+        private readonly string name;
+
+        protected Bindable(string name)
+        {
+            this.id = Interlocked.Increment(ref _lastId);
+            this.name = name ?? "";
+        }
+
+        public override string ToString()
+        {
+            return string.IsNullOrWhiteSpace(this.name)
+                ? $"{nameof(Bindable<int>)}({this.id})"
+                : $"{nameof(Bindable<int>)}({this.id}): {this.name}";
+        }
+    }
+
+    public class Bindable<T> : Bindable
+    {
 
         const int FALSE = 0;
         const int TRUE = -1;
 
-        private readonly int id;
         private readonly BindableOptions flags;
         private sbyte isChanging;
         private sbyte isInit;
-        private sbyte isAsync;
-        private readonly string name;
         private readonly EqualityComparer<T> equalityComparer;
 
         private T value;
         private Func<T> getter;
         private BindableChanging<T> changingHandler;
         private Action<T> changedHandler;
-        private Func<T, Task> changedAsyncHandler;
 
         /// <summary>
         /// Gets the number of times this bindable object has been changed.
@@ -33,10 +49,9 @@ namespace LetsEncryptAcmeReg
         public int Version { get; private set; }
 
         public Bindable(string name = "", EqualityComparer<T> equalityComparer = null, BindableOptions flags = 0)
+            : base(name)
         {
-            this.id = Interlocked.Increment(ref lastId);
             this.flags = flags;
-            this.name = name ?? "";
             this.equalityComparer = equalityComparer;
         }
 
@@ -123,7 +138,7 @@ namespace LetsEncryptAcmeReg
         /// </remarks>
         public void Update()
         {
-            foreach (Func<T> getter in this.getter.GetInvocationList())
+            foreach (Func<T> getter in this.getter.GetInvocationList().OfType<Func<T>>())
             {
                 if (!EqualityComparer<T>.Default.Equals(this.Value, getter()))
                 {
@@ -165,11 +180,12 @@ namespace LetsEncryptAcmeReg
         /// If <see cref="init"/> is true, returns a delegate to do the first synchronization between the bindable object and the data source;
         /// otherwise it returns null.
         /// </returns>
+        [ContractAnnotation("init:True => null; init:False => notnull")]
         public Action Bind([NotNull] Func<T> getter, [NotNull] Action<T> setter, bool init = false)
         {
             if (getter == null) throw new ArgumentNullException(nameof(getter));
             if (setter == null) throw new ArgumentNullException(nameof(setter));
-            return BindInternal(getter, setter, init);
+            return this.BindInternal(getter, setter, init);
         }
 
         /// <summary>
@@ -214,12 +230,14 @@ namespace LetsEncryptAcmeReg
         /// If <see cref="init"/> is true, returns a delegate to do the first synchronization between the bindable object and the data source;
         /// otherwise it returns null.
         /// </returns>
+        [ContractAnnotation("init:True => null; init:False => notnull")]
         public Action Bind([NotNull] Action<T> setter, bool init = false)
         {
             if (setter == null) throw new ArgumentNullException(nameof(setter));
             return this.BindInternal(null, setter, init);
         }
 
+        [ContractAnnotation("init:True => null; init:False => notnull")]
         private Action BindInternal([CanBeNull] Func<T> getter, [CanBeNull] Action<T> setter, bool init)
         {
             this.RegisterUpdater(getter);
@@ -239,13 +257,6 @@ namespace LetsEncryptAcmeReg
         {
             if (this.isInit != FALSE) setter?.Invoke(this.Value);
             else if (getter != null) this.Value = getter();
-        }
-
-        public override string ToString()
-        {
-            return string.IsNullOrWhiteSpace(this.name)
-                ? $"{nameof(Bindable<int>)}({this.id})"
-                : $"{nameof(Bindable<int>)}({this.id}): {this.name}";
         }
     }
 }

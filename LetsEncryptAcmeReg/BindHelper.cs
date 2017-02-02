@@ -2,38 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Windows.Forms;
+using JetBrains.Annotations;
 
 namespace LetsEncryptAcmeReg
 {
     public static class BindHelper
     {
-        public static Action Bind(this Bindable<bool> bindable, CheckBox checkBox)
+        [NotNull]
+        public static Action Bind([NotNull] this Bindable<string> bindable, [NotNull] Control control)
         {
-            bool isSetting = false;
-            Func<bool> getter = () => checkBox.Checked;
-            Action<bool> setter = b =>
-            {
-                isSetting = true;
-                try
-                {
-                    if (checkBox.Checked != b)
-                        checkBox.Checked = b;
-                }
-                finally
-                {
-                    isSetting = false;
-                }
-            };
-            checkBox.CheckedChanged += (sender, args) =>
-            {
-                if (!isSetting)
-                    bindable.Value = getter();
-            };
-            return bindable.Bind(getter, setter);
-        }
+            if (bindable == null) throw new ArgumentNullException(nameof(bindable));
+            if (control == null) throw new ArgumentNullException(nameof(control));
 
-        public static Action Bind(this Bindable<string> bindable, Control control)
-        {
             bool isSetting = false;
             Func<string> getter = () => control.Text;
             Action<string> setter = b =>
@@ -57,16 +37,49 @@ namespace LetsEncryptAcmeReg
             return bindable.Bind(getter, setter);
         }
 
-        public static Action Bind<T, T2>(this Bindable<T> bindable, ComboBox cmb, Func<T2, T> convert)
+        [NotNull]
+        public static Action Bind([NotNull] this Bindable<bool> bindable, [NotNull] CheckBox checkBox)
         {
+            if (bindable == null) throw new ArgumentNullException(nameof(bindable));
+            if (checkBox == null) throw new ArgumentNullException(nameof(checkBox));
+
             bool isSetting = false;
-            Func<T> getter = () => convert((T2)cmb.SelectedItem);
+            Func<bool> getter = () => checkBox.Checked;
+            Action<bool> setter = b =>
+            {
+                isSetting = true;
+                try
+                {
+                    if (checkBox.Checked != b)
+                        checkBox.Checked = b;
+                }
+                finally
+                {
+                    isSetting = false;
+                }
+            };
+            checkBox.CheckedChanged += (sender, args) =>
+            {
+                if (!isSetting)
+                    bindable.Value = getter();
+            };
+            return bindable.Bind(getter, setter);
+        }
+
+        [NotNull]
+        public static Action Bind<T>([NotNull] this Bindable<T> bindable, [NotNull] ComboBox cmb)
+        {
+            if (bindable == null) throw new ArgumentNullException(nameof(bindable));
+            if (cmb == null) throw new ArgumentNullException(nameof(cmb));
+
+            bool isSetting = false;
+            Func<T> getter = () => (T)cmb.SelectedItem;
             Action<T> setter = b =>
             {
                 isSetting = true;
                 try
                 {
-                    if (!EqualityComparer<T>.Default.Equals(convert((T2)cmb.SelectedItem), b))
+                    if (!EqualityComparer<T>.Default.Equals((T)cmb.SelectedItem, b))
                         cmb.SelectedItem = b;
                 }
                 finally
@@ -76,14 +89,63 @@ namespace LetsEncryptAcmeReg
             };
             cmb.TextChanged += (sender, args) =>
             {
-                if (!isSetting)
+                if (cmb.DropDownStyle != ComboBoxStyle.DropDownList && !isSetting)
+                    bindable.Value = getter();
+            };
+            cmb.SelectedIndexChanged += (sender, args) =>
+            {
+                if (cmb.DropDownStyle == ComboBoxStyle.DropDownList && !isSetting)
                     bindable.Value = getter();
             };
             return bindable.Bind(getter, setter);
         }
 
-        public static Action Bind<T>(this Bindable<T> bindable, ListBox lst)
+        [NotNull]
+        public static Action Bind<TValue, TListItem>(
+            [NotNull] this Bindable<TValue> bindable,
+            [NotNull] ComboBox cmb,
+            [NotNull] Func<TListItem, TValue> convertOut,
+            [CanBeNull] Func<TValue, TListItem> convertIn = null
+            )
         {
+            if (bindable == null) throw new ArgumentNullException(nameof(bindable));
+            if (cmb == null) throw new ArgumentNullException(nameof(cmb));
+            if (convertOut == null) throw new ArgumentNullException(nameof(convertOut));
+
+            bool isSetting = false;
+            Func<TValue> getter = () => convertOut((TListItem)cmb.SelectedItem);
+            Action<TValue> setter = b =>
+            {
+                isSetting = true;
+                try
+                {
+                    if (!EqualityComparer<TValue>.Default.Equals(convertOut((TListItem)cmb.SelectedItem), b))
+                        cmb.SelectedItem = convertIn != null ? (object)convertIn(b) : b;
+                }
+                finally
+                {
+                    isSetting = false;
+                }
+            };
+            cmb.TextChanged += (sender, args) =>
+            {
+                if (cmb.DropDownStyle != ComboBoxStyle.DropDownList && !isSetting)
+                    bindable.Value = getter();
+            };
+            cmb.SelectedIndexChanged += (sender, args) =>
+            {
+                if (cmb.DropDownStyle == ComboBoxStyle.DropDownList && !isSetting)
+                    bindable.Value = getter();
+            };
+            return bindable.Bind(getter, setter);
+        }
+
+        [NotNull]
+        public static Action Bind<T>([NotNull] this Bindable<T> bindable, [NotNull] ListBox lst)
+        {
+            if (bindable == null) throw new ArgumentNullException(nameof(bindable));
+            if (lst == null) throw new ArgumentNullException(nameof(lst));
+
             bool isSetting = false;
             Func<T> getter = () => (T)lst.SelectedItem;
             Action<T> setter = b =>
@@ -107,17 +169,27 @@ namespace LetsEncryptAcmeReg
             return bindable.Bind(getter, setter);
         }
 
-        public static Action Bind<T, T2>(this Bindable<T> bindable, ListBox lst, Func<T2, T> convert)
+        [NotNull]
+        public static Action Bind<TValue, TListItem>(
+            [NotNull] this Bindable<TValue> bindable,
+            [NotNull] ListBox lst,
+            [NotNull] Func<TListItem, TValue> convertOut,
+            [CanBeNull] Func<TValue, TListItem> convertIn = null
+            )
         {
+            if (bindable == null) throw new ArgumentNullException(nameof(bindable));
+            if (lst == null) throw new ArgumentNullException(nameof(lst));
+            if (convertOut == null) throw new ArgumentNullException(nameof(convertOut));
+
             bool isSetting = false;
-            Func<T> getter = () => convert((T2)lst.SelectedItem);
-            Action<T> setter = b =>
+            Func<TValue> getter = () => convertOut((TListItem)lst.SelectedItem);
+            Action<TValue> setter = b =>
             {
                 isSetting = true;
                 try
                 {
-                    if (!EqualityComparer<T>.Default.Equals(convert((T2)lst.SelectedItem), b))
-                        lst.SelectedItem = b;
+                    if (!EqualityComparer<TValue>.Default.Equals(convertOut((TListItem)lst.SelectedItem), b))
+                        lst.SelectedItem = convertIn != null ? (object)convertIn(b) : b;
                 }
                 finally
                 {
@@ -132,8 +204,12 @@ namespace LetsEncryptAcmeReg
             return bindable.Bind(getter, setter);
         }
 
-        public static Action Bind(this Bindable<string> bindable, TextBox txt)
+        [NotNull]
+        public static Action Bind([NotNull] this Bindable<string> bindable, [NotNull] TextBox txt)
         {
+            if (bindable == null) throw new ArgumentNullException(nameof(bindable));
+            if (txt == null) throw new ArgumentNullException(nameof(txt));
+
             bool isSetting = false;
             Func<string> getter = () => txt.Text;
             Action<string> setter = b =>
@@ -167,8 +243,12 @@ namespace LetsEncryptAcmeReg
             return bindable.Bind(getter, setter);
         }
 
-        public static Action Bind(this Bindable<string> bindable, ComboBox cmb)
+        [NotNull]
+        public static Action Bind([NotNull] this Bindable<string> bindable, [NotNull] ComboBox cmb)
         {
+            if (bindable == null) throw new ArgumentNullException(nameof(bindable));
+            if (cmb == null) throw new ArgumentNullException(nameof(cmb));
+
             Func<string> getter = () => cmb.Text;
             Action<string> setter = b =>
             {
@@ -203,8 +283,13 @@ namespace LetsEncryptAcmeReg
         /// If <see cref="init"/> is true, returns a delegate to assign the value of the expression the the bindable for the first time;
         /// otherwise it returns null.
         /// </returns>
-        public static Action BindExpression<T>(this Bindable<T> bindable, Expression<Func<T>> valueExpression, bool init = false)
+        [ContractAnnotation("init:True => null; init:False => notnull")]
+        public static Action BindExpression<T>([NotNull] this Bindable<T> bindable,
+            [NotNull] Expression<Func<T>> valueExpression, bool init = false)
         {
+            if (bindable == null) throw new ArgumentNullException(nameof(bindable));
+            if (valueExpression == null) throw new ArgumentNullException(nameof(valueExpression));
+
             // finding all bindables in the expression
             var finder = new BindableFinder<T>(bindable, valueExpression, init);
             finder.Visit(valueExpression);
@@ -240,8 +325,12 @@ namespace LetsEncryptAcmeReg
         /// If <see cref="init"/> is true, returns a delegate to call the action for the first time;
         /// otherwise it returns null.
         /// </returns>
-        public static Action BindExpression<T>(Expression<Func<T>> valueExpression, Action<T> action, bool init = false)
+        [ContractAnnotation("init:True => null; init:False => notnull")]
+        public static Action BindExpression<T>([NotNull] Expression<Func<T>> valueExpression, [NotNull] Action<T> action, bool init = false)
         {
+            if (valueExpression == null) throw new ArgumentNullException(nameof(valueExpression));
+            if (action == null) throw new ArgumentNullException(nameof(action));
+
             // finding all bindables in the expression
             var finder = new BindableFinder<T>(action, valueExpression, init);
             finder.Visit(valueExpression);
@@ -269,8 +358,11 @@ namespace LetsEncryptAcmeReg
         /// If <see cref="init"/> is true, returns a delegate to do the first execution of the bound expression as a way of synchronization;
         /// otherwise it returns null.
         /// </returns>
-        public static Action BindExpression(Expression<Action> boundExpression, bool init = false)
+        [ContractAnnotation("init:True => null; init:False => notnull")]
+        public static Action BindExpression([NotNull] Expression<Action> boundExpression, bool init = false)
         {
+            if (boundExpression == null) throw new ArgumentNullException(nameof(boundExpression));
+
             // finding all bindables in the expression
             var finder = new BindableFinder<string>(boundExpression, init);
             finder.Visit(boundExpression);
