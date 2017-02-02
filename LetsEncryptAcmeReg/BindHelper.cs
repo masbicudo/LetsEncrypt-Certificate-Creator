@@ -104,23 +104,23 @@ namespace LetsEncryptAcmeReg
         public static Action Bind<TValue, TListItem>(
             [NotNull] this Bindable<TValue> bindable,
             [NotNull] ComboBox cmb,
-            [NotNull] Func<TListItem, TValue> convertOut,
-            [CanBeNull] Func<TValue, TListItem> convertIn = null
+            [NotNull] Func<TListItem, TValue> convertIn,
+            [CanBeNull] Func<TValue, TListItem> convertOut = null
             )
         {
             if (bindable == null) throw new ArgumentNullException(nameof(bindable));
             if (cmb == null) throw new ArgumentNullException(nameof(cmb));
-            if (convertOut == null) throw new ArgumentNullException(nameof(convertOut));
+            if (convertIn == null) throw new ArgumentNullException(nameof(convertIn));
 
             bool isSetting = false;
-            Func<TValue> getter = () => convertOut((TListItem)cmb.SelectedItem);
+            Func<TValue> getter = () => convertIn((TListItem)cmb.SelectedItem);
             Action<TValue> setter = b =>
             {
                 isSetting = true;
                 try
                 {
-                    if (!EqualityComparer<TValue>.Default.Equals(convertOut((TListItem)cmb.SelectedItem), b))
-                        cmb.SelectedItem = convertIn != null ? (object)convertIn(b) : b;
+                    if (!EqualityComparer<TValue>.Default.Equals(convertIn((TListItem)cmb.SelectedItem), b))
+                        cmb.SelectedItem = convertOut != null ? (object)convertOut(b) : b;
                 }
                 finally
                 {
@@ -173,23 +173,23 @@ namespace LetsEncryptAcmeReg
         public static Action Bind<TValue, TListItem>(
             [NotNull] this Bindable<TValue> bindable,
             [NotNull] ListBox lst,
-            [NotNull] Func<TListItem, TValue> convertOut,
-            [CanBeNull] Func<TValue, TListItem> convertIn = null
+            [NotNull] Func<TListItem, TValue> convertIn,
+            [CanBeNull] Func<TValue, TListItem> convertOut = null
             )
         {
             if (bindable == null) throw new ArgumentNullException(nameof(bindable));
             if (lst == null) throw new ArgumentNullException(nameof(lst));
-            if (convertOut == null) throw new ArgumentNullException(nameof(convertOut));
+            if (convertIn == null) throw new ArgumentNullException(nameof(convertIn));
 
             bool isSetting = false;
-            Func<TValue> getter = () => convertOut((TListItem)lst.SelectedItem);
+            Func<TValue> getter = () => convertIn((TListItem)lst.SelectedItem);
             Action<TValue> setter = b =>
             {
                 isSetting = true;
                 try
                 {
-                    if (!EqualityComparer<TValue>.Default.Equals(convertOut((TListItem)lst.SelectedItem), b))
-                        lst.SelectedItem = convertIn != null ? (object)convertIn(b) : b;
+                    if (!EqualityComparer<TValue>.Default.Equals(convertIn((TListItem)lst.SelectedItem), b))
+                        lst.SelectedItem = convertOut != null ? (object)convertOut(b) : b;
                 }
                 finally
                 {
@@ -263,6 +263,56 @@ namespace LetsEncryptAcmeReg
                 }
             };
             cmb.TextChanged += (sender, args) => bindable.Value = getter();
+            return bindable.Bind(getter, setter);
+        }
+
+        [NotNull]
+        public static Action Bind(
+            [NotNull] this Bindable<string> bindable,
+            [NotNull] ComboBox cmb,
+            [NotNull] Func<string, string> convertIn,
+            [CanBeNull] Func<string, string> convertOut = null
+            )
+        {
+            if (bindable == null) throw new ArgumentNullException(nameof(bindable));
+            if (cmb == null) throw new ArgumentNullException(nameof(cmb));
+
+            bool isSetting = false;
+            Func<string> getter = () => convertIn(cmb.Text);
+            Action<string> setter = b =>
+            {
+                int oldSelStart = cmb.SelectionStart;
+                int oldSelLength = cmb.SelectionLength;
+                var areEqual = convertIn(cmb.Text) == b;
+
+                isSetting = true;
+                try
+                {
+                    cmb.Text = convertOut != null ? convertOut(b) : b;
+                }
+                finally
+                {
+                    isSetting = false;
+                }
+
+                if (areEqual && cmb.DropDownStyle != ComboBoxStyle.DropDownList)
+                {
+                    cmb.SelectionStart = oldSelStart;
+                    cmb.SelectionLength = oldSelLength;
+                }
+            };
+            cmb.TextChanged += (sender, args) =>
+            {
+                if (!isSetting)
+                    if (cmb.DropDownStyle != ComboBoxStyle.DropDownList)
+                        bindable.Value = getter();
+            };
+            cmb.SelectedIndexChanged += (sender, args) =>
+            {
+                if (!isSetting)
+                    if (cmb.DropDownStyle == ComboBoxStyle.DropDownList)
+                        bindable.Value = getter();
+            };
             return bindable.Bind(getter, setter);
         }
 
