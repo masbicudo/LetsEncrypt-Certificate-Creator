@@ -570,10 +570,10 @@ include:      ["".well-known""]
                         throw new Exception($"Certificate name is empty.");
 
                     var certificateInfo = this.acme.GetCertificate(this.Model.Certificate.Value);
-                    if (certificateInfo?.IdentifierDns != this.Model.Domain.Value)
+                    if (certificateInfo?.IdentifierDns == this.Model.Domain.Value)
                         throw new Exception($"Certificate name is already used by another domain.");
 
-                    var idref = this.Model.CurrentAuthState.Value.Identifier;
+                    var idref = this.acme.GetIdentifierAlias(this.Model.CurrentRegistration.Value, this.Model.CurrentAuthState.Value.Identifier);
 
                     if (certificateInfo == null)
                         new NewCertificate

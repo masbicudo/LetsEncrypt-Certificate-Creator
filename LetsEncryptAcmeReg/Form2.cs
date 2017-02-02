@@ -213,7 +213,7 @@ namespace LetsEncryptAcmeReg
 
         private void RetryToolTip(Control ctl, int? retry, int? timer)
         {
-            if (retry.HasValue && timer.HasValue && timer / 1000 + 1 > 0)
+            if (retry.HasValue && timer.HasValue && timer / 1000 > 0)
                 SetActionToolTip(ctl, $"Retry #{retry + 1} in {timer / 1000 + 1}s");
             else
                 SetActionToolTip(ctl, null);

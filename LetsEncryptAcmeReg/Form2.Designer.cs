@@ -423,7 +423,7 @@
             this.btnGetIssuerCert.TabIndex = 10;
             this.btnGetIssuerCert.Text = "Get Issuer Certificate";
             this.btnGetIssuerCert.UseVisualStyleBackColor = true;
-            this.btnGetIssuerCert.Click += new System.EventHandler(this.btnUpdateStatus_Click);
+            this.btnGetIssuerCert.Click += new System.EventHandler(this.btnGetIssuerCert_Click);
             // 
             // label1
             // 

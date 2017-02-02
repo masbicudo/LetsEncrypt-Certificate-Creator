@@ -7,6 +7,10 @@ namespace LetsEncryptAcmeReg
     {
         public static void SetItems<T>(this ComboBox cb, T[] array)
         {
+
+            if (array == null)
+                return;
+
             cb.BeginUpdate();
             try
             {
