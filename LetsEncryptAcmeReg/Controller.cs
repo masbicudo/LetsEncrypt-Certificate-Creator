@@ -44,6 +44,8 @@ namespace LetsEncryptAcmeReg
 
             // Primary initialization:
             init += () => mo.Registrations.Value = this.acme.GetRegistrations();
+            init += () => mo.Now.Value = DateTime.Now;
+            init += mo.Date.BindExpression(() => mo.Now.Value.Date);
 
             // Complex relations:
             //      These relations are built by using expressions.

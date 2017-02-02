@@ -119,6 +119,7 @@
             this.lstCertificates = new System.Windows.Forms.ListBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -1505,6 +1506,12 @@
             this.label12.TabIndex = 2;
             this.label12.Text = "Domains";
             // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 1000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1664,5 +1671,6 @@
         private System.Windows.Forms.CheckBox chkAutoGetIssuerCert;
         private System.Windows.Forms.Button btnGetIssuerCert;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
+        private System.Windows.Forms.Timer timer1;
     }
 }

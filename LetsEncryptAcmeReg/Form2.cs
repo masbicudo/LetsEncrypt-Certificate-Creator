@@ -366,5 +366,10 @@ namespace LetsEncryptAcmeReg
         {
             this.controller.DeleteCurrentDomain();
         }
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            this.controller.Model.Now.Value = DateTime.Now;
+        }
+
     }
 }

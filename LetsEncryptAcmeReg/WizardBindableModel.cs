@@ -8,6 +8,9 @@ namespace LetsEncryptAcmeReg
         // regex for valid lines in this file:
         // public Bindable(<(?><(?<c>)|[^<>)]+|(?:>|$)(?<-c>))*(?:>|$))\s(\S*)\s\{ get; \} = new Bindable\1\(nameof\(\2\)\);
 
+        public Bindable<DateTime> Now { get; } = new Bindable<DateTime>(nameof(Now));
+        public Bindable<DateTime> Date { get; } = new Bindable<DateTime>(nameof(Date), flags: BindableOptions.EqualMeansUnchanged);
+
         public Bindable<string> Email { get; } = new Bindable<string>(nameof(Email), flags: BindableOptions.EqualMeansUnchanged);
         public Bindable<string> Domain { get; } = new Bindable<string>(nameof(Domain), flags: BindableOptions.EqualMeansUnchanged);
         public Bindable<string> Challenge { get; } = new Bindable<string>(nameof(Challenge));
