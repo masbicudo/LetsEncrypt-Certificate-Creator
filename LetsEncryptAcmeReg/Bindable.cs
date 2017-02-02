@@ -36,6 +36,8 @@ namespace LetsEncryptAcmeReg
         private readonly BindableOptions flags;
         private sbyte isChanging;
         private sbyte isInit;
+        private sbyte isUpdating;
+
         private readonly EqualityComparer<T> equalityComparer;
 
         private T value;
@@ -91,35 +93,44 @@ namespace LetsEncryptAcmeReg
 
                 if (this.isChanging == FALSE)
                 {
-                    try
-                    {
-                        this.isChanging = TRUE;
-                        if (this.changingHandler != null)
-                        {
-                            bool cancel = false;
-                            this.changingHandler.Invoke(this, this.value, value, ref cancel);
-                            if (cancel)
-                                return;
-                        }
-
-                        this.value = value;
-                        this.Version++;
-                        this.isInit = TRUE;
-
-                        this.changedHandler?.Invoke(value);
-                        //if (this.changed != null)
-                        //    foreach (Action<T> @delegate in this.changed.GetInvocationList())
-                        //        @delegate(value);
-                    }
-                    finally
-                    {
-                        this.isChanging = FALSE;
-                    }
+                    this.ForceSetValue(value);
                 }
                 else if ((flags & BindableOptions.AllowRecursiveSets) == 0)
                 {
                     throw new InvalidOperationException("Recursively defining the value of a bindable object to different values is not allowed.");
                 }
+            }
+        }
+
+        /// <summary>
+        /// Sets the value of this bindable object,
+        /// raising the event that indicates that the object is changing.
+        /// </summary>
+        public void ForceSetValue(T value)
+        {
+            try
+            {
+                this.isChanging = TRUE;
+                if (this.changingHandler != null)
+                {
+                    bool cancel = false;
+                    this.changingHandler.Invoke(this, this.value, value, ref cancel);
+                    if (cancel)
+                        return;
+                }
+
+                this.value = value;
+                this.Version++;
+                this.isInit = TRUE;
+
+                this.changedHandler?.Invoke(value);
+                //if (this.changed != null)
+                //    foreach (Action<T> @delegate in this.changed.GetInvocationList())
+                //        @delegate(value);
+            }
+            finally
+            {
+                this.isChanging = FALSE;
             }
         }
 
@@ -136,16 +147,22 @@ namespace LetsEncryptAcmeReg
         /// Not every external source will be associated with a getter method.
         /// In that case, you will have to update the bindable value by setting it in your own code.
         /// </remarks>
-        public void Update()
+        public void Update(bool force = false)
         {
+            var value = this.Value;
             foreach (Func<T> getter in this.getter.GetInvocationList().OfType<Func<T>>())
             {
-                if (!EqualityComparer<T>.Default.Equals(this.Value, getter()))
+                var newValue = getter();
+                if (!EqualityComparer<T>.Default.Equals(value, getter()))
                 {
-                    this.Value = getter();
-                    return;
+                    value = newValue;
+                    force = true;
+                    break;
                 }
             }
+
+            if (force)
+                this.ForceSetValue(value);
         }
 
         /// <summary>
