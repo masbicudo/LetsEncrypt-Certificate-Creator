@@ -32,7 +32,7 @@ namespace LetsEncryptAcmeReg
 
             // Tool tips
             this.ToolTipFor(this.btnRegister, Messages.ToolTipForRegister);
-            mo.TOSLink.Changed += s => this.DataTipFor(this.lnkTOS, s, ">,v,>v");
+            mo.TOSLink.Changed += s => this.DataTipFor(this.lnkTOS, s, ">,v,>v,>v,>^,<v,<^");
             this.ToolTipFor(this.btnAcceptTos, Messages.ToolTipForAcceptTos);
             this.ToolTipFor(this.btnAddDomain, Messages.ToolTipForAddDomain);
             this.ToolTipFor(this.cmbDomain, Messages.ToolTipForDomain);
@@ -42,6 +42,8 @@ namespace LetsEncryptAcmeReg
             this.ToolTipFor(this.btnUpdateStatus, Messages.ToolTipForUpdateStatus);
 
             this.ToolTipFor(this.btnRegister, Messages.ToolTipForRegister);
+
+            this.ToolTipFor(this.lnkGitLabCertHelp, Messages.ToolTipForGitLabCertHelp, "v,>,<,^,>v,>^,<v,<^");
 
             this.txtSiteRoot.MouseMove += this.txtSiteRoot_MouseMove;
             this.txtSiteRoot.MouseEnter += this.txtSiteRoot_MouseEnter;
@@ -254,15 +256,16 @@ namespace LetsEncryptAcmeReg
 
         #region UI tips and messages
 
-        private void ToolTipFor(Control ctl, string message)
+        private void ToolTipFor(Control ctl, string message, string positionPreferences = ">,v,^,<,>v,>^,<v,<^")
         {
             var tt = this.tooltip.ToolTipFor(ctl, "Help")
                 .AutoPopup(message, useMarkdown: true);
+            tt.PositionPreferences = positionPreferences;
             tt.BorderColor = Color.DodgerBlue;
             tt.Margin = 1;
         }
 
-        private void DataTipFor(Control ctl, string text, string positionPreferences, bool auto = true, bool useMarkdown = false)
+        private void DataTipFor(Control ctl, string text, string positionPreferences = ">,v,^,<,>v,>^,<v,<^", bool auto = true, bool useMarkdown = false)
         {
             var tt = this.tooltip.ToolTipFor(ctl, "Data");
             tt.BorderColor = Color.Crimson;

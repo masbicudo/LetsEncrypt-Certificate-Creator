@@ -54,9 +54,8 @@ namespace LetsEncryptAcmeReg
 
             // Collections
             init += mo.Domains.BindExpression(() => this.acme.GetDomainsByEmail(mo.Email.Value).OrderBy(x => x).ToArray());
-            init += mo.Certificates.BindExpression(() => this.acme.GetCertificates(this.Model.CurrentRegistration.Value, this.Model.Domain.Value)
-                .Select(c => c.Alias)
-                .ToArray());
+            init += mo.Certificates.BindExpression(
+                () => this.acme.GetCertificates(this.Model.CurrentRegistration.Value, this.Model.Domain.Value).Select(c => c.Alias).ToArray());
 
             // Complex relations:
             //      These relations are built by using expressions.
