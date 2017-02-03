@@ -264,6 +264,11 @@ namespace LetsEncryptAcmeReg
                 { ">^", new Rectangle(+cw + 2*margin, -th - 2*margin, tw, th) }, // >^
                 { "<v", new Rectangle(-tw - 2*margin, +ch + 2*margin, tw, th) }, // <v
                 { "<^", new Rectangle(-tw - 2*margin, -th - 2*margin, tw, th) }, // <^
+
+                { "v>", new Rectangle(+cw + 2*margin, +ch + 2*margin, tw, th) }, // >v
+                { "^>", new Rectangle(+cw + 2*margin, -th - 2*margin, tw, th) }, // >^
+                { "v<", new Rectangle(-tw - 2*margin, +ch + 2*margin, tw, th) }, // <v
+                { "^<", new Rectangle(-tw - 2*margin, -th - 2*margin, tw, th) }, // <^
             };
 
             var rects = order.Where(x => rectsDic.ContainsKey(x)).Select(x => rectsDic[x]).ToArray();
