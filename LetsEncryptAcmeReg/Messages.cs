@@ -27,6 +27,21 @@ namespace LetsEncryptAcmeReg
             "Though this is intended to be used after the validation command is issued, there is no harm in using it before.\n" +
             "In this case, LetsEncrypt will simply state that validation command is pending.";
 
+        public static string ToolTipForRegister { get; }
+            = $"Creates a new registration at **LetsEncrypt.com** using the given e-mail.";
+
+        public static string ToolTipForAcceptTos { get; }
+            = $"After reading the Terms of Service, you may accept it to continue.";
+
+        public static string ToolTipForAddDomain { get; }
+            = $"Adds a new domain (an identity) to the current registration.";
+
+        public static string ToolTipForDomain { get; }
+            = $"The domain name (the identity) as given for DNS to resolve.\n" +
+              $"This does not include slashes ` \"/\" ` nor protocols like ` http `,\n" +
+              $"only the domain (e.g. *www.masbicudo.com*).\n" +
+              $"You can add multiple domains under a single registration.";
+
         public static string MapMessageToExplanation(string message)
         {
             if (dicMsgExplain == null)

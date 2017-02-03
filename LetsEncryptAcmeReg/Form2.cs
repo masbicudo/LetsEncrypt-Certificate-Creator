@@ -17,15 +17,6 @@ namespace LetsEncryptAcmeReg
         {
             InitializeComponent();
 
-            // Tool tips
-            this.ToolTipFor(this.chkConfigYml, Messages.ToolTipForConfigYml);
-            this.ToolTipFor(this.chkCname, Messages.ToolTipForCname);
-            this.ToolTipFor(this.btnUpdateStatus, Messages.ToolTipForUpdateStatus);
-
-            this.txtSiteRoot.MouseMove += this.txtSiteRoot_MouseMove;
-            this.txtSiteRoot.MouseEnter += this.txtSiteRoot_MouseEnter;
-            this.txtSiteRoot.MouseLeave += this.txtSiteRoot_MouseLeave;
-
             // Controller
             this.controller = new Controller(this.acme)
             {
@@ -35,9 +26,27 @@ namespace LetsEncryptAcmeReg
                 Success = this.Success,
             };
 
-            // Model bindings
             var mo = this.controller.Model;
             var ma = this.controller.ManagerModel;
+
+            // Tool tips
+            this.ToolTipFor(this.btnRegister, Messages.ToolTipForRegister);
+            mo.TOSLink.Changed += s => this.DataTipFor(this.lnkTOS, s, ">,v,>v");
+            this.ToolTipFor(this.btnAcceptTos, Messages.ToolTipForAcceptTos);
+            this.ToolTipFor(this.btnAddDomain, Messages.ToolTipForAddDomain);
+            this.ToolTipFor(this.cmbDomain, Messages.ToolTipForDomain);
+
+            this.ToolTipFor(this.chkConfigYml, Messages.ToolTipForConfigYml);
+            this.ToolTipFor(this.chkCname, Messages.ToolTipForCname);
+            this.ToolTipFor(this.btnUpdateStatus, Messages.ToolTipForUpdateStatus);
+
+            this.ToolTipFor(this.btnRegister, Messages.ToolTipForRegister);
+
+            this.txtSiteRoot.MouseMove += this.txtSiteRoot_MouseMove;
+            this.txtSiteRoot.MouseEnter += this.txtSiteRoot_MouseEnter;
+            this.txtSiteRoot.MouseLeave += this.txtSiteRoot_MouseLeave;
+
+            // Model bindings
 
             var init = this.controller.Initialize();
 
@@ -227,19 +236,25 @@ namespace LetsEncryptAcmeReg
 
         #endregion
 
+        #region UI tips and messages
+
         private void ToolTipFor(Control ctl, string message)
         {
-            var tt = this.tooltip.ToolTipFor(ctl)
+            var tt = this.tooltip.ToolTipFor(ctl, "Help")
                 .AutoPopup(message, useMarkdown: true);
             tt.BorderColor = Color.DodgerBlue;
             tt.Margin = 1;
         }
 
-        private void UpdateFiles(string[] v)
+        private void DataTipFor(Control ctl, string text, string positionPreferences, bool auto = true, bool useMarkdown = false)
         {
-            v = v ?? new string[0];
-            this.txtSiteRoot.Tag = string.Join("\r\n", v);
-            this.UpdateFiles();
+            var tt = this.tooltip.ToolTipFor(ctl, "Data");
+            tt.BorderColor = Color.Crimson;
+            tt.PositionPreferences = positionPreferences;
+            tt.Margin = 1;
+
+            if (auto) tt.AutoPopup(text, useMarkdown);
+            else tt.ShowMessage(text, useMarkdown);
         }
 
         private void SetActionToolTip(Control ctl, string msg)
@@ -298,6 +313,8 @@ namespace LetsEncryptAcmeReg
             this.richTextBox1.SelectedText = message.Trim() + "\n";
             this.richTextBox1.ScrollToCaret();
         }
+
+        #endregion
 
         private async void btnRegister_Click(object sender, EventArgs e)
             => await this.controller.Register();
@@ -369,10 +386,7 @@ namespace LetsEncryptAcmeReg
 
         private void UpdateFiles()
         {
-            var tt = this.tooltip.ToolTipFor(this.txtSiteRoot);
-            tt.BorderColor = Color.Crimson;
-            tt.PositionPreferences = ">,v,^,<";
-            tt.ShowMessage((string)this.txtSiteRoot.Tag, useMarkdown: false);
+            this.DataTipFor(this.txtSiteRoot, (string)this.txtSiteRoot.Tag, ">,v,^,<");
         }
 
         private void richTextBox1_MouseMove(object sender, MouseEventArgs e)
