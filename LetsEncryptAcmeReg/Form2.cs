@@ -366,7 +366,8 @@ namespace LetsEncryptAcmeReg
 
         private void btnShowCertificate_Click(object sender, EventArgs e)
         {
-
+            this.controller.ViewCertificate(this.controller.Model.Certificate.Value);
+            this.tabControl1.SelectedTab = this.tabPage3;
         }
 
         private void txtSiteRoot_MouseLeave(object sender, EventArgs e)
@@ -472,6 +473,13 @@ namespace LetsEncryptAcmeReg
             }
 
             public string Name => $"{this.domain} - {this.now.Date.ToString("yyyy-MM-dd")}";
+        }
+
+        private void btnCopyCertBase64Data_Click(object sender, EventArgs e)
+        {
+            var value = this.controller.CertViewModel.Base64Data.Value;
+            if (!string.IsNullOrWhiteSpace(value))
+                Clipboard.SetText(value);
         }
     }
 }

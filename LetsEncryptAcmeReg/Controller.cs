@@ -10,7 +10,6 @@ using System.IO;
 using System.Linq;
 using System.Management.Automation;
 using System.Net;
-using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -849,6 +848,10 @@ include:      ["".well-known""]
         {
             this.acme.DeleteDomain(this.Model.CurrentRegistration.Value, this.Model.Domain.Value);
             this.Model.Domains.Value = this.acme.GetDomainsByRegistration(this.Model.CurrentRegistration.Value);
+        }
+
+        public void ViewCertificate(string certRef)
+        {
         }
     }
 }

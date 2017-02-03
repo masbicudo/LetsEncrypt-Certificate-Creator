@@ -122,6 +122,12 @@
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
+            this.cmbCertViewType = new System.Windows.Forms.ComboBox();
+            this.cmbAllCerts = new System.Windows.Forms.ComboBox();
+            this.txtCertBase64Data = new System.Windows.Forms.TextBox();
+            this.btnCopyCertBase64Data = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -149,6 +155,8 @@
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
+            this.tabPage3.SuspendLayout();
+            this.tableLayoutPanel8.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -158,6 +166,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(9, 9);
             this.tabControl1.Margin = new System.Windows.Forms.Padding(0);
             this.tabControl1.Name = "tabControl1";
@@ -1570,6 +1579,92 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.tableLayoutPanel8);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(438, 557);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Certificate View";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanel8
+            // 
+            this.tableLayoutPanel8.ColumnCount = 1;
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel8.Controls.Add(this.cmbAllCerts, 0, 0);
+            this.tableLayoutPanel8.Controls.Add(this.cmbCertViewType, 0, 1);
+            this.tableLayoutPanel8.Controls.Add(this.txtCertBase64Data, 0, 2);
+            this.tableLayoutPanel8.Controls.Add(this.btnCopyCertBase64Data, 0, 3);
+            this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel8.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel8.Name = "tableLayoutPanel8";
+            this.tableLayoutPanel8.RowCount = 4;
+            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(432, 551);
+            this.tableLayoutPanel8.TabIndex = 0;
+            // 
+            // cmbCertViewType
+            // 
+            this.cmbCertViewType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel8.SetColumnSpan(this.cmbCertViewType, 3);
+            this.cmbCertViewType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbCertViewType.FormattingEnabled = true;
+            this.cmbCertViewType.Items.AddRange(new object[] {
+            "Key PEM",
+            "Csr PEM",
+            "Certificate PEM",
+            "Issuer PEM"});
+            this.cmbCertViewType.Location = new System.Drawing.Point(1, 24);
+            this.cmbCertViewType.Margin = new System.Windows.Forms.Padding(1);
+            this.cmbCertViewType.Name = "cmbCertViewType";
+            this.cmbCertViewType.Size = new System.Drawing.Size(430, 21);
+            this.cmbCertViewType.TabIndex = 10;
+            // 
+            // cmbAllCerts
+            // 
+            this.cmbAllCerts.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel8.SetColumnSpan(this.cmbAllCerts, 2);
+            this.cmbAllCerts.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbAllCerts.FormattingEnabled = true;
+            this.cmbAllCerts.Location = new System.Drawing.Point(1, 1);
+            this.cmbAllCerts.Margin = new System.Windows.Forms.Padding(1);
+            this.cmbAllCerts.Name = "cmbAllCerts";
+            this.cmbAllCerts.Size = new System.Drawing.Size(430, 21);
+            this.cmbAllCerts.TabIndex = 11;
+            // 
+            // txtCertBase64Data
+            // 
+            this.txtCertBase64Data.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtCertBase64Data.Location = new System.Drawing.Point(3, 49);
+            this.txtCertBase64Data.Multiline = true;
+            this.txtCertBase64Data.Name = "txtCertBase64Data";
+            this.txtCertBase64Data.ReadOnly = true;
+            this.txtCertBase64Data.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtCertBase64Data.Size = new System.Drawing.Size(426, 470);
+            this.txtCertBase64Data.TabIndex = 12;
+            this.txtCertBase64Data.WordWrap = false;
+            // 
+            // btnCopyCertBase64Data
+            // 
+            this.btnCopyCertBase64Data.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btnCopyCertBase64Data.AutoSize = true;
+            this.btnCopyCertBase64Data.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnCopyCertBase64Data.Location = new System.Drawing.Point(388, 525);
+            this.btnCopyCertBase64Data.Name = "btnCopyCertBase64Data";
+            this.btnCopyCertBase64Data.Size = new System.Drawing.Size(41, 23);
+            this.btnCopyCertBase64Data.TabIndex = 13;
+            this.btnCopyCertBase64Data.Text = "Copy";
+            this.btnCopyCertBase64Data.UseVisualStyleBackColor = true;
+            this.btnCopyCertBase64Data.Click += new System.EventHandler(this.btnCopyCertBase64Data_Click);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1626,6 +1721,9 @@
             this.toolStripContainer1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
+            this.tableLayoutPanel8.ResumeLayout(false);
+            this.tableLayoutPanel8.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1725,5 +1823,11 @@
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.TextBox txtSavePath;
         private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
+        private System.Windows.Forms.ComboBox cmbAllCerts;
+        private System.Windows.Forms.ComboBox cmbCertViewType;
+        private System.Windows.Forms.TextBox txtCertBase64Data;
+        private System.Windows.Forms.Button btnCopyCertBase64Data;
     }
 }
