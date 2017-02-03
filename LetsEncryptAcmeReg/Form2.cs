@@ -191,9 +191,17 @@ namespace LetsEncryptAcmeReg
 
         private static string CertTypeEnumToString(CertType arg)
         {
-            var str = arg.ToString();
-            str = string.Join(" ", str.Select(c => char.IsUpper(c) ? " " + c : c.ToString()));
-            return str;
+            switch (arg)
+            {
+                case CertType.KeyPEM: return "Key PEM";
+                case CertType.CsrPEM: return "Csr PEM";
+                case CertType.CertificatePEM: return "Certificate PEM";
+                case CertType.CertificateDER: return "Certificate DER";
+                case CertType.IssuerPEM: return "Issuer PEM";
+                case CertType.IssuerDER: return "Issuer DER";
+                case CertType.Pkcs12: return "Pkcs12";
+                default: return "";
+            }
         }
 
         private static CertType StringToCertTypeEnum(string li)
