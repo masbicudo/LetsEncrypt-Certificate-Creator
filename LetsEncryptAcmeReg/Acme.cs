@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections;
-using System.Linq;
-using System.Management.Automation;
-using System.Net;
-using ACMESharp;
-using ACMESharp.ACME;
+﻿using ACMESharp;
 using ACMESharp.POSH;
 using ACMESharp.POSH.Util;
+using ACMESharp.Vault;
 using ACMESharp.Vault.Model;
-using ACMESharp.Vault.Profile;
 using ACMESharp.Vault.Util;
 using JetBrains.Annotations;
+using System;
+using System.Collections;
+using System.IO;
+using System.Linq;
+using System.Management.Automation;
 
 namespace LetsEncryptAcmeReg
 {
@@ -135,11 +134,16 @@ namespace LetsEncryptAcmeReg
                 .Any(x => (x["Alias"] ?? "").ToString() == idref);
         }
 
-        private IdentifierInfo[] GetAllIdentifiers(RegistrationInfo regInfo)
+        [NotNull]
+        [ItemNotNull]
+        private IdentifierInfo[] GetAllIdentifiers([CanBeNull] RegistrationInfo regInfo)
         {
-            return this.GetAllIdentifiers().Where(x => x.RegistrationRef == regInfo?.Id).ToArray();
+            var all = this.GetAllIdentifiers();
+            return regInfo == null ? all : all.Where(x => x.RegistrationRef == regInfo.Id).ToArray();
         }
 
+        [NotNull]
+        [ItemNotNull]
         private IdentifierInfo[] GetAllIdentifiers()
         {
             using (var vlt = VaultHelper.GetVault(null))
@@ -289,18 +293,18 @@ namespace LetsEncryptAcmeReg
 
         [NotNull]
         [ItemNotNull]
-        public CertificateInfo[] GetCertificates(RegistrationInfo regInfo, string domain)
+        public CertificateInfo[] GetCertificates([CanBeNull] RegistrationInfo regInfo, [CanBeNull] params string[] domain)
         {
             var v = this.Vault();
 
+            if (regInfo == null && domain == null)
+                return v.Certificates?.Values.ToArray() ?? new CertificateInfo[0];
+
             var allIds = this.GetAllIdentifiers(regInfo);
 
-            var identifierInfo = allIds.SingleOrDefault(x => x != null && (x.Dns ?? "") == domain);
+            var identifierInfo = domain == null || domain.Length == 0 ? allIds : allIds.Where(x => Array.IndexOf(domain, x.Dns) >= 0);
 
-            if (identifierInfo == null)
-                return new CertificateInfo[0];
-
-            var result = v.Certificates?.Values?.Where(c => c.IdentifierRef == identifierInfo.Id).ToArray();
+            var result = v.Certificates?.Values?.Where(c => identifierInfo.Any(i => c.IdentifierRef == i.Id)).ToArray();
             return result ?? new CertificateInfo[0];
         }
 
@@ -384,6 +388,93 @@ namespace LetsEncryptAcmeReg
 
                 vlt.SaveVault(v);
             }
+        }
+
+        public AcmeTextAssets GetTextAssets(string certRef)
+        {
+            using (var vlt = VaultHelper.GetVault(null))
+            {
+                vlt.OpenStorage();
+                var v = vlt.LoadVault();
+
+                if (string.IsNullOrWhiteSpace(certRef))
+                    return null;
+
+                if (v.Certificates == null || v.Certificates.Count < 1)
+                    throw new InvalidOperationException("No certificates found");
+
+                var ci = v.Certificates.GetByRef(certRef, throwOnMissing: false);
+                if (ci == null)
+                    throw new ItemNotFoundException("Unable to find a Certificate for the given reference");
+
+                var ta = new AcmeTextAssets
+                {
+                    KeyPem = GetKeyPem(ci, vlt),
+                    CsrPem = GetCsrPem(ci, vlt),
+                    CrtPem = GetCrtPem(ci, vlt),
+                    CrtDer = GetCrtDer(ci, vlt),
+                    IssuerPem = GetIssuerPem(ci, v, vlt),
+                    IssuerDer = GetIssuerDer(ci, v, vlt),
+                };
+
+                return ta;
+            }
+        }
+
+        private static string GetIssuerDer(CertificateInfo ci, VaultInfo v, IVault vlt)
+        {
+            if (ci.CertificateRequest == null || string.IsNullOrEmpty(ci.CrtDerFile))
+                throw new InvalidOperationException("Cannot export CRT; CSR hasn't been submitted or CRT hasn't been retrieved");
+            if (string.IsNullOrEmpty(ci.IssuerSerialNumber) || !v.IssuerCertificates.ContainsKey(ci.IssuerSerialNumber))
+                throw new InvalidOperationException("Issuer certificate hasn't been resolved");
+            return GetAssetText(vlt, VaultAssetType.IssuerDer,
+                v.IssuerCertificates[ci.IssuerSerialNumber].CrtDerFile);
+        }
+
+        private static string GetIssuerPem(CertificateInfo ci, VaultInfo v, IVault vlt)
+        {
+            if (ci.CertificateRequest == null || string.IsNullOrEmpty(ci.CrtPemFile))
+                throw new InvalidOperationException("Cannot export CRT; CSR hasn't been submitted or CRT hasn't been retrieved");
+            if (string.IsNullOrEmpty(ci.IssuerSerialNumber) || !v.IssuerCertificates.ContainsKey(ci.IssuerSerialNumber))
+                throw new InvalidOperationException("Issuer certificate hasn't been resolved");
+            return GetAssetText(vlt, VaultAssetType.IssuerPem,
+                v.IssuerCertificates[ci.IssuerSerialNumber].CrtPemFile);
+        }
+
+        private static string GetCrtDer(CertificateInfo ci, IVault vlt)
+        {
+            if (ci.CertificateRequest == null || string.IsNullOrEmpty(ci.CrtDerFile))
+                throw new InvalidOperationException("Cannot export CRT; CSR hasn't been submitted or CRT hasn't been retrieved");
+            return GetAssetText(vlt, VaultAssetType.CrtDer, ci.CrtDerFile);
+        }
+
+        private static string GetCrtPem(CertificateInfo ci, IVault vlt)
+        {
+            if (ci.CertificateRequest == null || string.IsNullOrEmpty(ci.CrtPemFile))
+                throw new InvalidOperationException("Cannot export CRT; CSR hasn't been submitted or CRT hasn't been retrieved");
+            return GetAssetText(vlt, VaultAssetType.CrtPem, ci.CrtPemFile);
+        }
+
+        private static string GetCsrPem(CertificateInfo ci, IVault vlt)
+        {
+            if (string.IsNullOrEmpty(ci.CsrPemFile))
+                throw new InvalidOperationException("Cannot export CSR; it hasn't been imported or generated");
+            return GetAssetText(vlt, VaultAssetType.CsrPem, ci.CsrPemFile);
+        }
+
+        private static string GetKeyPem(CertificateInfo ci, IVault vlt)
+        {
+            if (string.IsNullOrEmpty(ci.KeyPemFile))
+                throw new InvalidOperationException("Cannot export private key; it hasn't been imported or generated");
+            return GetAssetText(vlt, VaultAssetType.KeyPem, ci.KeyPemFile);
+        }
+
+        public static string GetAssetText(IVault vlt, VaultAssetType type, string name)
+        {
+            var asset = vlt.GetAsset(type, name);
+            using (Stream s = vlt.LoadAsset(asset))
+            using (var reader = new StreamReader(s))
+                return reader.ReadToEnd();
         }
     }
 }

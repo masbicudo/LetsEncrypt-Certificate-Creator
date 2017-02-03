@@ -83,6 +83,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="RegistrationItem.cs" />
+    <Compile Include="AcmeTextAssets.cs" />
     <Compile Include="WinAPI\ShowWindowCommands.cs" />
     <Compile Include="ToolTipForm.cs">
       <SubType>Form</SubType>
