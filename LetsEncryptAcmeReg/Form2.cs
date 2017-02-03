@@ -501,5 +501,10 @@ namespace LetsEncryptAcmeReg
             if (!string.IsNullOrWhiteSpace(value))
                 Clipboard.SetText(value);
         }
+
+        private void lnkGitLabCertHelp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            this.controller.OpenPemConcatHelpInBrowser();
+        }
     }
 }

@@ -123,13 +123,13 @@
             this.label12 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.lnkGitLabCertHelp = new System.Windows.Forms.LinkLabel();
+            this.btnCopyCertBase64Data = new System.Windows.Forms.Button();
             this.cmbAllCerts = new System.Windows.Forms.ComboBox();
             this.cmbCertViewType = new System.Windows.Forms.ComboBox();
             this.txtCertBase64Data = new System.Windows.Forms.TextBox();
-            this.btnCopyCertBase64Data = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.lnkGitLabCertHelp = new System.Windows.Forms.LinkLabel();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -1606,6 +1606,44 @@
             this.tableLayoutPanel8.Size = new System.Drawing.Size(432, 551);
             this.tableLayoutPanel8.TabIndex = 0;
             // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.flowLayoutPanel1.AutoSize = true;
+            this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.flowLayoutPanel1.Controls.Add(this.lnkGitLabCertHelp);
+            this.flowLayoutPanel1.Controls.Add(this.btnCopyCertBase64Data);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(239, 522);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(193, 29);
+            this.flowLayoutPanel1.TabIndex = 2;
+            // 
+            // lnkGitLabCertHelp
+            // 
+            this.lnkGitLabCertHelp.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lnkGitLabCertHelp.AutoSize = true;
+            this.lnkGitLabCertHelp.Location = new System.Drawing.Point(3, 8);
+            this.lnkGitLabCertHelp.Name = "lnkGitLabCertHelp";
+            this.lnkGitLabCertHelp.Size = new System.Drawing.Size(140, 13);
+            this.lnkGitLabCertHelp.TabIndex = 14;
+            this.lnkGitLabCertHelp.TabStop = true;
+            this.lnkGitLabCertHelp.Text = "Using these PEMs at GitLab";
+            this.lnkGitLabCertHelp.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkGitLabCertHelp_LinkClicked);
+            // 
+            // btnCopyCertBase64Data
+            // 
+            this.btnCopyCertBase64Data.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnCopyCertBase64Data.AutoSize = true;
+            this.btnCopyCertBase64Data.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnCopyCertBase64Data.Location = new System.Drawing.Point(149, 3);
+            this.btnCopyCertBase64Data.Name = "btnCopyCertBase64Data";
+            this.btnCopyCertBase64Data.Size = new System.Drawing.Size(41, 23);
+            this.btnCopyCertBase64Data.TabIndex = 13;
+            this.btnCopyCertBase64Data.Text = "Copy";
+            this.btnCopyCertBase64Data.UseVisualStyleBackColor = true;
+            this.btnCopyCertBase64Data.Click += new System.EventHandler(this.btnCopyCertBase64Data_Click);
+            // 
             // cmbAllCerts
             // 
             this.cmbAllCerts.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
@@ -1649,48 +1687,11 @@
             this.txtCertBase64Data.TabIndex = 12;
             this.txtCertBase64Data.WordWrap = false;
             // 
-            // btnCopyCertBase64Data
-            // 
-            this.btnCopyCertBase64Data.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnCopyCertBase64Data.AutoSize = true;
-            this.btnCopyCertBase64Data.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnCopyCertBase64Data.Location = new System.Drawing.Point(149, 3);
-            this.btnCopyCertBase64Data.Name = "btnCopyCertBase64Data";
-            this.btnCopyCertBase64Data.Size = new System.Drawing.Size(41, 23);
-            this.btnCopyCertBase64Data.TabIndex = 13;
-            this.btnCopyCertBase64Data.Text = "Copy";
-            this.btnCopyCertBase64Data.UseVisualStyleBackColor = true;
-            this.btnCopyCertBase64Data.Click += new System.EventHandler(this.btnCopyCertBase64Data_Click);
-            // 
             // timer1
             // 
             this.timer1.Enabled = true;
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.flowLayoutPanel1.AutoSize = true;
-            this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.flowLayoutPanel1.Controls.Add(this.lnkGitLabCertHelp);
-            this.flowLayoutPanel1.Controls.Add(this.btnCopyCertBase64Data);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(239, 522);
-            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(193, 29);
-            this.flowLayoutPanel1.TabIndex = 2;
-            // 
-            // lnkGitLabCertHelp
-            // 
-            this.lnkGitLabCertHelp.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lnkGitLabCertHelp.AutoSize = true;
-            this.lnkGitLabCertHelp.Location = new System.Drawing.Point(3, 8);
-            this.lnkGitLabCertHelp.Name = "lnkGitLabCertHelp";
-            this.lnkGitLabCertHelp.Size = new System.Drawing.Size(140, 13);
-            this.lnkGitLabCertHelp.TabIndex = 14;
-            this.lnkGitLabCertHelp.TabStop = true;
-            this.lnkGitLabCertHelp.Text = "Using these PEMs at GitLab";
             // 
             // Form2
             // 

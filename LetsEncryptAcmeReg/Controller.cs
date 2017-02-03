@@ -272,6 +272,12 @@ namespace LetsEncryptAcmeReg
             Process.Start(this.Model.TOSLink.Value);
         }
 
+        public async Task OpenPemConcatHelpInBrowser()
+        {
+            await Task.Delay(1);
+            Process.Start("https://www.digicert.com/ssl-support/pem-ssl-creation.htm");
+        }
+
         /// <summary>
         /// Takes care of the automatic execution of the action, retries, timer between retries, and calling the next actions.
         /// </summary>
