@@ -1,6 +1,5 @@
 ﻿using ACMESharp.Vault.Model;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -156,6 +155,8 @@ namespace LetsEncryptAcmeReg
             init();
         }
 
+        #region Bind events
+
         private void SetItemsOf_cmbCertificate(string[] certList, string domain, DateTime now)
         {
             var newItem = new CreateNewCertItem(domain, now);
@@ -216,6 +217,15 @@ namespace LetsEncryptAcmeReg
                              && c.Token == pc.Token
                              && c.SubmitDate == pc.SubmitDate)));
         }
+
+        private void UpdateFiles(string[] v)
+        {
+            v = v ?? new string[0];
+            this.txtSiteRoot.Tag = string.Join("\r\n", v);
+            this.UpdateFiles();
+        }
+
+        #endregion
 
         private void ToolTipFor(Control ctl, string message)
         {
@@ -296,7 +306,7 @@ namespace LetsEncryptAcmeReg
             => await this.controller.AcceptTos();
 
         private async void lnkTOS_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-            => await this.controller.TosLink();
+            => await this.controller.OpenTosInBrowser();
 
         private async void btnAddDomain_Click(object sender, EventArgs e)
             => await this.controller.AddDomain();
@@ -430,24 +440,24 @@ namespace LetsEncryptAcmeReg
             if (save.ShowDialog(this) == DialogResult.OK)
                 this.controller.Model.SavePath.Value = save.FileName;
         }
-    }
 
-    public class CreateNewCertItem
-    {
-        private readonly string domain;
-        private readonly DateTime now;
-
-        public CreateNewCertItem(string domain, DateTime now)
+        internal class CreateNewCertItem
         {
-            this.domain = domain;
-            this.now = now;
-        }
+            private readonly string domain;
+            private readonly DateTime now;
 
-        public override string ToString()
-        {
-            return $"[new] {this.Name}";
-        }
+            public CreateNewCertItem(string domain, DateTime now)
+            {
+                this.domain = domain;
+                this.now = now;
+            }
 
-        public string Name => $"{this.domain} - {this.now.Date.ToString("yyyy-MM-dd")}";
+            public override string ToString()
+            {
+                return $"[new] {this.Name}";
+            }
+
+            public string Name => $"{this.domain} - {this.now.Date.ToString("yyyy-MM-dd")}";
+        }
     }
 }

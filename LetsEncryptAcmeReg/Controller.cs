@@ -253,7 +253,7 @@ namespace LetsEncryptAcmeReg
             }
         }
 
-        public async Task TosLink()
+        public async Task OpenTosInBrowser()
         {
             await Task.Delay(1);
             Process.Start(this.Model.TOSLink.Value);
