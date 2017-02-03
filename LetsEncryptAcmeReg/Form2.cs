@@ -382,7 +382,7 @@ namespace LetsEncryptAcmeReg
 
         private void btnShowCertificate_Click(object sender, EventArgs e)
         {
-            this.controller.ViewCertificate(this.controller.Model.Certificate.Value);
+            this.controller.ViewCertificate(this.controller.Model.Certificate.Value, this.controller.Model.CertificateType.Value);
             this.tabControl1.SelectedTab = this.tabPage3;
         }
 
@@ -445,6 +445,7 @@ namespace LetsEncryptAcmeReg
         {
             this.controller.DeleteCurrentDomain();
         }
+
         private void timer1_Tick(object sender, EventArgs e)
         {
             this.controller.Model.Now.Value = DateTime.Now;

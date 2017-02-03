@@ -100,6 +100,9 @@ namespace LetsEncryptAcmeReg
             init += mo.CanGetIssuerCertificate.BindExpression(() => mo.CurrentCertificate.Value.With(v => v != null && v.CertificateRequest != null && string.IsNullOrWhiteSpace(v.IssuerSerialNumber)));
             init += mo.CanSaveCertificate.BindExpression(() => mo.CurrentCertificate.Value.With(v => v != null && !string.IsNullOrWhiteSpace(v.IssuerSerialNumber)) && this.Model.CertificateType.Value != 0);
 
+            var viewableCertTypes = new[] { CertType.CertificatePEM, CertType.CsrPEM, CertType.IssuerPEM, CertType.KeyPEM };
+            init += mo.CanShowCertificate.BindExpression(() => mo.CurrentCertificate.Value.With(v => v != null && !string.IsNullOrWhiteSpace(v.IssuerSerialNumber)) && Array.IndexOf(viewableCertTypes, this.Model.CertificateType.Value) >= 0);
+
             init += mo.IsPasswordEnabled.BindExpression(() => mo.CertificateType.Value == CertType.Pkcs12);
 
             init += mo.Files.BindExpression(() => this.Files_Value(mo.SiteRoot.Value, mo.FileRelativePath.Value, mo.UpdateCname.Value, mo.UpdateConfigYml.Value));
@@ -869,8 +872,10 @@ include:      ["".well-known""]
             this.Model.Domains.Value = this.acme.GetDomainsByRegistration(this.Model.CurrentRegistration.Value);
         }
 
-        public void ViewCertificate(string certRef)
+        public void ViewCertificate(string certRef, CertType certType)
         {
+            this.CertViewModel.Certificate.Value = certRef;
+            this.CertViewModel.CertificateType.Value = certType;
         }
     }
 }
