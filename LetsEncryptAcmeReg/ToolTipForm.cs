@@ -274,6 +274,7 @@ namespace LetsEncryptAcmeReg
             var rects = order.Where(x => rectsDic.ContainsKey(x)).Select(x => rectsDic[x]).ToArray();
 
             var ownerHandle = GetRootWindow(this.control.Handle);
+            var myHandle = GetRootWindow(this.Handle);
 
             int max = int.MinValue;
             Rectangle choice = Rectangle.Empty;
@@ -285,31 +286,33 @@ namespace LetsEncryptAcmeReg
                     .Where(tt => tt.Priority < this.Priority)
                     .ToArray();
 
+                var baseScore = -0;
+
                 foreach (var r2 in rects)
                 {
                     var r = this.fixedLocation == null ? r2 : new Rectangle(this.fixedLocation.Value + (Size)r2.Location, r2.Size);
 
-                    var a = this.control.PointToScreen(new Point(r.Left, r.Top));
-                    var b = this.control.PointToScreen(new Point(r.Left, r.Bottom));
-                    var c = this.control.PointToScreen(new Point(r.Right, r.Top));
-                    var d = this.control.PointToScreen(new Point(r.Right, r.Bottom));
+                    Vec2 a = this.control.PointToScreen(new Point(r.Left, r.Top));
+                    Vec2 b = this.control.PointToScreen(new Point(r.Left, r.Bottom));
+                    Vec2 c = this.control.PointToScreen(new Point(r.Right, r.Top));
+                    Vec2 d = this.control.PointToScreen(new Point(r.Right, r.Bottom));
                     var sa = Screen.FromPoint(a);
                     var sb = Screen.FromPoint(b);
                     var sc = Screen.FromPoint(c);
                     var sd = Screen.FromPoint(d);
 
-                    var rect = new Rectangle(a, new Size(d.X - a.X, d.Y - a.Y));
+                    var rect = new Rectangle(a, d - a);
 
-                    var val = 0;
+                    var val = baseScore;
 
-                    val += (sa.Bounds.Contains(a) ? 4 : 0)
-                         + (sb.Bounds.Contains(b) ? 4 : 0)
-                         + (sc.Bounds.Contains(c) ? 4 : 0)
-                         + (sd.Bounds.Contains(d) ? 4 : 0);
+                    val += sa.Bounds.Contains(a) ? 40 : 0;
+                    val += sb.Bounds.Contains(b) ? 40 : 0;
+                    val += sc.Bounds.Contains(c) ? 40 : 0;
+                    val += sd.Bounds.Contains(d) ? 40 : 0;
 
-                    val += (sa.DeviceName == sb.DeviceName ? 1 : 0)
-                         + (sa.DeviceName == sc.DeviceName ? 1 : 0)
-                         + (sa.DeviceName == sd.DeviceName ? 1 : 0);
+                    val += sa.DeviceName == sb.DeviceName ? 10 : 0;
+                    val += sa.DeviceName == sc.DeviceName ? 10 : 0;
+                    val += sa.DeviceName == sd.DeviceName ? 10 : 0;
 
                     // counting the number of other tooltip forms under the current region
                     var overlapArea = others.Sum(tt =>
@@ -318,22 +321,45 @@ namespace LetsEncryptAcmeReg
                         i.Intersect(tt.Bounds);
                         return i.Width * i.Height;
                     });
-                    val -= overlapArea >> 8;
+                    val -= overlapArea >> 5;
 
-                    var wndA = GetRootWindow(User32.WindowFromPoint(a));
-                    var wndB = GetRootWindow(User32.WindowFromPoint(b));
-                    var wndC = GetRootWindow(User32.WindowFromPoint(c));
-                    var wndD = GetRootWindow(User32.WindowFromPoint(d));
+                    var wndLT = GetRootWindow(User32.WindowFromPoint(a));
+                    var wndLB = GetRootWindow(User32.WindowFromPoint(b - new Size(0, 1)));
+                    var wndRT = GetRootWindow(User32.WindowFromPoint(c - new Size(1, 0)));
+                    var wndRB = GetRootWindow(User32.WindowFromPoint(d - new Size(1, 1)));
+                    var wndL = GetRootWindow(User32.WindowFromPoint((Point)(0.5 * (a + b))));
+                    var wndT = GetRootWindow(User32.WindowFromPoint((Point)(0.5 * (a + c))));
+                    var wndR = GetRootWindow(User32.WindowFromPoint((Point)(0.5 * (c + d))));
+                    var wndB = GetRootWindow(User32.WindowFromPoint((Point)(0.5 * (b + d))));
+
+                    val += ownerHandle == wndLT ? 4 : 0;
+                    val += ownerHandle == wndLB ? 4 : 0;
+                    val += ownerHandle == wndRT ? 4 : 0;
+                    val += ownerHandle == wndRB ? 4 : 0;
+                    val += ownerHandle == wndL ? 4 : 0;
+                    val += ownerHandle == wndB ? 4 : 0;
+                    val += ownerHandle == wndT ? 4 : 0;
+                    val += ownerHandle == wndR ? 4 : 0;
+
+                    val += myHandle == wndLT ? 4 : 0;
+                    val += myHandle == wndLB ? 4 : 0;
+                    val += myHandle == wndRT ? 4 : 0;
+                    val += myHandle == wndRB ? 4 : 0;
+                    val += myHandle == wndL ? 4 : 0;
+                    val += myHandle == wndB ? 4 : 0;
+                    val += myHandle == wndT ? 4 : 0;
+                    val += myHandle == wndR ? 4 : 0;
+
+                    // avoid mouse cursor
+                    val += !rect.Contains(Cursor.Position) ? 16 : 0;
 
                     if (val > max)
-                        // must at least be over the owner window
-                        if (ownerHandle == wndA || ownerHandle == wndB || ownerHandle == wndC || ownerHandle == wndD)
-                            // avoid mouse cursor
-                            if (!rect.Contains(Cursor.Position))
-                            {
-                                max = val;
-                                choice = rect;
-                            }
+                    {
+                        max = val;
+                        choice = rect;
+                    }
+
+                    baseScore += baseScore / 5 - 8;
                 }
             }
 
@@ -408,7 +434,8 @@ namespace LetsEncryptAcmeReg
 
         private void Frm_Activated(object sender, EventArgs e)
         {
-            this.UpdateFormLocation();
+            if (this.Visible)
+                this.UpdateFormLocation();
             //this.ShowOrHide();
         }
 
@@ -419,7 +446,8 @@ namespace LetsEncryptAcmeReg
 
         private void Frm_Resize(object sender, EventArgs e)
         {
-            this.UpdateFormLocation();
+            if (this.Visible)
+                this.UpdateFormLocation();
             //this.ShowOrHide();
         }
 
@@ -507,5 +535,129 @@ namespace LetsEncryptAcmeReg
             var parent = User32.GetParent(hWnd);
             return parent == IntPtr.Zero ? hWnd : GetRootWindow(parent);
         }
+    }
+
+    public struct Vec2
+    {
+        public int X { get; }
+        public int Y { get; }
+
+        public Vec2(int x, int y)
+        {
+            this.X = x;
+            this.Y = y;
+        }
+
+        public static implicit operator Point(Vec2 v) => new Point(v.X, v.Y);
+        public static implicit operator Vec2(Point pt) => new Vec2(pt.X, pt.Y);
+        public static implicit operator Size(Vec2 v) => new Size(v.X, v.Y);
+        public static implicit operator Vec2(Size sz) => new Vec2(sz.Width, sz.Height);
+        public static implicit operator Vec2f(Vec2 v) => new Vec2f(v.X, v.Y);
+        public static Vec2 operator *(Vec2 a, Vec2 b) => new Vec2(a.X * b.X, a.Y * b.Y);
+        public static Vec2 operator *(Point a, Vec2 b) => new Vec2(a.X * b.X, a.Y * b.Y);
+        public static Vec2 operator *(Vec2 a, Point b) => new Vec2(a.X * b.X, a.Y * b.Y);
+        public static Vec2 operator *(Size a, Vec2 b) => new Vec2(a.Width * b.X, a.Height * b.Y);
+        public static Vec2 operator *(Vec2 a, Size b) => new Vec2(a.X * b.Width, a.Y * b.Height);
+        public static Vec2 operator *(int a, Vec2 b) => new Vec2(a * b.X, a * b.Y);
+        public static Vec2 operator *(Vec2 a, int b) => new Vec2(a.X * b, a.Y * b);
+        public static Vec2f operator *(float a, Vec2 b) => new Vec2f(a * b.X, a * b.Y);
+        public static Vec2f operator *(Vec2 a, float b) => new Vec2f(a.X * b, a.Y * b);
+        public static Vec2f operator *(double a, Vec2 b) => new Vec2f((float)(a * b.X), (float)(a * b.Y));
+        public static Vec2f operator *(Vec2 a, double b) => new Vec2f((float)(a.X * b), (float)(a.Y * b));
+        public static Vec2 operator +(Vec2 a, Vec2 b) => new Vec2(a.X + b.X, a.Y + b.Y);
+        public static Vec2 operator +(Point a, Vec2 b) => new Vec2(a.X + b.X, a.Y + b.Y);
+        public static Vec2 operator +(Vec2 a, Point b) => new Vec2(a.X + b.X, a.Y + b.Y);
+        public static Vec2 operator +(Size a, Vec2 b) => new Vec2(a.Width + b.X, a.Height + b.Y);
+        public static Vec2 operator +(Vec2 a, Size b) => new Vec2(a.X + b.Width, a.Y + b.Height);
+        public static Vec2 operator +(int a, Vec2 b) => new Vec2(a + b.X, a + b.Y);
+        public static Vec2 operator +(Vec2 a, int b) => new Vec2(a.X + b, a.Y + b);
+        public static Vec2f operator +(float a, Vec2 b) => new Vec2f(a + b.X, a + b.Y);
+        public static Vec2f operator +(Vec2 a, float b) => new Vec2f(a.X + b, a.Y + b);
+        public static Vec2f operator +(double a, Vec2 b) => new Vec2f((float)(a + b.X), (float)(a + b.Y));
+        public static Vec2f operator +(Vec2 a, double b) => new Vec2f((float)(a.X + b), (float)(a.Y + b));
+        public static Vec2 operator -(Vec2 a, Vec2 b) => new Vec2(a.X - b.X, a.Y - b.Y);
+        public static Vec2 operator -(Point a, Vec2 b) => new Vec2(a.X - b.X, a.Y - b.Y);
+        public static Vec2 operator -(Vec2 a, Point b) => new Vec2(a.X - b.X, a.Y - b.Y);
+        public static Vec2 operator -(Size a, Vec2 b) => new Vec2(a.Width - b.X, a.Height - b.Y);
+        public static Vec2 operator -(Vec2 a, Size b) => new Vec2(a.X - b.Width, a.Y - b.Height);
+        public static Vec2 operator -(int a, Vec2 b) => new Vec2(a - b.X, a - b.Y);
+        public static Vec2 operator -(Vec2 a, int b) => new Vec2(a.X - b, a.Y - b);
+        public static Vec2f operator -(float a, Vec2 b) => new Vec2f(a - b.X, a - b.Y);
+        public static Vec2f operator -(Vec2 a, float b) => new Vec2f(a.X - b, a.Y - b);
+        public static Vec2f operator -(double a, Vec2 b) => new Vec2f((float)(a - b.X), (float)(a - b.Y));
+        public static Vec2f operator -(Vec2 a, double b) => new Vec2f((float)(a.X - b), (float)(a.Y - b));
+        public static Vec2 operator /(Vec2 a, Vec2 b) => new Vec2(a.X / b.X, a.Y / b.Y);
+        public static Vec2 operator /(Point a, Vec2 b) => new Vec2(a.X / b.X, a.Y / b.Y);
+        public static Vec2 operator /(Vec2 a, Point b) => new Vec2(a.X / b.X, a.Y / b.Y);
+        public static Vec2 operator /(Size a, Vec2 b) => new Vec2(a.Width / b.X, a.Height / b.Y);
+        public static Vec2 operator /(Vec2 a, Size b) => new Vec2(a.X / b.Width, a.Y / b.Height);
+        public static Vec2 operator /(int a, Vec2 b) => new Vec2(a / b.X, a / b.Y);
+        public static Vec2 operator /(Vec2 a, int b) => new Vec2(a.X / b, a.Y / b);
+        public static Vec2f operator /(float a, Vec2 b) => new Vec2f(a / b.X, a / b.Y);
+        public static Vec2f operator /(Vec2 a, float b) => new Vec2f(a.X / b, a.Y / b);
+        public static Vec2f operator /(double a, Vec2 b) => new Vec2f((float)(a / b.X), (float)(a / b.Y));
+        public static Vec2f operator /(Vec2 a, double b) => new Vec2f((float)(a.X / b), (float)(a.Y / b));
+    }
+
+    public struct Vec2f
+    {
+        public float X { get; }
+        public float Y { get; }
+
+        public Vec2f(float x, float y)
+        {
+            this.X = x;
+            this.Y = y;
+        }
+
+        public static explicit operator Point(Vec2f v) => new Point((int)v.X, (int)v.Y);
+        public static implicit operator Vec2f(Point pt) => new Vec2f(pt.X, pt.Y);
+        public static explicit operator Size(Vec2f v) => new Size((int)v.X, (int)v.Y);
+        public static implicit operator Vec2f(Size sz) => new Vec2f(sz.Width, sz.Height);
+        public static explicit operator Vec2(Vec2f v) => new Vec2((int)v.X, (int)v.Y);
+        public static Vec2f operator *(Vec2f a, Vec2f b) => new Vec2f(a.X * b.X, a.Y * b.Y);
+        public static Vec2f operator *(Point a, Vec2f b) => new Vec2f(a.X * b.X, a.Y * b.Y);
+        public static Vec2f operator *(Vec2f a, Point b) => new Vec2f(a.X * b.X, a.Y * b.Y);
+        public static Vec2f operator *(Size a, Vec2f b) => new Vec2f(a.Width * b.X, a.Height * b.Y);
+        public static Vec2f operator *(Vec2f a, Size b) => new Vec2f(a.X * b.Width, a.Y * b.Height);
+        public static Vec2f operator *(int a, Vec2f b) => new Vec2f(a * b.X, a * b.Y);
+        public static Vec2f operator *(Vec2f a, int b) => new Vec2f(a.X * b, a.Y * b);
+        public static Vec2f operator *(float a, Vec2f b) => new Vec2f(a * b.X, a * b.Y);
+        public static Vec2f operator *(Vec2f a, float b) => new Vec2f(a.X * b, a.Y * b);
+        public static Vec2f operator *(double a, Vec2f b) => new Vec2f((float)(a * b.X), (float)(a * b.Y));
+        public static Vec2f operator *(Vec2f a, double b) => new Vec2f((float)(a.X * b), (float)(a.Y * b));
+        public static Vec2f operator +(Vec2f a, Vec2f b) => new Vec2f(a.X + b.X, a.Y + b.Y);
+        public static Vec2f operator +(Point a, Vec2f b) => new Vec2f(a.X + b.X, a.Y + b.Y);
+        public static Vec2f operator +(Vec2f a, Point b) => new Vec2f(a.X + b.X, a.Y + b.Y);
+        public static Vec2f operator +(Size a, Vec2f b) => new Vec2f(a.Width + b.X, a.Height + b.Y);
+        public static Vec2f operator +(Vec2f a, Size b) => new Vec2f(a.X + b.Width, a.Y + b.Height);
+        public static Vec2f operator +(int a, Vec2f b) => new Vec2f(a + b.X, a + b.Y);
+        public static Vec2f operator +(Vec2f a, int b) => new Vec2f(a.X + b, a.Y + b);
+        public static Vec2f operator +(float a, Vec2f b) => new Vec2f(a + b.X, a + b.Y);
+        public static Vec2f operator +(Vec2f a, float b) => new Vec2f(a.X + b, a.Y + b);
+        public static Vec2f operator +(double a, Vec2f b) => new Vec2f((float)(a + b.X), (float)(a + b.Y));
+        public static Vec2f operator +(Vec2f a, double b) => new Vec2f((float)(a.X + b), (float)(a.Y + b));
+        public static Vec2f operator -(Vec2f a, Vec2f b) => new Vec2f(a.X - b.X, a.Y - b.Y);
+        public static Vec2f operator -(Point a, Vec2f b) => new Vec2f(a.X - b.X, a.Y - b.Y);
+        public static Vec2f operator -(Vec2f a, Point b) => new Vec2f(a.X - b.X, a.Y - b.Y);
+        public static Vec2f operator -(Size a, Vec2f b) => new Vec2f(a.Width - b.X, a.Height - b.Y);
+        public static Vec2f operator -(Vec2f a, Size b) => new Vec2f(a.X - b.Width, a.Y - b.Height);
+        public static Vec2f operator -(int a, Vec2f b) => new Vec2f(a - b.X, a - b.Y);
+        public static Vec2f operator -(Vec2f a, int b) => new Vec2f(a.X - b, a.Y - b);
+        public static Vec2f operator -(float a, Vec2f b) => new Vec2f(a - b.X, a - b.Y);
+        public static Vec2f operator -(Vec2f a, float b) => new Vec2f(a.X - b, a.Y - b);
+        public static Vec2f operator -(double a, Vec2f b) => new Vec2f((float)(a - b.X), (float)(a - b.Y));
+        public static Vec2f operator -(Vec2f a, double b) => new Vec2f((float)(a.X - b), (float)(a.Y - b));
+        public static Vec2f operator /(Vec2f a, Vec2f b) => new Vec2f(a.X / b.X, a.Y / b.Y);
+        public static Vec2f operator /(Point a, Vec2f b) => new Vec2f(a.X / b.X, a.Y / b.Y);
+        public static Vec2f operator /(Vec2f a, Point b) => new Vec2f(a.X / b.X, a.Y / b.Y);
+        public static Vec2f operator /(Size a, Vec2f b) => new Vec2f(a.Width / b.X, a.Height / b.Y);
+        public static Vec2f operator /(Vec2f a, Size b) => new Vec2f(a.X / b.Width, a.Y / b.Height);
+        public static Vec2f operator /(int a, Vec2f b) => new Vec2f(a / b.X, a / b.Y);
+        public static Vec2f operator /(Vec2f a, int b) => new Vec2f(a.X / b, a.Y / b);
+        public static Vec2f operator /(float a, Vec2f b) => new Vec2f(a / b.X, a / b.Y);
+        public static Vec2f operator /(Vec2f a, float b) => new Vec2f(a.X / b, a.Y / b);
+        public static Vec2f operator /(double a, Vec2f b) => new Vec2f((float)(a / b.X), (float)(a / b.Y));
+        public static Vec2f operator /(Vec2f a, double b) => new Vec2f((float)(a.X / b), (float)(a.Y / b));
     }
 }
