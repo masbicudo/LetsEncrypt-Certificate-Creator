@@ -28,6 +28,7 @@ namespace LetsEncryptAcmeReg
 
             var mo = this.controller.Model;
             var ma = this.controller.ManagerModel;
+            var mc = this.controller.CertViewModel;
 
             // Tool tips
             this.ToolTipFor(this.btnRegister, Messages.ToolTipForRegister);
@@ -91,6 +92,13 @@ namespace LetsEncryptAcmeReg
 
             init += mo.UpdateConfigYml.Bind(this.chkConfigYml);
             init += mo.UpdateCname.Bind(this.chkCname);
+
+            // Cert view controls
+            init += mc.Certificate.Bind(this.cmbAllCerts);
+            init += mc.Certificates.Bind(() => this.cmbAllCerts.Items.OfType<string>().ToArray());
+            init += BindHelper.BindExpression(() => this.cmbAllCerts.SetItems(mc.Certificates.Value));
+            init += mc.CertificateType.Bind(this.cmbCertViewType, StringToCertTypeEnum, CertTypeEnumToString);
+            init += mc.Base64Data.Bind(this.txtCertBase64Data);
 
             // 
             init += BindHelper.BindExpression(() => RetryToolTip(this.btnRegister, mo.AutoRegisterRetry.Value, mo.AutoRegisterTimer.Value));

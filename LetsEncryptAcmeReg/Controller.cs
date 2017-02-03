@@ -27,10 +27,13 @@ namespace LetsEncryptAcmeReg
             this.acme = acme;
             this.Model = new WizardBindableModel();
             this.ManagerModel = new ManagerBindableModel();
+            this.CertViewModel = new CertViewBindableModel();
         }
 
         public WizardBindableModel Model { get; }
         public ManagerBindableModel ManagerModel { get; }
+        public CertViewBindableModel CertViewModel { get; }
+
         public Action<Exception> Error { get; set; }
         public Action<string> Warn { get; set; }
         public Action<string> Success { get; set; }
@@ -40,6 +43,7 @@ namespace LetsEncryptAcmeReg
         {
             var mo = this.Model;
             var ma = this.ManagerModel;
+            var mc = this.CertViewModel;
             Action init = null;
 
             // Primary initialization:
@@ -101,6 +105,13 @@ namespace LetsEncryptAcmeReg
             init += mo.Files.BindExpression(() => this.Files_Value(mo.SiteRoot.Value, mo.FileRelativePath.Value, mo.UpdateCname.Value, mo.UpdateConfigYml.Value));
 
             init += mo.ExpandedSavePath.BindExpression(() => this.ExpandedSavePath_Value(mo.SavePath.Value, mo.CertificateType.Value, mo.Certificate.Value));
+
+            // Certificate Viewer
+
+            init += mc.CurrentCertificate.BindExpression(() => this.CurrentCertificate_Value(null, null, mc.Certificate.Value));
+            init += mc.Certificates.BindExpression(() => this.acme.GetCertificates(null, null).Select(c => c.Alias).ToArray());
+            init += mc.TextAssets.BindExpression(() => this.acme.GetTextAssets(mc.Certificate.Value));
+            init += mc.Base64Data.BindExpression(() => mc.TextAssets.Value == null ? null : mc.TextAssets.Value.GetAsset(mc.CertificateType.Value));
 
             // when the key changes, the domain must be tested again
             mo.Key.Changed += s => mo.CanValidateChallenge.Value = false;
@@ -182,7 +193,8 @@ namespace LetsEncryptAcmeReg
             return ext;
         }
 
-        private CertificateInfo CurrentCertificate_Value(RegistrationInfo regInfo, string domain, string certRef)
+        [CanBeNull]
+        private CertificateInfo CurrentCertificate_Value([CanBeNull] RegistrationInfo regInfo, [CanBeNull] string domain, string certRef)
         {
             var result = this.acme
                 .GetCertificates(regInfo, domain)
@@ -727,6 +739,13 @@ include:      ["".well-known""]
 
                         if (string.IsNullOrEmpty(certificateInfo.IssuerSerialNumber))
                             throw new Exception(Messages.IssuerSerialNumberNotSet);
+
+                        // # SUCCESS ! ! !
+
+                        // the certificate in now complete
+                        // updating the list of certificates of the Viewer
+                        var newList = this.CertViewModel.Certificates.Value.Concat(new[] { certificateInfo.Alias }).OrderBy(x => x).ToArray();
+                        this.CertViewModel.Certificates.Value = newList;
 
                         // success message
                         this.Success?.Invoke(Messages.SuccessGetIssuerCert);
