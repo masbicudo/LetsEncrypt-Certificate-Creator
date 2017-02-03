@@ -729,7 +729,7 @@ include:      ["".well-known""]
                 this.Model.AutoGetIssuerCertificateTimer,
                 async () =>
                 {
-                    if (this.Model.CurrentAuthState.Value.Status == "valid")
+                    if (this.Model.CurrentAuthState.Value.Status == "valid" && this.Model.CurrentCertificate.Value.IssuerSerialNumber == null)
                     {
                         var certificateInfo =
                             new UpdateCertificate { CertificateRef = this.Model.Certificate.Value }
