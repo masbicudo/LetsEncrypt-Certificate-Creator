@@ -47,6 +47,7 @@ namespace LetsEncryptAcmeReg
             init += () => mo.Registrations.Value = this.acme.GetRegistrations();
             init += () => mo.Now.Value = DateTime.Now;
             init += mo.Date.BindExpression(() => mo.Now.Value.Date);
+            init += mo.TOSLink.BindExpression(() => this.acme.GetTos(this.Model.Email.Value));
 
             // Collections
             init += mo.Domains.BindExpression(() => this.acme.GetDomainsByEmail(mo.Email.Value).OrderBy(x => x).ToArray());
@@ -255,8 +256,7 @@ namespace LetsEncryptAcmeReg
         public async Task TosLink()
         {
             await Task.Delay(1);
-
-            Process.Start(this.acme.GetTos(this.Model.Email.Value));
+            Process.Start(this.Model.TOSLink.Value);
         }
 
         /// <summary>

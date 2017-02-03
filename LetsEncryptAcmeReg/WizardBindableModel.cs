@@ -7,7 +7,7 @@ namespace LetsEncryptAcmeReg
     public class WizardBindableModel
     {
         // regex for valid lines in this file:
-        // public Bindable(<(?><(?<c>)|[^<>)]+|(?:>|$)(?<-c>))*(?:>|$))\s(\S*)\s\{ get; \} = new Bindable\1\(nameof\(\2\)\);
+        // public Bindable(<(?><(?<c>)|[^<>)]+|(?:>|$)(?<-c>))*(?:>|$))\s(\S*)\s\{ get; \} = new Bindable\1\(nameof\(\2\)(?:[^\)]*)\);
 
         public Bindable<DateTime> Now { get; } = new Bindable<DateTime>(nameof(Now));
         public Bindable<DateTime> Date { get; } = new Bindable<DateTime>(nameof(Date), flags: BindableOptions.EqualMeansUnchanged);
@@ -27,6 +27,7 @@ namespace LetsEncryptAcmeReg
         public Bindable<string> GitPassword { get; } = new Bindable<string>(nameof(GitPassword));
         public Bindable<string> SavePath { get; } = new Bindable<string>(nameof(SavePath));
 
+        public Bindable<string> TOSLink { get; } = new Bindable<string>(nameof(TOSLink));
         public Bindable<string> ExpandedSavePath { get; } = new Bindable<string>(nameof(ExpandedSavePath));
         public Bindable<string> FileRelativePath { get; } = new Bindable<string>(nameof(FileRelativePath));
         public Bindable<string> FilePath { get; } = new Bindable<string>(nameof(FilePath));
