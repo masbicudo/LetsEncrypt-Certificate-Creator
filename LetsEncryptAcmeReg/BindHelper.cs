@@ -262,7 +262,16 @@ namespace LetsEncryptAcmeReg
                     cmb.SelectionLength = oldSelLength;
                 }
             };
-            cmb.TextChanged += (sender, args) => bindable.Value = getter();
+            cmb.TextChanged += (sender, args) =>
+            {
+                if (cmb.DropDownStyle != ComboBoxStyle.DropDownList)
+                    bindable.Value = getter();
+            };
+            cmb.SelectedIndexChanged += (sender, args) =>
+            {
+                if (cmb.DropDownStyle == ComboBoxStyle.DropDownList)
+                    bindable.Value = getter();
+            };
             return bindable.Bind(getter, setter);
         }
 
