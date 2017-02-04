@@ -149,20 +149,31 @@ namespace LetsEncryptAcmeReg
         /// </remarks>
         public void Update(bool force = false)
         {
-            var value = this.Value;
-            foreach (Func<T> getter in this.getter.GetInvocationList().OfType<Func<T>>())
-            {
-                var newValue = getter();
-                if (!EqualityComparer<T>.Default.Equals(value, getter()))
-                {
-                    value = newValue;
-                    force = true;
-                    break;
-                }
-            }
+            if (this.isUpdating != FALSE)
+                return;
 
-            if (force)
-                this.ForceSetValue(value);
+            this.isUpdating = TRUE;
+            try
+            {
+                var value = this.Value;
+                foreach (Func<T> getter in this.getter.GetInvocationList().OfType<Func<T>>())
+                {
+                    var newValue = getter();
+                    if (!EqualityComparer<T>.Default.Equals(value, getter()))
+                    {
+                        value = newValue;
+                        force = true;
+                        break;
+                    }
+                }
+
+                if (force)
+                    this.ForceSetValue(value);
+            }
+            finally
+            {
+                this.isUpdating = FALSE;
+            }
         }
 
         /// <summary>
