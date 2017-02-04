@@ -172,6 +172,15 @@ namespace LetsEncryptAcmeReg
             mo.CurrentAuthState.Changed += CurrentAuthState_Changed;
 
             init();
+
+            this.lstCertDomains.ItemCheck += (s, a) =>
+            {
+                if (this.lstCertDomains.Items[a.Index].ToString() == mo.Domain.Value)
+                    a.NewValue = CheckState.Checked;
+            };
+            mo.CurrentIdentifier.Changed += s => this.tableCertDomains.Hide();
+
+            this.tableCertDomains.Width = this.Width / 2;
         }
 
         #region Bind events
@@ -505,6 +514,55 @@ namespace LetsEncryptAcmeReg
         private void lnkGitLabCertHelp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             this.controller.OpenPemConcatHelpInBrowser();
+        }
+
+        private void btnHideCertDomains_Click(object sender, EventArgs e)
+        {
+            this.HideAndSaveCertDomains();
+        }
+
+        private void btnCertDomains_Click(object sender, EventArgs e)
+        {
+            if (this.tableCertDomains.Visible)
+                this.HideAndSaveCertDomains();
+            else
+                this.ShowCertDomains();
+        }
+
+        private void HideAndSaveCertDomains()
+        {
+            var mo = this.controller.Model;
+            mo.CertificateDomains.Value = this.lstCertDomains.CheckedItems.AsArray((object o) => o.ToString())
+                .Except(new[] { mo.Domain.Value })
+                .Where(x => x != null)
+                .Distinct()
+                .OrderBy(x => x)
+                .ToArray();
+
+            this.tableCertDomains.Visible = false;
+        }
+
+        private void ShowCertDomains()
+        {
+            var mo = this.controller.Model;
+            this.lstCertDomains.SetItems(
+                (mo.AvailableDomains.Value ?? new string[0]).Append(mo.Domain.Value)
+                    .Where(x => x != null)
+                    .Distinct()
+                    .OrderBy(x => x)
+                    .ToArray(),
+                (mo.CertificateDomains.Value ?? new string[0]).Append(mo.Domain.Value)
+                    .Where(x => x != null)
+                    .Distinct()
+                    .OrderBy(x => x)
+                    .ToArray());
+
+            this.tableCertDomains.Visible = true;
+        }
+
+        private void Form2_Resize(object sender, EventArgs e)
+        {
+            this.tableCertDomains.Width = this.Width / 2;
         }
     }
 }

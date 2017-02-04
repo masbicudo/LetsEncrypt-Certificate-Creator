@@ -73,7 +73,8 @@ namespace LetsEncryptAcmeReg
             init += mo.ChallengeHasFile.BindExpression(() => mo.IsTargetValid.Value && mo.IsKeyValid.Value
                     && (mo.Challenge.Value != "http-01" || !string.IsNullOrWhiteSpace(mo.SiteRoot.Value)));
 
-            init += mo.CurrentAuthState.BindExpression(() => this.CurrentAuthState_Value(mo.CurrentRegistration.Value, mo.Domain.Value));
+            init += mo.CurrentIdentifier.BindExpression(() => this.CurrentIdentifier_Value(mo.CurrentRegistration.Value, mo.Domain.Value));
+            init += mo.CurrentAuthState.BindExpression(() => this.CurrentAuthState_Value(mo.CurrentIdentifier.Value));
             init += mo.CurrentChallenge.BindExpression(() => this.CurrentChallenge_Value(mo.CurrentAuthState.Value, mo.Challenge.Value));
             init += mo.CurrentCertificate.BindExpression(() => this.CurrentCertificate_Value(mo.CurrentRegistration.Value, mo.Domain.Value, mo.Certificate.Value));
 
@@ -107,6 +108,8 @@ namespace LetsEncryptAcmeReg
             init += mo.Files.BindExpression(() => this.Files_Value(mo.SiteRoot.Value, mo.FileRelativePath.Value, mo.UpdateCname.Value, mo.UpdateConfigYml.Value));
 
             init += mo.ExpandedSavePath.BindExpression(() => this.ExpandedSavePath_Value(mo.SavePath.Value, mo.CertificateType.Value, mo.Certificate.Value));
+
+            init += mo.AvailableDomains.BindExpression(() => mo.CurrentRegistration.Value == null ? new string[0] : this.acme.GetIdentifiers(mo.CurrentRegistration.Value, null).Where(c => c.Authorization.Status == "valid").Select(c => c.Dns).ToArray());
 
             // Certificate Viewer
 
@@ -229,8 +232,11 @@ namespace LetsEncryptAcmeReg
         private bool CanAcceptTos_Value(RegistrationInfo regInfo)
             => CatchError(() => regInfo?.Registration != null && regInfo.Registration.TosAgreementUri == null);
 
-        private AuthorizationState CurrentAuthState_Value([CanBeNull] RegistrationInfo regInfo, [CanBeNull] string dns)
-            => CatchError(() => regInfo == null || string.IsNullOrWhiteSpace(dns) ? null : this.acme.GetIdentifiers(regInfo, dns).Select(ii => ii.Authorization).SingleOrDefault());
+        private IdentifierInfo CurrentIdentifier_Value([CanBeNull] RegistrationInfo regInfo, [CanBeNull] string dns)
+            => CatchError(() => regInfo == null || string.IsNullOrWhiteSpace(dns) ? null : this.acme.GetIdentifiers(regInfo, dns).SingleOrDefault());
+
+        private AuthorizationState CurrentAuthState_Value([CanBeNull] IdentifierInfo idInfo)
+            => CatchError(() => idInfo?.Authorization);
 
         private AuthorizeChallenge CurrentChallenge_Value(AuthorizationState authState, string challengeType)
             => CatchError(() => authState?.Challenges?.SingleOrDefault(x => x.Type == challengeType));
@@ -687,7 +693,8 @@ include:      ["".well-known""]
                         {
                             IdentifierRef = idref,
                             Alias = this.Model.Certificate.Value,
-                            Generate = SwitchParameter.Present
+                            Generate = SwitchParameter.Present,
+                            AlternativeIdentifierRefs = this.Model.CertificateDomains.Value,
                         }
                         .GetValue<CertificateInfo>();
 

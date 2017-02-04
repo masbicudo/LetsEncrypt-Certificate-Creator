@@ -27,12 +27,16 @@ namespace LetsEncryptAcmeReg
         public Bindable<string> GitPassword { get; } = new Bindable<string>(nameof(GitPassword));
         public Bindable<string> SavePath { get; } = new Bindable<string>(nameof(SavePath));
 
+        public Bindable<string[]> AvailableDomains { get; } = new Bindable<string[]>(nameof(AvailableDomains));
+        public Bindable<string[]> CertificateDomains { get; } = new Bindable<string[]>(nameof(CertificateDomains));
+
         public Bindable<string> TOSLink { get; } = new Bindable<string>(nameof(TOSLink));
         public Bindable<string> ExpandedSavePath { get; } = new Bindable<string>(nameof(ExpandedSavePath));
         public Bindable<string> FileRelativePath { get; } = new Bindable<string>(nameof(FileRelativePath));
         public Bindable<string> FilePath { get; } = new Bindable<string>(nameof(FilePath));
         public Bindable<string[]> Files { get; } = new Bindable<string[]>(nameof(Files));
         public Bindable<RegistrationInfo> CurrentRegistration { get; } = new Bindable<RegistrationInfo>(nameof(CurrentRegistration), flags: BindableOptions.EqualMeansUnchanged);
+        public Bindable<IdentifierInfo> CurrentIdentifier { get; } = new Bindable<IdentifierInfo>(nameof(CurrentIdentifier), flags: BindableOptions.EqualMeansUnchanged);
         public Bindable<AuthorizationState> CurrentAuthState { get; } = new Bindable<AuthorizationState>(nameof(CurrentAuthState));
         public Bindable<AuthorizeChallenge> CurrentChallenge { get; } = new Bindable<AuthorizeChallenge>(nameof(CurrentChallenge));
         public Bindable<CertificateInfo> CurrentCertificate { get; } = new Bindable<CertificateInfo>(nameof(CurrentCertificate));

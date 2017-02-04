@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -39,6 +40,23 @@ namespace LetsEncryptAcmeReg
             {
                 lb.EndUpdate();
             }
+        }
+
+        public static void SetItems<T>(this CheckedListBox lb, T[] items, T[] checkedItems)
+        {
+            lb.BeginUpdate();
+            checkedItems = checkedItems ?? new T[0];
+            try
+            {
+                lb.Items.Clear();
+                lb.Items.AddRange(items.Cast<object>().ToArray());
+            }
+            finally
+            {
+                lb.EndUpdate();
+            }
+            foreach (var index in checkedItems.Select(i => Array.IndexOf(items, i)))
+                lb.SetItemChecked(index, true);
         }
     }
 }

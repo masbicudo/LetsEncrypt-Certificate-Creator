@@ -189,10 +189,9 @@ namespace LetsEncryptAcmeReg
 
         [NotNull]
         [ItemNotNull]
-        public IdentifierInfo[] GetIdentifiers([NotNull] RegistrationInfo regInfo, [NotNull] string domain)
+        public IdentifierInfo[] GetIdentifiers([NotNull] RegistrationInfo regInfo, [CanBeNull] string domain)
         {
             if (regInfo == null) throw new ArgumentNullException(nameof(regInfo));
-            if (domain == null) throw new ArgumentNullException(nameof(domain));
 
             var states = this.GetOrCreateIdentifiers(regInfo, null, domain, allowCreation: false);
             return states;
