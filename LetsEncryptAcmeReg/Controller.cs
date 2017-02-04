@@ -114,7 +114,7 @@ namespace LetsEncryptAcmeReg
             // Certificate Viewer
 
             init += mc.CurrentCertificate.BindExpression(() => this.CurrentCertificate_Value(null, null, mc.Certificate.Value));
-            init += mc.Certificates.BindExpression(() => this.acme.GetCertificates(null, null).Select(c => c.Alias).ToArray());
+            init += mc.Certificates.BindExpression(() => this.acme.GetCertificates(null, null).Where(c => c.IssuerSerialNumber != null).Select(c => c.Alias).ToArray());
             init += mc.TextAssets.BindExpression(() => this.acme.GetTextAssets(mc.Certificate.Value));
             init += mc.Base64Data.BindExpression(() => mc.TextAssets.Value == null ? null : mc.TextAssets.Value.GetAsset(mc.CertificateType.Value));
 
