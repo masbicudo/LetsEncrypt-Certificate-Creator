@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 
 namespace LetsEncryptAcmeReg
 {
@@ -22,40 +23,62 @@ namespace LetsEncryptAcmeReg
             return items.Any(IsNotNullOrWhiteSpace);
         }
 
-        public static IEnumerable<T> Append<T>(this IEnumerable<T> items, T newItem)
+        [NotNull]
+        public static IEnumerable<T> Sort<T>([CanBeNull] this IEnumerable<T> items)
         {
-            foreach (var item in items)
-                yield return item;
+            return items?.OrderBy(x => x) ?? Enumerable.Empty<T>();
+        }
+
+        [NotNull]
+        public static IEnumerable<T> Append<T>([CanBeNull] this IEnumerable<T> items, T newItem)
+        {
+            if (items != null)
+                foreach (var item in items)
+                    yield return item;
+
             yield return newItem;
         }
 
-        public static IEnumerable<T> Append<T>(this IEnumerable<T> items, params T[] newItems)
+        [NotNull]
+        public static IEnumerable<T> Append<T>([CanBeNull] this IEnumerable<T> items, [CanBeNull] params T[] newItems)
         {
-            foreach (var item in items)
-                yield return item;
-            foreach (var newItem in newItems)
-                yield return newItem;
+            if (items != null)
+                foreach (var item in items)
+                    yield return item;
+
+            if (newItems != null)
+                foreach (var newItem in newItems)
+                    yield return newItem;
         }
 
-        public static IEnumerable<T> Prepend<T>(this IEnumerable<T> items, T newItem)
+        [NotNull]
+        public static IEnumerable<T> Prepend<T>([CanBeNull] this IEnumerable<T> items, T newItem)
         {
             yield return newItem;
-            foreach (var item in items)
-                yield return item;
+
+            if (items != null)
+                foreach (var item in items)
+                    yield return item;
         }
 
-        public static IEnumerable<T> Prepend<T>(this IEnumerable<T> items, params T[] newItems)
+        [NotNull]
+        public static IEnumerable<T> Prepend<T>([CanBeNull] this IEnumerable<T> items, [CanBeNull] params T[] newItems)
         {
-            for (int index = 0; index < newItems.Length; index++)
-            {
-                var newItem = newItems[newItems.Length - index - 1];
-                yield return newItem;
-            }
-            foreach (var item in items)
-                yield return item;
+            if (newItems != null)
+                for (int index = 0; index < newItems.Length; index++)
+                {
+                    var newItem = newItems[newItems.Length - index - 1];
+                    yield return newItem;
+                }
+
+            if (items != null)
+                foreach (var item in items)
+                    yield return item;
         }
 
         private static bool IsNotNullOrWhiteSpace(string str) => !string.IsNullOrWhiteSpace(str);
         private static bool IsNullOrWhiteSpace(string str) => string.IsNullOrWhiteSpace(str);
+        private static bool IsNull<T>(T str) => str == null;
+        private static bool IsNotNull<T>(T str) => str != null;
     }
 }

@@ -444,16 +444,14 @@ namespace LetsEncryptAcmeReg
                         this.Model.Domain.Value
                         );
 
-                    if (states.Length == 1)
-                        this.Model.CurrentAuthState.Value = states[0].Authorization;
-
                     if (states.Length == 0)
                         throw new Exception("Identity could not be created.");
 
                     if (states.Length > 1)
                         this.Warn(Messages.MultipleIdentities);
 
-                    this.Model.CurrentAuthState.Value = states[0].Authorization;
+                    this.Model.Domains.Value = this.Model.Domains.Value?.Append(states[0].Dns).Sort().Distinct().ToArray();
+                    this.Model.Domain.Value = states[0].Dns;
                 },
                 this.Model.AutoCreateChallenge,
                 this.CreateChallenge);
