@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace LetsEncryptAcmeReg
@@ -33,7 +34,15 @@ namespace LetsEncryptAcmeReg
         public new int Margin { get; set; } = -1;
         public new int Padding { get; set; } = 6;
         public Color BorderColor { get; set; } = Color.LightSlateGray;
-        public int Priority { get; set; }
+
+        /// <summary>
+        /// Gets or sets the number used to define the priority of this tooltip.
+        /// The lesser the number, the more priority it has.
+        /// Tooltips with less priority can be moved out of the way, or even turned invisible, if multiple tooltips are disputing space.
+        /// </summary>
+        public int PriorityOrder { get; set; }
+
+        public long ShowOrder { get; private set; }
 
         /// <summary>
         /// Indicates that the tool tip should show up automatically when the mouse is over the designated control.
@@ -47,7 +56,14 @@ namespace LetsEncryptAcmeReg
             bool invalidate = message != this.currentMessage;
 
             if (invalidate)
+            {
                 this.InitMessage(message);
+                if (this.Visible)
+                {
+                    this.Invalidate();
+                    this.UpdateFormLocation();
+                }
+            }
 
             this.control.MouseEnter -= Control_MouseEnter;
             this.control.MouseHover -= Control_MouseHover;
@@ -89,14 +105,21 @@ namespace LetsEncryptAcmeReg
             return this;
         }
 
-        protected virtual void ShowMessageInternal(string message)
+        protected virtual void ShowMessageInternal(string message, bool updateLocation = false)
         {
             bool invalidate = message != this.currentMessage;
 
             if (invalidate)
                 this.InitMessage(message);
 
-            this.UpdateFormLocation();
+            // the locatios is updated if:
+            //  - the tooltip is invisible, and will become visible
+            //  - the updateLocation is true
+            if (!this.Visible || updateLocation)
+            {
+                this.ShowOrder = Interlocked.Increment(ref this.manager.showOrder);
+                this.UpdateFormLocation();
+            }
             this.ShowOrHide();
 
             if (invalidate)
@@ -280,11 +303,7 @@ namespace LetsEncryptAcmeReg
             Rectangle choice = Rectangle.Empty;
             if (size != Size.Empty)
             {
-                var others = this.manager.GetToolTipsFor(this.control)
-                    .Where(tt => tt != this)
-                    .Where(tt => tt.Visible)
-                    .Where(tt => tt.Priority < this.Priority)
-                    .ToArray();
+                var others = this.GetByPriority(lessPriorityThanThis: false);
 
                 var baseScore = -0;
 
@@ -315,6 +334,7 @@ namespace LetsEncryptAcmeReg
                     val += sa.DeviceName == sd.DeviceName ? 10 : 0;
 
                     // counting the number of other tooltip forms under the current region
+                    // that have more priority and thus cannot be moved out of the way
                     var overlapArea = others.Sum(tt =>
                     {
                         var i = rect;
@@ -404,11 +424,7 @@ namespace LetsEncryptAcmeReg
                     this.ShowInactiveTopmost();
 
                     // moving other tooltips out of the way
-                    var othersToMove = this.manager.GetToolTipsFor(this.control)
-                        .Where(tt => tt != this)
-                        .Where(tt => tt.Visible)
-                        .Where(tt => tt.Priority > this.Priority)
-                        .ToArray();
+                    var othersToMove = this.GetByPriority(lessPriorityThanThis: true);
 
                     foreach (var toolTipForm in othersToMove)
                         toolTipForm.UpdateFormLocation();
@@ -430,6 +446,33 @@ namespace LetsEncryptAcmeReg
                     this.Hide();
                 }
             }
+        }
+
+        private ToolTipForm[] GetByPriority(bool lessPriorityThanThis)
+        {
+            var others = this.manager.GetToolTipsFor(this.control);
+            var targetIdx = 0;
+            for (int it = 0; it < others.Length; it++)
+            {
+                var item = others[it];
+
+                if (item == this || !item.Visible)
+                    continue;
+
+                var thisHasPriority =
+                    this.PriorityOrder < item.PriorityOrder
+                    || this.PriorityOrder == item.PriorityOrder && this.ShowOrder < item.ShowOrder;
+
+                if (thisHasPriority != lessPriorityThanThis)
+                    continue;
+
+                others[targetIdx] = item;
+                targetIdx++;
+            }
+
+            Array.Resize(ref others, targetIdx);
+
+            return others;
         }
 
         private void Frm_Activated(object sender, EventArgs e)

@@ -7,6 +7,7 @@ namespace LetsEncryptAcmeReg
     public class ToolTipManager : Control
     {
         private readonly Dictionary<Control, Dictionary<object, ToolTipForm>> dic = new Dictionary<Control, Dictionary<object, ToolTipForm>>();
+        internal long showOrder = 0;
 
         public ToolTipForm ToolTipFor(Control control, object key = null)
         {
@@ -32,7 +33,7 @@ namespace LetsEncryptAcmeReg
 
         public ToolTipForm[] GetToolTipsFor(Control control)
         {
-            lock (dic)
+            lock (this.dic)
             {
                 Dictionary<object, ToolTipForm> dic2;
                 this.dic.TryGetValue(control, out dic2);
