@@ -9,7 +9,7 @@ namespace LetsEncryptAcmeReg
     public static class BindHelper
     {
         [NotNull]
-        public static Action Bind([NotNull] this Bindable<string> bindable, [NotNull] Control control)
+        public static Action BindControl([NotNull] this Bindable<string> bindable, [NotNull] Control control)
         {
             if (bindable == null) throw new ArgumentNullException(nameof(bindable));
             if (control == null) throw new ArgumentNullException(nameof(control));
@@ -38,7 +38,7 @@ namespace LetsEncryptAcmeReg
         }
 
         [NotNull]
-        public static Action Bind([NotNull] this Bindable<bool> bindable, [NotNull] CheckBox checkBox)
+        public static Action BindControl([NotNull] this Bindable<bool> bindable, [NotNull] CheckBox checkBox)
         {
             if (bindable == null) throw new ArgumentNullException(nameof(bindable));
             if (checkBox == null) throw new ArgumentNullException(nameof(checkBox));
@@ -67,7 +67,7 @@ namespace LetsEncryptAcmeReg
         }
 
         [NotNull]
-        public static Action Bind<T>([NotNull] this Bindable<T> bindable, [NotNull] ComboBox cmb)
+        public static Action BindControl<T>([NotNull] this Bindable<T> bindable, [NotNull] ComboBox cmb)
         {
             if (bindable == null) throw new ArgumentNullException(nameof(bindable));
             if (cmb == null) throw new ArgumentNullException(nameof(cmb));
@@ -101,7 +101,7 @@ namespace LetsEncryptAcmeReg
         }
 
         [NotNull]
-        public static Action Bind<TValue, TListItem>(
+        public static Action BindControl<TValue, TListItem>(
             [NotNull] this Bindable<TValue> bindable,
             [NotNull] ComboBox cmb,
             [NotNull] Func<TListItem, TValue> convertIn,
@@ -141,7 +141,7 @@ namespace LetsEncryptAcmeReg
         }
 
         [NotNull]
-        public static Action Bind<T>([NotNull] this Bindable<T> bindable, [NotNull] ListBox lst)
+        public static Action BindControl<T>([NotNull] this Bindable<T> bindable, [NotNull] ListBox lst)
         {
             if (bindable == null) throw new ArgumentNullException(nameof(bindable));
             if (lst == null) throw new ArgumentNullException(nameof(lst));
@@ -205,7 +205,7 @@ namespace LetsEncryptAcmeReg
         }
 
         [NotNull]
-        public static Action Bind([NotNull] this Bindable<string> bindable, [NotNull] TextBox txt)
+        public static Action BindControl([NotNull] this Bindable<string> bindable, [NotNull] TextBox txt)
         {
             if (bindable == null) throw new ArgumentNullException(nameof(bindable));
             if (txt == null) throw new ArgumentNullException(nameof(txt));
@@ -244,7 +244,7 @@ namespace LetsEncryptAcmeReg
         }
 
         [NotNull]
-        public static Action Bind([NotNull] this Bindable<string> bindable, [NotNull] ComboBox cmb)
+        public static Action BindControl([NotNull] this Bindable<string> bindable, [NotNull] ComboBox cmb)
         {
             if (bindable == null) throw new ArgumentNullException(nameof(bindable));
             if (cmb == null) throw new ArgumentNullException(nameof(cmb));
@@ -276,7 +276,7 @@ namespace LetsEncryptAcmeReg
         }
 
         [NotNull]
-        public static Action Bind(
+        public static Action BindControl(
             [NotNull] this Bindable<string> bindable,
             [NotNull] ComboBox cmb,
             [NotNull] Func<string, string> convertIn,

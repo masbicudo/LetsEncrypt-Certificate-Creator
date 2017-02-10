@@ -56,51 +56,51 @@ namespace LetsEncryptAcmeReg
             // Control bindings:
             //      These are relations between the controls on the form
             //      and the bindable objects.
-            init += mo.Email.Bind(this.cmbRegistration);
-            init += mo.Domain.Bind(this.cmbDomain);
-            init += mo.Challenge.Bind(this.cmbChallenge);
-            init += mo.Target.Bind(this.txtChallengeTarget);
-            init += mo.Key.Bind(this.txtChallengeKey);
-            init += mo.SiteRoot.Bind(this.txtSiteRoot);
-            init += mo.Certificate.Bind(this.cmbCertificate, s => s?.StartsWith("[new] ") == true ? s.Substring(6) : s);
-            init += mo.Issuer.Bind(this.txtIssuer);
-            init += mo.CertificateType.Bind(this.cmbCertificateType, StringToCertTypeEnum, CertTypeEnumToString);
-            init += mo.Password.Bind(this.txtPassword);
-            init += mo.ShowPassword.Bind(this.chkShowPassword);
-            init += mo.GitUserName.Bind(this.txtGitUserName);
-            init += mo.GitPassword.Bind(this.txtGitPassword);
-            init += mo.SavePath.Bind(this.txtSavePath);
+            init += mo.Email.BindControl(this.cmbRegistration);
+            init += mo.Domain.BindControl(this.cmbDomain);
+            init += mo.Challenge.BindControl(this.cmbChallenge);
+            init += mo.Target.BindControl(this.txtChallengeTarget);
+            init += mo.Key.BindControl(this.txtChallengeKey);
+            init += mo.SiteRoot.BindControl(this.txtSiteRoot);
+            init += mo.Certificate.BindControl(this.cmbCertificate, s => s?.StartsWith("[new] ") == true ? s.Substring(6) : s);
+            init += mo.Issuer.BindControl(this.txtIssuer);
+            init += mo.CertificateType.BindControl(this.cmbCertificateType, StringToCertTypeEnum, CertTypeEnumToString);
+            init += mo.Password.BindControl(this.txtPassword);
+            init += mo.ShowPassword.BindControl(this.chkShowPassword);
+            init += mo.GitUserName.BindControl(this.txtGitUserName);
+            init += mo.GitPassword.BindControl(this.txtGitPassword);
+            init += mo.SavePath.BindControl(this.txtSavePath);
 
-            init += mo.AutoRegister.Bind(this.chkAutoRegister);
-            init += mo.AutoAcceptTos.Bind(this.chkAutoAcceptTos);
-            init += mo.AutoAddDomain.Bind(this.chkAutoAddDomain);
-            init += mo.AutoCreateChallenge.Bind(this.chkAutoCreateChallenge);
-            init += mo.AutoSaveChallenge.Bind(this.chkAutoSaveChallenge);
-            init += mo.AutoCommitChallenge.Bind(this.chkAutoCommit);
-            init += mo.AutoTestChallenge.Bind(this.chkAutoTest);
-            init += mo.AutoValidateChallenge.Bind(this.chkAutoValidate);
-            init += mo.AutoUpdateStatus.Bind(this.chkAutoUpdateStatus);
-            init += mo.AutoCreateCertificate.Bind(this.chkAutoCreateCertificate);
-            init += mo.AutoSubmitCertificate.Bind(this.chkAutoSubmit);
-            init += mo.AutoGetIssuerCertificate.Bind(this.chkAutoGetIssuerCert);
-            init += mo.AutoSaveOrShowCertificate.Bind(this.chkAutoSaveOrShowCertificate);
+            init += mo.AutoRegister.BindControl(this.chkAutoRegister);
+            init += mo.AutoAcceptTos.BindControl(this.chkAutoAcceptTos);
+            init += mo.AutoAddDomain.BindControl(this.chkAutoAddDomain);
+            init += mo.AutoCreateChallenge.BindControl(this.chkAutoCreateChallenge);
+            init += mo.AutoSaveChallenge.BindControl(this.chkAutoSaveChallenge);
+            init += mo.AutoCommitChallenge.BindControl(this.chkAutoCommit);
+            init += mo.AutoTestChallenge.BindControl(this.chkAutoTest);
+            init += mo.AutoValidateChallenge.BindControl(this.chkAutoValidate);
+            init += mo.AutoUpdateStatus.BindControl(this.chkAutoUpdateStatus);
+            init += mo.AutoCreateCertificate.BindControl(this.chkAutoCreateCertificate);
+            init += mo.AutoSubmitCertificate.BindControl(this.chkAutoSubmit);
+            init += mo.AutoGetIssuerCertificate.BindControl(this.chkAutoGetIssuerCert);
+            init += mo.AutoSaveOrShowCertificate.BindControl(this.chkAutoSaveOrShowCertificate);
 
             init += mo.CurrentRegistration.Bind(this.lstRegistrations, (RegistrationItem i) => i?.RegistrationInfo);
-            init += mo.CurrentRegistration.Bind(this.cmbRegistration, (RegistrationItem i) => i?.RegistrationInfo);
+            init += mo.CurrentRegistration.BindControl(this.cmbRegistration, (RegistrationItem i) => i?.RegistrationInfo);
 
-            init += mo.Domain.Bind(this.lstDomains);
+            init += mo.Domain.BindControl(this.lstDomains);
 
-            init += ma.Challenge.Bind(this.lstChallenges);
+            init += ma.Challenge.BindControl(this.lstChallenges);
 
-            init += mo.UpdateConfigYml.Bind(this.chkConfigYml);
-            init += mo.UpdateCname.Bind(this.chkCname);
+            init += mo.UpdateConfigYml.BindControl(this.chkConfigYml);
+            init += mo.UpdateCname.BindControl(this.chkCname);
 
             // Cert view controls
-            init += mc.Certificate.Bind(this.cmbAllCerts);
+            init += mc.Certificate.BindControl(this.cmbAllCerts);
             init += mc.Certificates.Bind(() => this.cmbAllCerts.Items.OfType<string>().ToArray());
             init += BindHelper.BindExpression(() => this.cmbAllCerts.SetItems(mc.Certificates.Value));
-            init += mc.CertificateType.Bind(this.cmbCertViewType, StringToCertTypeEnum, CertTypeEnumToString);
-            init += mc.Base64Data.Bind(this.txtCertBase64Data);
+            init += mc.CertificateType.BindControl(this.cmbCertViewType, StringToCertTypeEnum, CertTypeEnumToString);
+            init += mc.Base64Data.BindControl(this.txtCertBase64Data);
 
             // 
             init += BindHelper.BindExpression(() => RetryToolTip(this.btnRegister, mo.AutoRegisterRetry.Value, mo.AutoRegisterTimer.Value));
