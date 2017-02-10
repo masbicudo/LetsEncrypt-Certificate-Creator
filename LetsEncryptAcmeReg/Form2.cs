@@ -513,7 +513,7 @@ namespace LetsEncryptAcmeReg
 
         private void lnkGitLabCertHelp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            this.controller.OpenPemConcatHelpInBrowser();
+            this.controller.OpenPemConcatHelpInBrowser().RunSynchronously();
         }
 
         private void btnHideCertDomains_Click(object sender, EventArgs e)
