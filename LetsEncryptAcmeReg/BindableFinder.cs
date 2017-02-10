@@ -49,7 +49,7 @@ namespace LetsEncryptAcmeReg
                 var refBindable = node.Expression;
                 var boundExpression = this.exprLambda.Body;
 
-                if (this.IsConstant(refBindable))
+                if (IsConstant(refBindable))
                 {
                     this.BindablesFound.Add(refBindable);
 
@@ -84,7 +84,7 @@ namespace LetsEncryptAcmeReg
             return base.VisitMember(node);
         }
 
-        private bool IsConstant(Expression expr)
+        private static bool IsConstant(Expression expr)
         {
             return expr is ConstantExpression || expr is MemberExpression && IsConstant(((MemberExpression)expr).Expression);
         }
