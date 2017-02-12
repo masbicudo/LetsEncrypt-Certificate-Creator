@@ -37,8 +37,6 @@ namespace LetsEncryptAcmeReg
             this.ToolTipFor(this.btnAddDomain, Messages.ToolTipForAddDomain);
             this.ToolTipFor(this.cmbDomain, Messages.ToolTipForDomain);
 
-            this.ToolTipFor(this.chkConfigYml, Messages.ToolTipForConfigYml);
-            this.ToolTipFor(this.chkCname, Messages.ToolTipForCname);
             this.ToolTipFor(this.btnUpdateStatus, Messages.ToolTipForUpdateStatus);
 
             this.ToolTipFor(this.btnRegister, Messages.ToolTipForRegister);
@@ -92,8 +90,9 @@ namespace LetsEncryptAcmeReg
 
             init += ma.Challenge.BindControl(this.lstChallenges);
 
-            init += mo.UpdateConfigYml.BindControl(this.chkConfigYml);
-            init += mo.UpdateCname.BindControl(this.chkCname);
+            //moved to GithubSsg
+            //init += mo.UpdateConfigYml.BindControl(this.chkConfigYml);
+            //init += mo.UpdateCname.BindControl(this.chkCname);
 
             // Cert view controls
             init += mc.Certificate.BindControl(this.cmbAllCerts);
@@ -145,6 +144,10 @@ namespace LetsEncryptAcmeReg
 
             init += mo.Certificates.Bind(() => this.cmbCertificate.Items.OfType<string>().ToArray());
             init += BindHelper.BindExpression(() => this.SetItemsOf_cmbCertificate(mo.Certificates.Value, mo.Domain.Value, mo.Date.Value));
+
+            init += mo.SsgTypes.Bind(
+                () => this.cmbSsg.Items.OfType<string>().ToArray(),
+                v => this.cmbSsg.SetItems(v));
 
             // Manual changed events:
             mo.CanRegister.Changed += v => this.btnRegister.Enabled = v;

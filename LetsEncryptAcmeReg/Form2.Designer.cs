@@ -68,6 +68,7 @@
             this.btnSubmit = new System.Windows.Forms.Button();
             this.chkAutoGetIssuerCert = new System.Windows.Forms.CheckBox();
             this.btnGetIssuerCert = new System.Windows.Forms.Button();
+            this.btnCertDomains = new System.Windows.Forms.Button();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.btnChangeSavePath = new System.Windows.Forms.Button();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
@@ -95,12 +96,13 @@
             this.label6 = new System.Windows.Forms.Label();
             this.txtSiteRoot = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
-            this.chkCname = new System.Windows.Forms.CheckBox();
-            this.chkConfigYml = new System.Windows.Forms.CheckBox();
             this.label15 = new System.Windows.Forms.Label();
             this.txtGitUserName = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
             this.txtGitPassword = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.cmbSsg = new System.Windows.Forms.ComboBox();
+            this.flowSsgControls = new System.Windows.Forms.FlowLayoutPanel();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
             this.toolStripContainer2 = new System.Windows.Forms.ToolStripContainer();
@@ -131,7 +133,6 @@
             this.txtCertBase64Data = new System.Windows.Forms.TextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.lstCertDomains = new System.Windows.Forms.CheckedListBox();
-            this.btnCertDomains = new System.Windows.Forms.Button();
             this.tableCertDomains = new System.Windows.Forms.TableLayoutPanel();
             this.btnHideCertDomains = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
@@ -823,6 +824,20 @@
             this.btnGetIssuerCert.UseVisualStyleBackColor = true;
             this.btnGetIssuerCert.Click += new System.EventHandler(this.btnGetIssuerCert_Click);
             // 
+            // btnCertDomains
+            // 
+            this.btnCertDomains.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCertDomains.AutoSize = true;
+            this.btnCertDomains.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnCertDomains.Location = new System.Drawing.Point(1, 1);
+            this.btnCertDomains.Margin = new System.Windows.Forms.Padding(1);
+            this.btnCertDomains.Name = "btnCertDomains";
+            this.btnCertDomains.Size = new System.Drawing.Size(92, 23);
+            this.btnCertDomains.TabIndex = 12;
+            this.btnCertDomains.Text = "More domains...";
+            this.btnCertDomains.UseVisualStyleBackColor = true;
+            this.btnCertDomains.Click += new System.EventHandler(this.btnCertDomains_Click);
+            // 
             // tableLayoutPanel4
             // 
             this.tableLayoutPanel4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -1116,11 +1131,16 @@
             this.tableLayoutPanel2.Controls.Add(this.txtChallengeTarget, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.label6, 0, 2);
             this.tableLayoutPanel2.Controls.Add(this.txtSiteRoot, 1, 2);
-            this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel9, 0, 3);
+            this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel9, 0, 5);
+            this.tableLayoutPanel2.Controls.Add(this.label19, 0, 3);
+            this.tableLayoutPanel2.Controls.Add(this.cmbSsg, 1, 3);
+            this.tableLayoutPanel2.Controls.Add(this.flowSsgControls, 1, 4);
             this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 146);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 6;
+            this.tableLayoutPanel2.RowCount = 8;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -1222,55 +1242,25 @@
             this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel9.Controls.Add(this.chkCname, 0, 0);
-            this.tableLayoutPanel9.Controls.Add(this.chkConfigYml, 2, 0);
-            this.tableLayoutPanel9.Controls.Add(this.label15, 0, 1);
-            this.tableLayoutPanel9.Controls.Add(this.txtGitUserName, 1, 1);
-            this.tableLayoutPanel9.Controls.Add(this.label16, 2, 1);
-            this.tableLayoutPanel9.Controls.Add(this.txtGitPassword, 3, 1);
+            this.tableLayoutPanel9.Controls.Add(this.label15, 0, 0);
+            this.tableLayoutPanel9.Controls.Add(this.txtGitUserName, 1, 0);
+            this.tableLayoutPanel9.Controls.Add(this.label16, 2, 0);
+            this.tableLayoutPanel9.Controls.Add(this.txtGitPassword, 3, 0);
             this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel9.Location = new System.Drawing.Point(0, 69);
+            this.tableLayoutPanel9.Location = new System.Drawing.Point(0, 92);
             this.tableLayoutPanel9.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel9.Name = "tableLayoutPanel9";
-            this.tableLayoutPanel9.RowCount = 2;
+            this.tableLayoutPanel9.RowCount = 1;
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel9.Size = new System.Drawing.Size(432, 45);
+            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayoutPanel9.Size = new System.Drawing.Size(432, 22);
             this.tableLayoutPanel9.TabIndex = 18;
-            // 
-            // chkCname
-            // 
-            this.chkCname.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.chkCname.AutoSize = true;
-            this.chkCname.Checked = true;
-            this.chkCname.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.tableLayoutPanel9.SetColumnSpan(this.chkCname, 2);
-            this.chkCname.Location = new System.Drawing.Point(112, 3);
-            this.chkCname.Name = "chkCname";
-            this.chkCname.Size = new System.Drawing.Size(102, 17);
-            this.chkCname.TabIndex = 0;
-            this.chkCname.Text = "Update CNAME";
-            this.chkCname.UseVisualStyleBackColor = true;
-            // 
-            // chkConfigYml
-            // 
-            this.chkConfigYml.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.chkConfigYml.AutoSize = true;
-            this.chkConfigYml.Checked = true;
-            this.chkConfigYml.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.tableLayoutPanel9.SetColumnSpan(this.chkConfigYml, 2);
-            this.chkConfigYml.Location = new System.Drawing.Point(220, 3);
-            this.chkConfigYml.Name = "chkConfigYml";
-            this.chkConfigYml.Size = new System.Drawing.Size(117, 17);
-            this.chkConfigYml.TabIndex = 1;
-            this.chkConfigYml.Text = "Update _config.yml";
-            this.chkConfigYml.UseVisualStyleBackColor = true;
             // 
             // label15
             // 
             this.label15.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(1, 27);
+            this.label15.Location = new System.Drawing.Point(1, 4);
             this.label15.Margin = new System.Windows.Forms.Padding(1);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(71, 13);
@@ -1281,7 +1271,7 @@
             // txtGitUserName
             // 
             this.txtGitUserName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtGitUserName.Location = new System.Drawing.Point(74, 24);
+            this.txtGitUserName.Location = new System.Drawing.Point(74, 1);
             this.txtGitUserName.Margin = new System.Windows.Forms.Padding(1);
             this.txtGitUserName.Name = "txtGitUserName";
             this.txtGitUserName.Size = new System.Drawing.Size(142, 20);
@@ -1292,7 +1282,7 @@
             // 
             this.label16.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(218, 27);
+            this.label16.Location = new System.Drawing.Point(218, 4);
             this.label16.Margin = new System.Windows.Forms.Padding(1);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(69, 13);
@@ -1303,12 +1293,49 @@
             // txtGitPassword
             // 
             this.txtGitPassword.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtGitPassword.Location = new System.Drawing.Point(289, 24);
+            this.txtGitPassword.Location = new System.Drawing.Point(289, 1);
             this.txtGitPassword.Margin = new System.Windows.Forms.Padding(1);
             this.txtGitPassword.Name = "txtGitPassword";
             this.txtGitPassword.Size = new System.Drawing.Size(142, 20);
             this.txtGitPassword.TabIndex = 15;
             this.txtGitPassword.UseSystemPasswordChar = true;
+            // 
+            // label19
+            // 
+            this.label19.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(1, 74);
+            this.label19.Margin = new System.Windows.Forms.Padding(1);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(54, 13);
+            this.label19.TabIndex = 16;
+            this.label19.Text = "SSG";
+            this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // cmbSsg
+            // 
+            this.cmbSsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel2.SetColumnSpan(this.cmbSsg, 2);
+            this.cmbSsg.FormattingEnabled = true;
+            this.cmbSsg.Location = new System.Drawing.Point(57, 70);
+            this.cmbSsg.Margin = new System.Windows.Forms.Padding(1);
+            this.cmbSsg.Name = "cmbSsg";
+            this.cmbSsg.Size = new System.Drawing.Size(374, 21);
+            this.cmbSsg.TabIndex = 1;
+            // 
+            // flowSsgControls
+            // 
+            this.flowSsgControls.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.flowSsgControls.AutoSize = true;
+            this.flowSsgControls.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.tableLayoutPanel2.SetColumnSpan(this.flowSsgControls, 2);
+            this.flowSsgControls.Location = new System.Drawing.Point(56, 92);
+            this.flowSsgControls.Margin = new System.Windows.Forms.Padding(0);
+            this.flowSsgControls.Name = "flowSsgControls";
+            this.flowSsgControls.Size = new System.Drawing.Size(376, 1);
+            this.flowSsgControls.TabIndex = 19;
             // 
             // tabPage2
             // 
@@ -1702,22 +1729,8 @@
             this.lstCertDomains.IntegralHeight = false;
             this.lstCertDomains.Location = new System.Drawing.Point(3, 3);
             this.lstCertDomains.Name = "lstCertDomains";
-            this.lstCertDomains.Size = new System.Drawing.Size(23, 570);
+            this.lstCertDomains.Size = new System.Drawing.Size(18, 570);
             this.lstCertDomains.TabIndex = 2;
-            // 
-            // btnCertDomains
-            // 
-            this.btnCertDomains.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCertDomains.AutoSize = true;
-            this.btnCertDomains.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnCertDomains.Location = new System.Drawing.Point(1, 1);
-            this.btnCertDomains.Margin = new System.Windows.Forms.Padding(1);
-            this.btnCertDomains.Name = "btnCertDomains";
-            this.btnCertDomains.Size = new System.Drawing.Size(92, 23);
-            this.btnCertDomains.TabIndex = 12;
-            this.btnCertDomains.Text = "More domains...";
-            this.btnCertDomains.UseVisualStyleBackColor = true;
-            this.btnCertDomains.Click += new System.EventHandler(this.btnCertDomains_Click);
             // 
             // tableCertDomains
             // 
@@ -1726,12 +1739,12 @@
             this.tableCertDomains.Controls.Add(this.lstCertDomains, 0, 0);
             this.tableCertDomains.Controls.Add(this.btnHideCertDomains, 0, 1);
             this.tableCertDomains.Dock = System.Windows.Forms.DockStyle.Right;
-            this.tableCertDomains.Location = new System.Drawing.Point(435, 0);
+            this.tableCertDomains.Location = new System.Drawing.Point(440, 0);
             this.tableCertDomains.Name = "tableCertDomains";
             this.tableCertDomains.RowCount = 2;
             this.tableCertDomains.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableCertDomains.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableCertDomains.Size = new System.Drawing.Size(29, 601);
+            this.tableCertDomains.Size = new System.Drawing.Size(24, 601);
             this.tableCertDomains.TabIndex = 3;
             this.tableCertDomains.Visible = false;
             // 
@@ -1743,7 +1756,7 @@
             this.btnHideCertDomains.Location = new System.Drawing.Point(1, 577);
             this.btnHideCertDomains.Margin = new System.Windows.Forms.Padding(1);
             this.btnHideCertDomains.Name = "btnHideCertDomains";
-            this.btnHideCertDomains.Size = new System.Drawing.Size(27, 23);
+            this.btnHideCertDomains.Size = new System.Drawing.Size(22, 23);
             this.btnHideCertDomains.TabIndex = 12;
             this.btnHideCertDomains.Text = "ok";
             this.btnHideCertDomains.UseVisualStyleBackColor = true;
@@ -1885,8 +1898,6 @@
         private System.Windows.Forms.Button btnAcceptTos;
         private System.Windows.Forms.CheckBox chkAutoRegister;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel9;
-        private System.Windows.Forms.CheckBox chkCname;
-        private System.Windows.Forms.CheckBox chkConfigYml;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.CheckBox chkAutoUpdateStatus;
         private System.Windows.Forms.Button btnUpdateStatus;
@@ -1925,5 +1936,8 @@
         private System.Windows.Forms.CheckedListBox lstCertDomains;
         private System.Windows.Forms.TableLayoutPanel tableCertDomains;
         private System.Windows.Forms.Button btnHideCertDomains;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.ComboBox cmbSsg;
+        private System.Windows.Forms.FlowLayoutPanel flowSsgControls;
     }
 }

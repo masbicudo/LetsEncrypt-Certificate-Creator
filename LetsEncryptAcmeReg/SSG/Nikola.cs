@@ -61,14 +61,19 @@ namespace LetsEncryptAcmeReg.SSG
             return true;
         }
 
+        public bool InitModel(ISsgController controller, ISsgMasterModel mainModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public BindResult? InitControls(IControlCreatorAndBinder creator)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool IsValid()
         {
             return true;
-        }
-
-        public void CreateModel()
-        {
-            throw new NotImplementedException();
         }
 
         public void Patch()

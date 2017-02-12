@@ -76,10 +76,12 @@
     <Compile Include="Bindable.cs" />
     <Compile Include="BindableFinder.cs" />
     <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="ISsgController.cs" />
     <Compile Include="ManagerBindableModel.cs" />
     <Compile Include="MessagePart.cs" />
     <Compile Include="Messages.cs" />
     <Compile Include="ObjectExtensions.cs" />
+    <Compile Include="PathUtils.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -89,9 +91,13 @@
     <Compile Include="AcmeTextAssets.cs" />
     <Compile Include="Replaceables\DefaultSystemIoDirectory.cs" />
     <Compile Include="Replaceables\DefaultSystemIoFile.cs" />
+    <Compile Include="SSG\IControlCreatorAndBinder.cs" />
     <Compile Include="SSG\ISsg.cs" />
     <Compile Include="Replaceables\ISystemIoDirectory.cs" />
     <Compile Include="Replaceables\ISystemIoFile.cs" />
+    <Compile Include="SSG\GitHubSsg.cs" />
+    <Compile Include="SSG\ISsgMasterModel.cs" />
+    <Compile Include="SSG\ISsgModel.cs" />
     <Compile Include="SSG\Nikola.cs" />
     <Compile Include="Replaceables\Singletons.cs" />
     <Compile Include="WinAPI\ShowWindowCommands.cs" />

@@ -10,17 +10,21 @@ using System.IO;
 using System.Linq;
 using System.Management.Automation;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using LetsEncryptAcmeReg.SSG;
 using Signature = LibGit2Sharp.Signature;
 #pragma warning disable 1998
 
 namespace LetsEncryptAcmeReg
 {
-    public class Controller
+    public class Controller :
+        ISsgController
     {
         private readonly Acme acme;
+        private static readonly Lazy<Type[]> _ssgTypes = new Lazy<Type[]>(GetSsgTypes, LazyThreadSafetyMode.ExecutionAndPublication);
 
         public Controller(Acme acme)
         {
@@ -105,7 +109,8 @@ namespace LetsEncryptAcmeReg
 
             init += mo.IsPasswordEnabled.BindExpression(() => mo.CertificateType.Value == CertType.Pkcs12);
 
-            init += mo.Files.BindExpression(() => this.Files_Value(mo.SiteRoot.Value, mo.FileRelativePath.Value, mo.UpdateCname.Value, mo.UpdateConfigYml.Value));
+            init += mo.SsgTypes.BindExpression(() => _ssgTypes.Value.Select(t => t.Name).ToArray());
+            init += mo.CurrentSsg.BindExpression(() => this.CurrentSsg_Value(mo.SsgName.Value));
 
             init += mo.ExpandedSavePath.BindExpression(() => this.ExpandedSavePath_Value(mo.SavePath.Value, mo.CertificateType.Value, mo.Certificate.Value));
 
@@ -122,6 +127,28 @@ namespace LetsEncryptAcmeReg
             mo.Key.Changed += s => mo.CanValidateChallenge.Value = false;
 
             return init;
+        }
+
+        [CanBeNull]
+        private ISsg CurrentSsg_Value([CanBeNull] string value)
+        {
+            var ssgType = _ssgTypes.Value.FirstOrDefault(t => t.Name == value);
+
+            if (ssgType == null)
+                return null;
+
+            var ssg = (ISsg)Activator.CreateInstance(ssgType);
+            return ssg;
+        }
+
+        private static Type[] GetSsgTypes()
+        {
+            var type = typeof(ISsg);
+            var types = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => type.IsAssignableFrom(p))
+                .ToArray();
+            return types;
         }
 
         private string ExpandedSavePath_Value(string savePath, CertType certType, string cert)
@@ -213,21 +240,6 @@ namespace LetsEncryptAcmeReg
 
         private string FilePath_Value(bool hasFile, string siteRoot, string indexRelativePath)
             => CatchError(() => hasFile ? Path.Combine(siteRoot, indexRelativePath) : "");
-
-        private string[] Files_Value(string siteRoot, string indexRelative, bool updateCname, bool updateConfigYml)
-        {
-            return CatchError(() =>
-            {
-                if (new[] { siteRoot, indexRelative }.AnyNullOrWhiteSpace())
-                    return new string[0];
-
-                var items = Enumerable.Empty<string>();
-                items = items.Append(Path.Combine(siteRoot, indexRelative, "index.html"));
-                if (updateCname) items = items.Append(Path.Combine(siteRoot, "CNAME"));
-                if (updateConfigYml) items = items.Append(Path.Combine(siteRoot, "_config.yml"));
-                return items.Where(x => x != null).ToArray();
-            });
-        }
 
         private bool CanAcceptTos_Value(RegistrationInfo regInfo)
             => CatchError(() => regInfo?.Registration != null && regInfo.Registration.TosAgreementUri == null);
@@ -496,31 +508,6 @@ namespace LetsEncryptAcmeReg
                 this.Model.AutoSaveChallengeTimer,
                 async () =>
                 {
-                    Directory.CreateDirectory(this.Model.FilePath.Value);
-
-                    using (var fs = File.Open(Path.Combine(this.Model.FilePath.Value, "index.html"), FileMode.Create, FileAccess.ReadWrite))
-                    using (var sw = new StreamWriter(fs))
-                        sw.Write(this.Model.Key.Value);
-
-                    if (this.Model.UpdateConfigYml.Value)
-                        using (var fs = File.Open(Path.Combine(this.Model.SiteRoot.Value, "_config.yml"), FileMode.OpenOrCreate, FileAccess.ReadWrite))
-                        {
-                            string allText;
-                            using (var sr = new StreamReader(fs, Encoding.UTF8, false, 1024, true))
-                                allText = sr.ReadToEnd();
-
-                            if (!allText.Contains(@""".well-known"""))
-                                using (var sw = new StreamWriter(fs))
-                                    sw.Write(@"
-# Handling Reading
-include:      ["".well-known""]
-");
-                        }
-
-                    if (this.Model.UpdateCname.Value)
-                        using (var fs = File.Open(Path.Combine(this.Model.SiteRoot.Value, "CNAME"), FileMode.Create, FileAccess.ReadWrite))
-                        using (var sw = new StreamWriter(fs))
-                            sw.Write(this.Model.Domain.Value);
                 },
                 this.Model.AutoCommitChallenge,
                 this.CommitChallenge);
@@ -541,14 +528,13 @@ include:      ["".well-known""]
                         var password = this.Model.GitPassword.Value;
                         var email = this.Model.Email.Value;
 
-                        // Stage the file
-                        repo.Index.Add(Path.Combine(this.Model.FileRelativePath.Value, "index.html"));
+                        // Stage the files
+                        var filesToAdd = this.Model.Files.Value
+                            .Select(p => PathUtils.CreateRelativePath(p, this.Model.SiteRoot.Value))
+                            .ToArray();
 
-                        if (this.Model.UpdateCname.Value)
-                            repo.Index.Add("CNAME");
-
-                        if (this.Model.UpdateConfigYml.Value)
-                            repo.Index.Add("_config.yml");
+                        foreach (var eachPath in filesToAdd)
+                            repo.Index.Add(eachPath);
 
                         // Create the committer's signature and commit
                         Signature author = new Signature(username, email, DateTime.Now);

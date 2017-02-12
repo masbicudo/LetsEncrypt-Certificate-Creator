@@ -1,6 +1,7 @@
 using System;
 using ACMESharp;
 using ACMESharp.Vault.Model;
+using LetsEncryptAcmeReg.SSG;
 
 namespace LetsEncryptAcmeReg
 {
@@ -32,9 +33,11 @@ namespace LetsEncryptAcmeReg
 
         public Bindable<string> TOSLink { get; } = new Bindable<string>(nameof(TOSLink));
         public Bindable<string> ExpandedSavePath { get; } = new Bindable<string>(nameof(ExpandedSavePath));
+
         public Bindable<string> FileRelativePath { get; } = new Bindable<string>(nameof(FileRelativePath));
         public Bindable<string> FilePath { get; } = new Bindable<string>(nameof(FilePath));
         public Bindable<string[]> Files { get; } = new Bindable<string[]>(nameof(Files));
+
         public Bindable<RegistrationInfo> CurrentRegistration { get; } = new Bindable<RegistrationInfo>(nameof(CurrentRegistration), flags: BindableOptions.EqualMeansUnchanged);
         public Bindable<IdentifierInfo> CurrentIdentifier { get; } = new Bindable<IdentifierInfo>(nameof(CurrentIdentifier), flags: BindableOptions.EqualMeansUnchanged);
         public Bindable<AuthorizationState> CurrentAuthState { get; } = new Bindable<AuthorizationState>(nameof(CurrentAuthState));
@@ -42,8 +45,9 @@ namespace LetsEncryptAcmeReg
         public Bindable<CertificateInfo> CurrentCertificate { get; } = new Bindable<CertificateInfo>(nameof(CurrentCertificate));
         public Bindable<string[]> Certificates { get; } = new Bindable<string[]>(nameof(Certificates));
 
-        public Bindable<bool> UpdateConfigYml { get; } = new Bindable<bool>(nameof(UpdateConfigYml));
-        public Bindable<bool> UpdateCname { get; } = new Bindable<bool>(nameof(UpdateCname));
+        public Bindable<string[]> SsgTypes { get; } = new Bindable<string[]>(nameof(SsgTypes));
+        public Bindable<string> SsgName { get; } = new Bindable<string>(nameof(SsgName));
+        public Bindable<ISsg> CurrentSsg { get; } = new Bindable<ISsg>(nameof(CurrentSsg));
 
         public Bindable<bool> IsRegistrationCreated { get; } = new Bindable<bool>(nameof(IsRegistrationCreated));
         public Bindable<bool> IsDomainCreated { get; } = new Bindable<bool>(nameof(IsDomainCreated));
