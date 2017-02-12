@@ -15,8 +15,7 @@ namespace LetsEncryptAcmeReg
         private readonly LambdaExpression exprLambda;
         private readonly bool init;
 
-        [CanBeNull]
-        public Action InitAction { get; private set; }
+        public BindResult BindResult { get; private set; }
 
         public List<Expression> BindablesFound { get; } = new List<Expression>();
 
@@ -77,8 +76,8 @@ namespace LetsEncryptAcmeReg
                     //      var fn = () => refBindable.Bind(x => ..., this.init);
                     //      this.InitAction += fn();
                     var call = Expression.Call(refBindable, method, lambda, Expression.Constant(this.init));
-                    var fn = Expression.Lambda<Func<Action>>(call).Compile();
-                    this.InitAction += fn();
+                    var fn = Expression.Lambda<Func<BindResult>>(call).Compile();
+                    this.BindResult += fn();
                 }
             }
 

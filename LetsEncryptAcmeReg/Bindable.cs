@@ -115,13 +115,13 @@ namespace LetsEncryptAcmeReg
         /// </summary>
         public T Value
         {
-            get { return value; }
+            get { return this.value; }
             set
             {
                 //if (isAsync != FALSE)
                 //    throw new InvalidOperationException($"To set an async bindable object use the `{nameof(this.SetValueAsync)}` method.");
 
-                if ((flags & BindableOptions.EqualMeansUnchanged) != 0)
+                if ((this.flags & BindableOptions.EqualMeansUnchanged) != 0)
                     if ((this.equalityComparer ?? EqualityComparer<T>.Default).Equals(this.value, value))
                         return;
 
@@ -129,7 +129,7 @@ namespace LetsEncryptAcmeReg
                 {
                     this.ForceSetValue(value);
                 }
-                else if ((flags & BindableOptions.AllowRecursiveSets) == 0)
+                else if ((this.flags & BindableOptions.AllowRecursiveSets) == 0)
                 {
                     throw new InvalidOperationException("Recursively defining the value of a bindable object to different values is not allowed.");
                 }
@@ -252,6 +252,7 @@ namespace LetsEncryptAcmeReg
         /// Not every external source will be associated with a getter method.
         /// In that case, you will have to update the bindable value by setting it in your own code.
         /// </remarks>
+        [UsedImplicitly]
         public void Update(bool force = false)
         {
             if (this.isUpdating != FALSE)
@@ -285,6 +286,12 @@ namespace LetsEncryptAcmeReg
         /// Regsiters an external source that can be used to later update the value of the bindable object.
         /// </summary>
         /// <param name="getter">The method that is used to get the external data.</param>
+        /// <remarks>
+        /// RegisterUpdater is an advanced method intended only for the
+        /// implementation of extension methods for the bindable class.
+        /// </remarks>
+        [UsedImplicitly]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public void RegisterUpdater(Func<T> getter)
         {
             this.getter += getter;
@@ -313,8 +320,8 @@ namespace LetsEncryptAcmeReg
         /// If <see cref="init"/> is true, returns a delegate to do the first synchronization between the bindable object and the data source;
         /// otherwise it returns null.
         /// </returns>
-        [ContractAnnotation("init:True => null; init:False => notnull")]
-        public Action Bind([NotNull] Func<T> getter, [NotNull] Action<T> setter, bool init = false)
+        [UsedImplicitly]
+        public BindResult Bind([NotNull] Func<T> getter, [NotNull] Action<T> setter, bool init = false)
         {
             if (getter == null) throw new ArgumentNullException(nameof(getter));
             if (setter == null) throw new ArgumentNullException(nameof(setter));
@@ -339,7 +346,8 @@ namespace LetsEncryptAcmeReg
         /// If <see cref="init"/> is true, returns a delegate to do the first synchronization between the bindable object and the data source;
         /// otherwise it returns null.
         /// </returns>
-        public Action Bind([NotNull] Func<T> getter, bool init = false)
+        [UsedImplicitly]
+        public BindResult Bind([NotNull] Func<T> getter, bool init = false)
         {
             if (getter == null) throw new ArgumentNullException(nameof(getter));
             return this.BindInternal(getter, null, init);
@@ -363,15 +371,14 @@ namespace LetsEncryptAcmeReg
         /// If <see cref="init"/> is true, returns a delegate to do the first synchronization between the bindable object and the data source;
         /// otherwise it returns null.
         /// </returns>
-        [ContractAnnotation("init:True => null; init:False => notnull")]
-        public Action Bind([NotNull] Action<T> setter, bool init = false)
+        [UsedImplicitly]
+        public BindResult Bind([NotNull] Action<T> setter, bool init = false)
         {
             if (setter == null) throw new ArgumentNullException(nameof(setter));
             return this.BindInternal(null, setter, init);
         }
 
-        [ContractAnnotation("init:True => null; init:False => notnull")]
-        private Action BindInternal([CanBeNull] Func<T> getter, [CanBeNull] Action<T> setter, bool init)
+        private BindResult BindInternal([CanBeNull] Func<T> getter, [CanBeNull] Action<T> setter, bool init)
         {
             this.RegisterUpdater(getter);
             this.Changed += setter;
@@ -379,14 +386,21 @@ namespace LetsEncryptAcmeReg
             bool used = false;
             Action initFn = () =>
             {
-                if (!used) this.PostInitialize(getter, setter);
+                if (!used) this.InitialSync(getter, setter);
                 used = true;
             };
             if (init) initFn();
-            return init ? null : initFn;
+
+            Action unbinder = () =>
+            {
+                this.Changed -= setter;
+                this.getter -= getter;
+            };
+
+            return new BindResult(init ? null : initFn, unbinder);
         }
 
-        private void PostInitialize([CanBeNull] Func<T> getter, [CanBeNull] Action<T> setter)
+        private void InitialSync([CanBeNull] Func<T> getter, [CanBeNull] Action<T> setter)
         {
             if (this.isInit != FALSE) setter?.Invoke(this.Value);
             else if (getter != null) this.Value = getter();

@@ -51,7 +51,7 @@ namespace LetsEncryptAcmeReg
 
             // Model bindings
 
-            var init = this.controller.Initialize();
+            BindResult init = this.controller.Initialize();
 
             // Control bindings:
             //      These are relations between the controls on the form
@@ -171,7 +171,7 @@ namespace LetsEncryptAcmeReg
             mo.CurrentAuthState.Changing += CurrentAuthState_Changing;
             mo.CurrentAuthState.Changed += CurrentAuthState_Changed;
 
-            init();
+            init.InitAction?.Invoke();
 
             this.lstCertDomains.ItemCheck += (s, a) =>
             {

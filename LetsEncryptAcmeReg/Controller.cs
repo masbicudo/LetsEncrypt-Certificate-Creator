@@ -39,16 +39,16 @@ namespace LetsEncryptAcmeReg
         public Action<string> Success { get; set; }
         public Action<string> Log { get; set; }
 
-        public Action Initialize()
+        public BindResult Initialize()
         {
             var mo = this.Model;
             var ma = this.ManagerModel;
             var mc = this.CertViewModel;
-            Action init = null;
+            BindResult init = BindResult.Null;
 
             // Primary initialization:
-            init += () => mo.Registrations.Value = this.acme.GetRegistrations();
-            init += () => mo.Now.Value = DateTime.Now;
+            init += new BindResult(() => mo.Registrations.Value = this.acme.GetRegistrations());
+            init += new BindResult(() => mo.Now.Value = DateTime.Now);
             init += mo.Date.BindExpression(() => mo.Now.Value.Date);
             init += mo.TOSLink.BindExpression(() => this.acme.GetTos(this.Model.Email.Value));
 
