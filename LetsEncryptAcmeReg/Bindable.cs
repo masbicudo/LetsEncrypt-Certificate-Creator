@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 
 namespace LetsEncryptAcmeReg
@@ -9,6 +11,7 @@ namespace LetsEncryptAcmeReg
     public abstract class Bindable
     {
         private static int _lastId;
+        protected static readonly object _Locker = new object();
 
         private readonly int id;
         private readonly string name;
@@ -29,7 +32,6 @@ namespace LetsEncryptAcmeReg
 
     public class Bindable<T> : Bindable
     {
-
         const int FALSE = 0;
         const int TRUE = -1;
 
@@ -42,8 +44,8 @@ namespace LetsEncryptAcmeReg
 
         private T value;
         private Func<T> getter;
-        private BindableChanging<T> changingHandler;
-        private Action<T> changedHandler;
+        private List<ChangingHandlers> changingHandlers;
+        private List<ChangedHandlers> changedHandlers;
 
         /// <summary>
         /// Gets the number of times this bindable object has been changed.
@@ -62,8 +64,8 @@ namespace LetsEncryptAcmeReg
         /// </summary>
         public event BindableChanging<T> Changing
         {
-            add { this.changingHandler += value; }
-            remove { this.changingHandler -= value; }
+            add { lock (_Locker) ListAdder(ref this.changingHandlers, value); }
+            remove { lock (_Locker) ListRemover(ref this.changingHandlers, value); }
         }
 
         /// <summary>
@@ -71,8 +73,40 @@ namespace LetsEncryptAcmeReg
         /// </summary>
         public event Action<T> Changed
         {
-            add { this.changedHandler += value; }
-            remove { this.changedHandler -= value; }
+            add { lock (_Locker) ListAdder(ref this.changedHandlers, value); }
+            remove { lock (_Locker) ListRemover(ref this.changedHandlers, value); }
+        }
+
+        /// <summary>
+        /// Occurs when the value of this bindable object is changed.
+        /// </summary>
+        public event BindableChangingAsync<T> ChangingAsync
+        {
+            add { lock (_Locker) ListAdder(ref this.changingHandlers, value); }
+            remove { lock (_Locker) ListRemover(ref this.changingHandlers, value); }
+        }
+
+        /// <summary>
+        /// Occurs when the value of this bindable object is changed.
+        /// </summary>
+        public event Func<T, Task> ChangedAsync
+        {
+            add { lock (_Locker) ListAdder(ref this.changedHandlers, value); }
+            remove { lock (_Locker) ListRemover(ref this.changedHandlers, value); }
+        }
+
+        private static void ListAdder<TH>(ref List<TH> list, TH value)
+        {
+            if (list == null)
+                list = new List<TH>();
+            list.Add(value);
+        }
+
+        private static void ListRemover<TH>(ref List<TH> list, TH value)
+        {
+            list.Remove(value);
+            if (list.Count == 0)
+                list = null;
         }
 
         /// <summary>
@@ -104,17 +138,28 @@ namespace LetsEncryptAcmeReg
 
         /// <summary>
         /// Sets the value of this bindable object,
-        /// raising the event that indicates that the object is changing.
+        /// raising the events that indicates that the object is changing.
         /// </summary>
+        /// <remarks>
+        /// ForceSetValue is an advanced method for setting the value of the bindable object.
+        /// It should not be used unless you are creating extension methods for the bindable class.
+        /// It's purpoe is to set the value of the bindable regardless of the option to compare
+        /// with the previous value (see `BindableOptions.EqualMeansUnchanged`) and
+        /// also disregarding the internal recursion control flag `isChanging`.
+        /// So, if you use this method, the risk is of creating infinitely recursive behaviour.
+        /// </remarks>
+        [UsedImplicitly]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public void ForceSetValue(T value)
         {
             try
             {
                 this.isChanging = TRUE;
-                if (this.changingHandler != null)
+                if (this.changingHandlers != null)
                 {
                     bool cancel = false;
-                    this.changingHandler.Invoke(this, this.value, value, ref cancel);
+                    for (int it = 0; it < this.changingHandlers.Count; it++)
+                        this.changingHandlers[it].Invoke(this, this.value, value, ref cancel);
                     if (cancel)
                         return;
                 }
@@ -123,10 +168,9 @@ namespace LetsEncryptAcmeReg
                 this.Version++;
                 this.isInit = TRUE;
 
-                this.changedHandler?.Invoke(value);
-                //if (this.changed != null)
-                //    foreach (Action<T> @delegate in this.changed.GetInvocationList())
-                //        @delegate(value);
+                if (this.changedHandlers != null)
+                    for (int it = 0; it < this.changedHandlers.Count; it++)
+                        this.changedHandlers[it].Invoke(value);
             }
             finally
             {
@@ -134,9 +178,70 @@ namespace LetsEncryptAcmeReg
             }
         }
 
-        //public Task SetValueAsync(T value)
-        //{
-        //}
+        /// <summary>
+        /// Sets the value of this bindable object,
+        /// raising the event that indicates that the object is changing.
+        /// </summary>
+        /// <remarks>
+        /// ForceSetValue is an advanced method for setting the value of the bindable object.
+        /// It should not be used unless you are creating extension methods for the bindable class.
+        /// It's purpoe is to set the value of the bindable regardless of the option to compare
+        /// with the previous value (see `BindableOptions.EqualMeansUnchanged`) and
+        /// also disregarding the internal recursion control flag `isChanging`.
+        /// So, if you use this method, the risk is of creating infinitely recursive behaviour.
+        /// </remarks>
+        [UsedImplicitly]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public async Task ForceSetValueAsync(T value)
+        {
+            try
+            {
+                this.isChanging = TRUE;
+                if (this.changingHandlers != null)
+                {
+                    bool cancel = false;
+                    for (int it = 0; it < this.changingHandlers.Count; it++)
+                        cancel = await this.changingHandlers[it].InvokeAsync(this, this.value, value, cancel);
+                    if (cancel)
+                        return;
+                }
+
+                this.value = value;
+                this.Version++;
+                this.isInit = TRUE;
+
+                if (this.changedHandlers != null)
+                    for (int it = 0; it < this.changedHandlers.Count; it++)
+                        await this.changedHandlers[it].InvokeAsync(value);
+            }
+            finally
+            {
+                this.isChanging = FALSE;
+            }
+        }
+
+        /// <summary>
+        /// Sets the value of this bindable object asynchronously,
+        /// raising the events that indicates that the object is changing.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [UsedImplicitly]
+        public async Task SetValueAsync(T value)
+        {
+            if ((this.flags & BindableOptions.EqualMeansUnchanged) != 0)
+                if ((this.equalityComparer ?? EqualityComparer<T>.Default).Equals(this.value, value))
+                    return;
+
+            if (this.isChanging == FALSE)
+            {
+                await this.ForceSetValueAsync(value);
+            }
+            else if ((this.flags & BindableOptions.AllowRecursiveSets) == 0)
+            {
+                throw new InvalidOperationException("Recursively defining the value of a bindable object to different values is not allowed.");
+            }
+        }
 
         /// <summary>
         /// Update the value of the bindable object with values from the registered external sources.
@@ -285,6 +390,115 @@ namespace LetsEncryptAcmeReg
         {
             if (this.isInit != FALSE) setter?.Invoke(this.Value);
             else if (getter != null) this.Value = getter();
+        }
+
+        struct ChangingHandlers :
+            IComparable<BindableChanging<T>>,
+            IComparable<BindableChangingAsync<T>>
+        {
+            private BindableChanging<T> sync;
+            private BindableChangingAsync<T> async;
+
+            private ChangingHandlers([NotNull] BindableChanging<T> sync)
+            {
+                if (sync == null) throw new ArgumentNullException(nameof(sync));
+
+                this.sync = sync;
+                this.async = null;
+            }
+
+            private ChangingHandlers([NotNull] BindableChangingAsync<T> @async)
+            {
+                if (@async == null) throw new ArgumentNullException(nameof(@async));
+
+                this.sync = null;
+                this.async = async;
+            }
+
+            public void Invoke(Bindable<T> sender, T value, T prev, ref bool cancel)
+            {
+                if (this.sync != null)
+                    this.sync(sender, value, prev, ref cancel);
+                else if (this.@async != null)
+                    cancel = this.@async(sender, value, prev, cancel).Result;
+            }
+
+            public async Task<bool> InvokeAsync(Bindable<T> sender, T value, T prev, bool cancel)
+            {
+                if (this.@async != null)
+                    cancel = await this.@async(sender, value, prev, cancel);
+                else if (this.sync != null)
+                    this.sync(sender, value, prev, ref cancel);
+                return cancel;
+            }
+
+            public static implicit operator ChangingHandlers(BindableChanging<T> b) => new ChangingHandlers(b);
+
+            public static implicit operator ChangingHandlers(BindableChangingAsync<T> b) => new ChangingHandlers(b);
+
+            public int CompareTo(BindableChanging<T> other)
+            {
+                return Comparer<BindableChanging<T>>.Default.Compare(this.sync, other);
+            }
+
+            public int CompareTo(BindableChangingAsync<T> other)
+            {
+                return Comparer<BindableChangingAsync<T>>.Default.Compare(this.@async, other);
+            }
+        }
+
+        struct ChangedHandlers :
+            IComparable<Action<T>>,
+            IComparable<Func<T, Task>>
+        {
+            Action<T> sync;
+            Func<T, Task> async;
+
+            private ChangedHandlers([NotNull] Action<T> sync)
+            {
+                if (sync == null) throw new ArgumentNullException(nameof(sync));
+
+                this.sync = sync;
+                this.async = null;
+            }
+
+            private ChangedHandlers([NotNull] Func<T, Task> @async)
+            {
+                if (@async == null) throw new ArgumentNullException(nameof(@async));
+
+                this.sync = null;
+                this.@async = @async;
+            }
+
+            public void Invoke(T value)
+            {
+                if (this.sync != null)
+                    this.sync(value);
+                else if (this.@async != null)
+                    this.@async(value).RunSynchronously();
+            }
+
+            public async Task InvokeAsync(T value)
+            {
+                if (this.@async != null)
+                    await this.@async(value);
+                else if (this.sync != null)
+                    this.sync(value);
+            }
+
+            public static implicit operator ChangedHandlers(Action<T> b) => new ChangedHandlers(b);
+
+            public static implicit operator ChangedHandlers(Func<T, Task> b) => new ChangedHandlers(b);
+
+            public int CompareTo(Action<T> other)
+            {
+                return Comparer<Action<T>>.Default.Compare(this.sync, other);
+            }
+
+            public int CompareTo(Func<T, Task> other)
+            {
+                return Comparer<Func<T, Task>>.Default.Compare(this.@async, other);
+            }
         }
     }
 }

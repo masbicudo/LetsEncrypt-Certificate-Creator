@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BindableChanging.cs" />
+    <Compile Include="BindableChangingAsync.cs" />
     <Compile Include="BindableExtensions.cs" />
     <Compile Include="BindableOptions.cs" />
     <Compile Include="CertType.cs" />
