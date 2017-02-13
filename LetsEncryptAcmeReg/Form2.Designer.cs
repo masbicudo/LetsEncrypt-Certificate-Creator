@@ -136,6 +136,8 @@
             this.lstCertDomains = new System.Windows.Forms.CheckedListBox();
             this.tableCertDomains = new System.Windows.Forms.TableLayoutPanel();
             this.btnHideCertDomains = new System.Windows.Forms.Button();
+            this.labVer = new System.Windows.Forms.Label();
+            this.linkProject = new System.Windows.Forms.LinkLabel();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -181,7 +183,7 @@
             this.tabControl1.Margin = new System.Windows.Forms.Padding(0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(446, 583);
+            this.tabControl1.Size = new System.Drawing.Size(446, 576);
             this.tabControl1.TabIndex = 1;
             // 
             // tabPage1
@@ -191,7 +193,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(438, 557);
+            this.tabPage1.Size = new System.Drawing.Size(438, 550);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Wizard";
             // 
@@ -250,7 +252,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(432, 551);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(432, 544);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // panel1
@@ -263,7 +265,7 @@
             this.panel1.Controls.Add(this.richTextBox1);
             this.panel1.Location = new System.Drawing.Point(3, 493);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(426, 55);
+            this.panel1.Size = new System.Drawing.Size(426, 48);
             this.panel1.TabIndex = 2;
             // 
             // richTextBox1
@@ -275,7 +277,7 @@
             this.richTextBox1.Location = new System.Drawing.Point(0, 0);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(424, 53);
+            this.richTextBox1.Size = new System.Drawing.Size(424, 46);
             this.richTextBox1.TabIndex = 14;
             this.richTextBox1.Text = "";
             this.richTextBox1.MouseLeave += new System.EventHandler(this.richTextBox1_MouseLeave);
@@ -1764,13 +1766,39 @@
             this.btnHideCertDomains.UseVisualStyleBackColor = true;
             this.btnHideCertDomains.Click += new System.EventHandler(this.btnHideCertDomains_Click);
             // 
+            // labVer
+            // 
+            this.labVer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labVer.AutoSize = true;
+            this.labVer.Location = new System.Drawing.Point(0, 586);
+            this.labVer.Margin = new System.Windows.Forms.Padding(2);
+            this.labVer.Name = "labVer";
+            this.labVer.Size = new System.Drawing.Size(46, 13);
+            this.labVer.TabIndex = 4;
+            this.labVer.Text = "v0.0.0.0";
+            // 
+            // linkProject
+            // 
+            this.linkProject.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.linkProject.AutoSize = true;
+            this.linkProject.Location = new System.Drawing.Point(163, 585);
+            this.linkProject.Margin = new System.Windows.Forms.Padding(2);
+            this.linkProject.Name = "linkProject";
+            this.linkProject.Size = new System.Drawing.Size(299, 13);
+            this.linkProject.TabIndex = 5;
+            this.linkProject.TabStop = true;
+            this.linkProject.Text = "https://github.com/masbicudo/LetsEncrypt-Certificate-Creator";
+            this.linkProject.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkProject_LinkClicked);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(464, 601);
+            this.Controls.Add(this.labVer);
             this.Controls.Add(this.tableCertDomains);
             this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.linkProject);
             this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(480, 640);
@@ -1831,6 +1859,7 @@
             this.tableCertDomains.ResumeLayout(false);
             this.tableCertDomains.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -1942,5 +1971,7 @@
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.ComboBox cmbSsg;
         private System.Windows.Forms.FlowLayoutPanel flowSsgControls;
+        private System.Windows.Forms.Label labVer;
+        private System.Windows.Forms.LinkLabel linkProject;
     }
 }

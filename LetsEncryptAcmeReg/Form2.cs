@@ -1,6 +1,7 @@
 ﻿using ACMESharp.Vault.Model;
 using LetsEncryptAcmeReg.SSG;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -19,6 +20,8 @@ namespace LetsEncryptAcmeReg
         public Form2()
         {
             InitializeComponent();
+
+            this.labVer.Text = $"v{App.CurrentVersion} alpha";
 
             // Controller
             this.controller = new Controller(this.acme, this)
@@ -586,6 +589,11 @@ namespace LetsEncryptAcmeReg
         void IUIServices.ClearPanelForSsg()
         {
             this.flowSsgControls.Controls.Clear();
+        }
+
+        private void linkProject_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://github.com/masbicudo/LetsEncrypt-Certificate-Creator");
         }
     }
 }
