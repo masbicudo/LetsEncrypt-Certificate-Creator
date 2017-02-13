@@ -136,6 +136,11 @@ namespace LetsEncryptAcmeReg
             init += ma.Challenges.Bind(
                 () => this.lstChallenges.Items.AsArray((object o) => o.ToString()),
                 v => this.lstChallenges.SetItems(v));
+            ma.Challenges.Changed += fnames =>
+            {
+                if (this.cmbChallenge.SelectedIndex < 0)
+                    this.cmbChallenge.SelectedIndex = 0;
+            };
 
             init += ma.Certificates.Bind(
                 () => this.lstCertificates.Items.OfType<string>().ToArray(),
@@ -148,6 +153,11 @@ namespace LetsEncryptAcmeReg
             init += mo.SsgTypes.Bind(
                 () => this.cmbSsg.Items.OfType<string>().ToArray(),
                 v => this.cmbSsg.SetItems(v));
+            mo.SsgTypes.Changed += fnames =>
+            {
+                if (this.cmbSsg.SelectedIndex < 0)
+                    this.cmbSsg.SelectedIndex = 0;
+            };
 
             // Manual changed events:
             mo.CanRegister.Changed += v => this.btnRegister.Enabled = v;

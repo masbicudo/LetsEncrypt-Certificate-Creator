@@ -1,3 +1,4 @@
+using System;
 using System.Windows.Forms;
 using LetsEncryptAcmeReg.SSG;
 
@@ -15,7 +16,7 @@ namespace LetsEncryptAcmeReg
             this.parent = parent;
         }
 
-        public BindResult ForBool(Bindable<bool> bindable, string label, string tooltip)
+        public CreateAndBindResult ForBool(Bindable<bool> bindable, string label, string tooltip)
         {
             var checkBox = new CheckBox
             {
@@ -25,15 +26,20 @@ namespace LetsEncryptAcmeReg
                 Anchor = 0,
             };
 
-            this.controlAppender.AddGroup(null, checkBox);
+            var addResult = this.controlAppender.AddGroup(null, checkBox);
 
-            this.parent.ToolTipFor(checkBox, tooltip);
+            Action killToolTipForm = null;
+            if (!string.IsNullOrWhiteSpace(tooltip))
+            {
+                this.parent.ToolTipFor(checkBox, tooltip);
+                killToolTipForm = () => this.parent.ToolTipFor(checkBox, null);
+            }
 
             var init = bindable.BindControl(checkBox);
-            return init;
+            return new CreateAndBindResult(init, killToolTipForm, addResult.RemoveGroup);
         }
 
-        public BindResult ForString(Bindable<string> bindable, string label, string tooltip)
+        public CreateAndBindResult ForString(Bindable<string> bindable, string label, string tooltip)
         {
             var labelCtl = new Label
             {
@@ -47,12 +53,17 @@ namespace LetsEncryptAcmeReg
                 Anchor = 0,
             };
 
-            this.controlAppender.AddGroup(labelCtl, textBox);
+            var addResult = this.controlAppender.AddGroup(labelCtl, textBox);
 
-            this.parent.ToolTipFor(textBox, tooltip);
+            Action killToolTipForm = null;
+            if (!string.IsNullOrWhiteSpace(tooltip))
+            {
+                this.parent.ToolTipFor(textBox, tooltip);
+                killToolTipForm = () => this.parent.ToolTipFor(textBox, null);
+            }
 
             var init = bindable.BindControl(textBox);
-            return init;
+            return new CreateAndBindResult(init, killToolTipForm, addResult.RemoveGroup);
         }
     }
 }

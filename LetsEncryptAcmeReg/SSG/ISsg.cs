@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace LetsEncryptAcmeReg.SSG
 {
@@ -7,7 +8,7 @@ namespace LetsEncryptAcmeReg.SSG
     {
         bool Initialize(ISsgController controller, ISsgMasterModel mainModel, IControlCreatorAndBinder createAndBind);
 
-        bool IsValid();
+        IEnumerable<Exception> GetErrors();
 
         /// <summary>
         /// Patch the repository to allow the challenge files to be served.

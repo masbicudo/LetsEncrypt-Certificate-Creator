@@ -158,6 +158,9 @@ namespace LetsEncryptAcmeReg
         {
             if (t == null) throw new ArgumentNullException(nameof(t));
 
+            if (t == typeof(BaseSsg))
+                return "[None/Manual]";
+
             return t.Name.EndsWith("SSG", StringComparison.InvariantCultureIgnoreCase)
                 ? t.Name.Substring(0, t.Name.Length - 3)
                 : t.Name;
@@ -180,7 +183,8 @@ namespace LetsEncryptAcmeReg
             var type = typeof(ISsg);
             var types = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
-                .Where(p => type.IsAssignableFrom(p) && p != typeof(ISsg))
+                .Where(p => type.IsAssignableFrom(p) && p != typeof(ISsg) && p != typeof(BaseSsg))
+                .Prepend(typeof(BaseSsg))
                 .ToArray();
             return types;
         }
@@ -542,6 +546,15 @@ namespace LetsEncryptAcmeReg
                 this.Model.AutoSaveChallengeTimer,
                 async () =>
                 {
+                    var ssg = this.Model.CurrentSsg.Value;
+                    if (ssg != null)
+                    {
+                        ssg.Patch();
+                    }
+                    else
+                    {
+
+                    }
                 },
                 this.Model.AutoCommitChallenge,
                 this.CommitChallenge);

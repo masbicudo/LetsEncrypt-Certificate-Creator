@@ -1,7 +1,10 @@
-﻿using LetsEncryptAcmeReg.SSG;
+﻿using LetsEncryptAcmeReg;
+using LetsEncryptAcmeReg.SSG;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using Replaceables;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Tests
@@ -13,7 +16,7 @@ namespace Tests
         public void TestMethod1()
         {
             MockFile mockFile;
-            Singletons.File = mockFile = new MockFile(new Dictionary<string, string>()
+            Singletons.File = mockFile = new MockFile(new Dictionary<string, string>
             {
                 { @"C:\Projetos\masb-blog-gitlab-pages\conf.py", @"
 # Default is:
@@ -22,8 +25,13 @@ namespace Tests
 "}
             });
 
-            var nikola = new Nikola();
-            nikola.Init(@"C:\Projetos\masb-blog-gitlab-pages");
+            var mockCreator = new Mock<IControlCreatorAndBinder>(MockBehavior.Loose);
+            var mockController = new Mock<ISsgController>(MockBehavior.Loose);
+            var model = new WizardBindableModel();
+            model.SiteRoot.Value = @"C:\Projetos\masb-blog-gitlab-pages";
+            var nikola = new NikolaSsg();
+            nikola.Initialize(mockController.Object, model, mockCreator.Object);
+            nikola.Patch();
 
             var expected = @"
 # Default is:
@@ -40,7 +48,7 @@ FILES_FOLDERS = {'files': '',
         public void TestMethod2()
         {
             MockFile mockFile;
-            Singletons.File = mockFile = new MockFile(new Dictionary<string, string>()
+            Singletons.File = mockFile = new MockFile(new Dictionary<string, string>
             {
                 { @"C:\Projetos\masb-blog-gitlab-pages\conf.py", @"
 # Default is:
@@ -49,8 +57,13 @@ FILES_FOLDERS = {'files': ''}
 "}
             });
 
-            var nikola = new Nikola();
-            nikola.Init(@"C:\Projetos\masb-blog-gitlab-pages");
+            var mockCreator = new Mock<IControlCreatorAndBinder>(MockBehavior.Loose);
+            var mockController = new Mock<ISsgController>(MockBehavior.Loose);
+            var model = new WizardBindableModel();
+            model.SiteRoot.Value = @"C:\Projetos\masb-blog-gitlab-pages";
+            var nikola = new NikolaSsg();
+            nikola.Initialize(mockController.Object, model, mockCreator.Object);
+            nikola.Patch();
 
             Assert.AreEqual(mockFile.Dic.First().Value, @"
 # Default is:
@@ -64,7 +77,7 @@ FILES_FOLDERS = {'files': '',
         public void TestMethod3()
         {
             MockFile mockFile;
-            Singletons.File = mockFile = new MockFile(new Dictionary<string, string>()
+            Singletons.File = mockFile = new MockFile(new Dictionary<string, string>
             {
                 { @"C:\Projetos\masb-blog-gitlab-pages\conf.py", @"
 # Default is:
@@ -73,14 +86,34 @@ FILES_FOLDERS = {'files': '', '.well-known': '.well-known'}
 "}
             });
 
-            var nikola = new Nikola();
-            nikola.Init(@"C:\Projetos\masb-blog-gitlab-pages");
+            var mockCreator = new Mock<IControlCreatorAndBinder>(MockBehavior.Loose);
+            var mockController = new Mock<ISsgController>(MockBehavior.Loose);
+            var model = new WizardBindableModel();
+            model.SiteRoot.Value = @"C:\Projetos\masb-blog-gitlab-pages";
+            var nikola = new NikolaSsg();
+            nikola.Initialize(mockController.Object, model, mockCreator.Object);
+            nikola.Patch();
 
             Assert.AreEqual(mockFile.Dic.First().Value, @"
 # Default is:
 FILES_FOLDERS = {'files': '', '.well-known': '.well-known'}
 # Which means copy 'files' into 'output'
 ");
+        }
+
+        [TestMethod]
+        public void TestMethod_Error1()
+        {
+            Singletons.File = new MockFile(new Dictionary<string, string>());
+            var mockCreator = new Mock<IControlCreatorAndBinder>(MockBehavior.Loose);
+            var mockController = new Mock<ISsgController>(MockBehavior.Loose);
+            var model = new WizardBindableModel();
+            model.SiteRoot.Value = @"C:\Projetos\masb-blog-gitlab-pages";
+            var nikola = new NikolaSsg();
+            nikola.Initialize(mockController.Object, model, mockCreator.Object);
+            var errors = nikola.GetErrors().OfType<FileNotFoundException>().ToArray();
+
+            Assert.IsTrue(errors.Length > 0);
         }
     }
 }

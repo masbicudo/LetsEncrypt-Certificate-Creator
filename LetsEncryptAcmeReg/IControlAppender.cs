@@ -4,6 +4,6 @@ namespace LetsEncryptAcmeReg
 {
     internal interface IControlAppender
     {
-        void AddGroup(Label label, Control control, params Control[] other);
+        AppenderResult AddGroup(Label label, Control control, params Control[] other);
     }
 }

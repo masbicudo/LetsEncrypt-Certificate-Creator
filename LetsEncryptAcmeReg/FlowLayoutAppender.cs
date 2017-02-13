@@ -13,7 +13,7 @@ namespace LetsEncryptAcmeReg
             this.flow = flow;
         }
 
-        public void AddGroup(Label label, Control control, params Control[] other)
+        public AppenderResult AddGroup(Label label, Control control, params Control[] other)
         {
             other = other.Prepend(control).Prepend(label).Where(x => x != null).ToArray();
             var table = new TableLayoutPanel
@@ -30,6 +30,14 @@ namespace LetsEncryptAcmeReg
                 table.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
             table.Controls.AddRange(other);
             this.flow.Controls.Add(table);
+
+            var result = new AppenderResult(() =>
+            {
+                this.flow.Controls.Remove(table);
+                foreach (var ctl in other)
+                    table.Controls.Remove(ctl);
+            });
+            return result;
         }
     }
 }

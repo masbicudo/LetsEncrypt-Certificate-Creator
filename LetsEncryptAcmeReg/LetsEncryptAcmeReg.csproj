@@ -62,6 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppenderResult.cs" />
     <Compile Include="BindableChanging.cs" />
     <Compile Include="BindableChangingAsync.cs" />
     <Compile Include="BindableExtensions.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="CertViewBindableModel.cs" />
     <Compile Include="CmdLetExtensions.cs" />
     <Compile Include="Controller.cs" />
+    <Compile Include="CreateAndBindResult.cs" />
     <Compile Include="DynamicExtensions.cs" />
     <Compile Include="Acme.cs" />
     <Compile Include="Bindable.cs" />
@@ -95,6 +97,7 @@
     <Compile Include="AcmeTextAssets.cs" />
     <Compile Include="Replaceables\DefaultSystemIoDirectory.cs" />
     <Compile Include="Replaceables\DefaultSystemIoFile.cs" />
+    <Compile Include="SSG\BaseSsg.cs" />
     <Compile Include="SSG\IControlCreatorAndBinder.cs" />
     <Compile Include="SSG\ISsg.cs" />
     <Compile Include="Replaceables\ISystemIoDirectory.cs" />
@@ -102,7 +105,7 @@
     <Compile Include="SSG\GitHubSsg.cs" />
     <Compile Include="SSG\ISsgMasterModel.cs" />
     <Compile Include="SSG\ISsgModel.cs" />
-    <Compile Include="SSG\Nikola.cs" />
+    <Compile Include="SSG\NikolaSsg.cs" />
     <Compile Include="Replaceables\Singletons.cs" />
     <Compile Include="WinAPI\ShowWindowCommands.cs" />
     <Compile Include="ToolTipForm.cs">

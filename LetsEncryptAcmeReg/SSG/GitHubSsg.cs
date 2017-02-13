@@ -1,6 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using Replaceables;
 
 namespace LetsEncryptAcmeReg.SSG
 {
@@ -11,6 +14,7 @@ namespace LetsEncryptAcmeReg.SSG
         private Model model;
         private ISsgController controller;
         private BindResult bindResult;
+        private Action removeUI;
 
         public bool Initialize(ISsgController controller, ISsgMasterModel mainModel, IControlCreatorAndBinder createAndBind)
         {
@@ -28,28 +32,41 @@ namespace LetsEncryptAcmeReg.SSG
                     mo.UpdateCname.Value,
                     mo.UpdateConfigYml.Value));
 
+            var cname = createAndBind.ForBool(this.model.UpdateCname, "Update CNAME", Messages.ToolTipForCname);
+            var configYml = createAndBind.ForBool(this.model.UpdateConfigYml, "Update _config.yml", Messages.ToolTipForConfigYml);
+
+            init += cname.BindResult;
+            init += configYml.BindResult;
+
             init.InitAction?.Invoke();
 
-            init += createAndBind.ForBool(this.model.UpdateCname, "Update CNAME", Messages.ToolTipForCname);
-            init += createAndBind.ForBool(this.model.UpdateConfigYml, "Update _config.yml", Messages.ToolTipForConfigYml);
+            this.bindResult = new BindResult(null, init.UnbindAction);
 
-            this.bindResult = init;
+            this.removeUI =
+                cname.RemoveTooltips + cname.RemoveControls +
+                configYml.RemoveTooltips + configYml.RemoveControls;
+
             return true;
         }
 
-        public bool IsValid()
+        public IEnumerable<Exception> GetErrors()
         {
-            return true;
+            yield break;
         }
 
         public void Patch()
         {
+            foreach (var exception in this.GetErrors())
+                throw exception;
+
+            // Creating the main challenge file
             Directory.CreateDirectory(this.mainModel.FilePath.Value);
 
             using (var fs = File.Open(Path.Combine(this.mainModel.FilePath.Value, "index.html"), FileMode.Create, FileAccess.ReadWrite))
             using (var sw = new StreamWriter(fs))
                 sw.Write(this.mainModel.Key.Value);
 
+            // Creating Github specific files
             if (this.model.UpdateConfigYml.Value)
                 using (var fs = File.Open(Path.Combine(this.mainModel.SiteRoot.Value, "_config.yml"), FileMode.OpenOrCreate, FileAccess.ReadWrite))
                 {
@@ -74,6 +91,7 @@ include:      ["".well-known""]
         public void Dispose()
         {
             this.bindResult.UnbindAction?.Invoke();
+            this.removeUI?.Invoke();
         }
 
         private string[] Files_Value(string siteRoot, string indexRelative, bool updateCname, bool updateConfigYml)

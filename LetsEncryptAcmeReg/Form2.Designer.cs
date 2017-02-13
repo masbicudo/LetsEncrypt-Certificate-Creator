@@ -1316,6 +1316,7 @@
             // 
             this.cmbSsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel2.SetColumnSpan(this.cmbSsg, 2);
+            this.cmbSsg.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbSsg.FormattingEnabled = true;
             this.cmbSsg.Location = new System.Drawing.Point(57, 70);
             this.cmbSsg.Margin = new System.Windows.Forms.Padding(1);

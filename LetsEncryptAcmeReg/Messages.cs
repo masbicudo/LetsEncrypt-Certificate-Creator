@@ -25,6 +25,13 @@ namespace LetsEncryptAcmeReg
             = "Updates or creates a ` CNAME ` file,\n" +
               "with the name of the ***selected domain***.";
 
+        public static string ToolTipForConfPy { get; }
+            = "Updates the ` conf.py ` file,\n" +
+              "with instructions to _**copy**_\n" +
+              "the path ` .well-known\\ ` to the\n" +
+              "output directory, so that\n" +
+              "it is served by Nikola.";
+
         public static string ToolTipForUpdateStatus { get; }
             = "Updates the status of the current domain after issuing the validate command for LetsEncrypt.\n" +
               "If LetsEncrypt finds that the domain failed the validation process, then a fail message is returned when updating.\n" +
