@@ -1,4 +1,4 @@
-# Let’s Encrypt Certification Wizard
+# [App Icon](https://raw.githubusercontent.com/masbicudo/LetsEncrypt-Certificate-Creator/master/content/LockIcon-64.png) Let’s Encrypt Certification Wizard
 
 This is a small Windows application to help you create a certificate
 for your domain using [Let’s Encrypt](https://letsencrypt.org) service.
