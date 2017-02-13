@@ -1,6 +1,7 @@
 ﻿using ACMESharp.Vault.Model;
 using LetsEncryptAcmeReg.SSG;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -181,11 +182,11 @@ namespace LetsEncryptAcmeReg
             mo.ShowPassword.Changed += b => this.txtPassword.UseSystemPasswordChar = !b;
 
             mo.IsPasswordEnabled.Changed += v => this.txtPassword.Enabled = this.chkShowPassword.Enabled = v;
-
             mo.Files.Changed += this.UpdateFiles;
-
-            mo.CurrentAuthState.Changing += CurrentAuthState_Changing;
-            mo.CurrentAuthState.Changed += CurrentAuthState_Changed;
+            mo.CurrentAuthState.Changing += this.CurrentAuthState_Changing;
+            mo.CurrentAuthState.Changed += this.CurrentAuthState_Changed;
+            mo.CurrentIdentifier.Changed += s => this.tableCertDomains.Hide();
+            mo.CurrentSsg.Changed += this.CurrentSsg_Changed;
 
             init.InitAction?.Invoke();
 
@@ -194,12 +195,42 @@ namespace LetsEncryptAcmeReg
                 if (this.lstCertDomains.Items[a.Index].ToString() == mo.Domain.Value)
                     a.NewValue = CheckState.Checked;
             };
-            mo.CurrentIdentifier.Changed += s => this.tableCertDomains.Hide();
-
             this.tableCertDomains.Width = this.Width / 2;
         }
 
         #region Bind events
+
+        private void CurrentSsg_Changed(ISsg ssg)
+        {
+            // setup tab indexes
+            var queue = new Queue<Control>();
+            queue.Enqueue(this);
+            var idx = 0;
+            while (queue.Count != 0)
+            {
+                var ctl = queue.Dequeue();
+                ctl.TabIndex = idx++;
+
+                if (ctl is TableLayoutPanel)
+                {
+                    var table = (TableLayoutPanel)ctl;
+                    for (int itRow = 0; itRow < table.RowCount; itRow++)
+                    {
+                        for (int itColumn = 0; itColumn < table.ColumnCount; itColumn++)
+                        {
+                            var child = table.GetControlFromPosition(itColumn, itRow);
+                            if (child != null)
+                                queue.Enqueue(child);
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (Control child in ctl.Controls.OfType<Control>())
+                        queue.Enqueue(child);
+                }
+            }
+        }
 
         private void SetItemsOf_cmbCertificate(string[] certList, string domain, DateTime now)
         {
