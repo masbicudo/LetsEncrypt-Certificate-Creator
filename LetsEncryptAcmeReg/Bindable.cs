@@ -64,8 +64,8 @@ namespace LetsEncryptAcmeReg
         /// </summary>
         public event BindableChanging<T> Changing
         {
-            add { lock (_Locker) ListAdder(ref this.changingHandlers, value); }
-            remove { lock (_Locker) ListRemover(ref this.changingHandlers, value); }
+            add { lock (_Locker) if (value != null) ListAdder(ref this.changingHandlers, value); }
+            remove { lock (_Locker) if (value != null) ListRemover(ref this.changingHandlers, value); }
         }
 
         /// <summary>
@@ -73,8 +73,8 @@ namespace LetsEncryptAcmeReg
         /// </summary>
         public event Action<T> Changed
         {
-            add { lock (_Locker) ListAdder(ref this.changedHandlers, value); }
-            remove { lock (_Locker) ListRemover(ref this.changedHandlers, value); }
+            add { lock (_Locker) if (value != null) ListAdder(ref this.changedHandlers, value); }
+            remove { lock (_Locker) if (value != null) ListRemover(ref this.changedHandlers, value); }
         }
 
         /// <summary>
@@ -82,8 +82,8 @@ namespace LetsEncryptAcmeReg
         /// </summary>
         public event BindableChangingAsync<T> ChangingAsync
         {
-            add { lock (_Locker) ListAdder(ref this.changingHandlers, value); }
-            remove { lock (_Locker) ListRemover(ref this.changingHandlers, value); }
+            add { lock (_Locker) if (value != null) ListAdder(ref this.changingHandlers, value); }
+            remove { lock (_Locker) if (value != null) ListRemover(ref this.changingHandlers, value); }
         }
 
         /// <summary>
@@ -91,8 +91,8 @@ namespace LetsEncryptAcmeReg
         /// </summary>
         public event Func<T, Task> ChangedAsync
         {
-            add { lock (_Locker) ListAdder(ref this.changedHandlers, value); }
-            remove { lock (_Locker) ListRemover(ref this.changedHandlers, value); }
+            add { lock (_Locker) if (value != null) ListAdder(ref this.changedHandlers, value); }
+            remove { lock (_Locker) if (value != null) ListRemover(ref this.changedHandlers, value); }
         }
 
         private static void ListAdder<TH>(ref List<TH> list, TH value)
