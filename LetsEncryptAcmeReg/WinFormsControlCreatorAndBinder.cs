@@ -20,6 +20,9 @@ namespace LetsEncryptAcmeReg
             var checkBox = new CheckBox
             {
                 Text = label,
+                Margin = new Padding(1),
+                AutoSize = true,
+                Anchor = 0,
             };
 
             this.controlAppender.AddGroup(null, checkBox);
@@ -36,10 +39,12 @@ namespace LetsEncryptAcmeReg
             {
                 Text = label,
                 Margin = new Padding(1),
+                Anchor = 0,
             };
             var textBox = new TextBox
             {
                 Margin = new Padding(1),
+                Anchor = 0,
             };
 
             this.controlAppender.AddGroup(labelCtl, textBox);

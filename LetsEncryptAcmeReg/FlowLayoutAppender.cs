@@ -21,10 +21,13 @@ namespace LetsEncryptAcmeReg
                 Margin = new Padding(0),
                 ColumnCount = other.Length,
                 RowCount = 1,
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                Padding = new Padding(0),
             };
-            table.RowStyles[0].SizeType = SizeType.AutoSize;
+            table.RowStyles.Add(new ColumnStyle(SizeType.AutoSize));
             for (int it = 0; it < other.Length; it++)
-                table.ColumnStyles[it].SizeType = SizeType.AutoSize;
+                table.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
             table.Controls.AddRange(other);
             this.flow.Controls.Add(table);
         }

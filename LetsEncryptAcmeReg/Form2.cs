@@ -21,7 +21,7 @@ namespace LetsEncryptAcmeReg
             InitializeComponent();
 
             // Controller
-            this.controller = new Controller(this.acme)
+            this.controller = new Controller(this.acme, this)
             {
                 Error = this.Error,
                 Warn = this.Warn,
@@ -568,9 +568,14 @@ namespace LetsEncryptAcmeReg
             this.tableCertDomains.Width = this.Width / 2;
         }
 
-        public IControlCreatorAndBinder CreatePanelForSsg()
+        IControlCreatorAndBinder IUIServices.CreatePanelForSsg()
         {
             return new WinFormsControlCreatorAndBinder(new FlowLayoutAppender(this.flowSsgControls), this);
+        }
+
+        void IUIServices.ClearPanelForSsg()
+        {
+            this.flowSsgControls.Controls.Clear();
         }
     }
 }

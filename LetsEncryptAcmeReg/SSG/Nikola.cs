@@ -70,5 +70,9 @@ namespace LetsEncryptAcmeReg.SSG
         {
             throw new NotImplementedException();
         }
+
+        public void Dispose()
+        {
+        }
     }
 }

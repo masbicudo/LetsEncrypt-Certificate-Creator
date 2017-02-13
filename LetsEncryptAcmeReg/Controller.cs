@@ -24,9 +24,10 @@ namespace LetsEncryptAcmeReg
         private readonly Acme acme;
         private static readonly Lazy<Type[]> _ssgTypes = new Lazy<Type[]>(GetSsgTypes, LazyThreadSafetyMode.ExecutionAndPublication);
 
-        public Controller(Acme acme)
+        public Controller(Acme acme, IUIServices uiServices)
         {
             this.acme = acme;
+            this.UIServices = uiServices;
             this.Model = new WizardBindableModel();
             this.ManagerModel = new ManagerBindableModel();
             this.CertViewModel = new CertViewBindableModel();
@@ -126,19 +127,29 @@ namespace LetsEncryptAcmeReg
             // when the key changes, the domain must be tested again
             mo.Key.Changed += s => mo.CanValidateChallenge.Value = false;
 
-            mo.CurrentSsg.Changed += CurrentSsgOnChanged;
+            mo.CurrentSsg.Changing += this.CurrentSsg_Changing;
+            mo.CurrentSsg.Changed += this.CurrentSsg_Changed;
 
             return init;
         }
 
-        private void CurrentSsgOnChanged(ISsg ssg)
+        private void CurrentSsg_Changing(Bindable<ISsg> sender, ISsg value, ISsg prev, ref bool cancel)
         {
+            prev?.Dispose();
+            this.UIServices.ClearPanelForSsg();
+        }
+
+        private void CurrentSsg_Changed(ISsg ssg)
+        {
+            if (ssg == null)
+                return;
+
             var panel = this.UIServices.CreatePanelForSsg();
             var ok = ssg.Initialize(this, this.Model, panel);
 
             if (ok)
             {
-                
+
             }
         }
 
