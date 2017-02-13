@@ -5,7 +5,8 @@ using LetsEncryptAcmeReg.SSG;
 
 namespace LetsEncryptAcmeReg
 {
-    public class WizardBindableModel
+    public class WizardBindableModel :
+        ISsgMasterModel
     {
         // regex for valid lines in this file:
         // public Bindable(<(?><(?<c>)|[^<>)]+|(?:>|$)(?<-c>))*(?:>|$))\s(\S*)\s\{ get; \} = new Bindable\1\(nameof\(\2\)(?:[^\)]*)\);
@@ -46,7 +47,7 @@ namespace LetsEncryptAcmeReg
         public Bindable<string[]> Certificates { get; } = new Bindable<string[]>(nameof(Certificates));
 
         public Bindable<string[]> SsgTypes { get; } = new Bindable<string[]>(nameof(SsgTypes));
-        public Bindable<string> SsgName { get; } = new Bindable<string>(nameof(SsgName));
+        public Bindable<string> SsgName { get; } = new Bindable<string>(nameof(SsgName), flags: BindableOptions.EqualMeansUnchanged);
         public Bindable<ISsg> CurrentSsg { get; } = new Bindable<ISsg>(nameof(CurrentSsg));
 
         public Bindable<bool> IsRegistrationCreated { get; } = new Bindable<bool>(nameof(IsRegistrationCreated));

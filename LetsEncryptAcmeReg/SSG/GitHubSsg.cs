@@ -1,24 +1,18 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Text;
 
 namespace LetsEncryptAcmeReg.SSG
 {
     public class GitHubSsg :
-        ISsg,
-        IDisposable
+        ISsg
     {
         private ISsgMasterModel mainModel;
         private Model model;
         private ISsgController controller;
+        private BindResult bindResult;
 
-        public bool Init(string dir)
-        {
-            return true;
-        }
-
-        public bool InitModel(ISsgController controller, ISsgMasterModel mainModel)
+        public bool Initialize(ISsgController controller, ISsgMasterModel mainModel, IControlCreatorAndBinder createAndBind)
         {
             this.controller = controller;
             this.mainModel = mainModel;
@@ -36,15 +30,11 @@ namespace LetsEncryptAcmeReg.SSG
 
             init.InitAction?.Invoke();
 
-            return true;
-        }
-
-        public BindResult? InitControls(IControlCreatorAndBinder createAndBind)
-        {
-            var init = BindResult.Null;
             init += createAndBind.ForBool(this.model.UpdateCname, "Update CNAME", Messages.ToolTipForCname);
             init += createAndBind.ForBool(this.model.UpdateConfigYml, "Update _config.yml", Messages.ToolTipForConfigYml);
-            return init;
+
+            this.bindResult = init;
+            return true;
         }
 
         public bool IsValid()
@@ -83,7 +73,7 @@ include:      ["".well-known""]
 
         public void Dispose()
         {
-            // release model events
+            this.bindResult.UnbindAction?.Invoke();
         }
 
         private string[] Files_Value(string siteRoot, string indexRelative, bool updateCname, bool updateConfigYml)

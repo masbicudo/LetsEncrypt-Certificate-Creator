@@ -12,9 +12,9 @@ namespace LetsEncryptAcmeReg.SSG
     {
         private string dir;
 
-        public bool Init(string dir)
+        public bool Initialize(ISsgController controller, ISsgMasterModel mainModel, IControlCreatorAndBinder createAndBind)
         {
-            this.dir = dir;
+            this.dir = mainModel.SiteRoot.Value;
 
             var confPath = Path.Combine(this.dir, "conf.py");
             if (!Singletons.File.Exists(confPath))
@@ -59,16 +59,6 @@ namespace LetsEncryptAcmeReg.SSG
             Singletons.File.WriteAllText(confPath, conf);
 
             return true;
-        }
-
-        public bool InitModel(ISsgController controller, ISsgMasterModel mainModel)
-        {
-            throw new NotImplementedException();
-        }
-
-        public BindResult? InitControls(IControlCreatorAndBinder creator)
-        {
-            throw new NotImplementedException();
         }
 
         public bool IsValid()

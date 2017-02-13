@@ -93,10 +93,6 @@ namespace LetsEncryptAcmeReg
 
             init += ma.Challenge.BindControl(this.lstChallenges);
 
-            //moved to GithubSsg
-            //init += mo.UpdateConfigYml.BindControl(this.chkConfigYml);
-            //init += mo.UpdateCname.BindControl(this.chkCname);
-
             // Cert view controls
             init += mc.Certificate.BindControl(this.cmbAllCerts);
             init += mc.Certificates.Bind(() => this.cmbAllCerts.Items.OfType<string>().ToArray());
@@ -148,6 +144,7 @@ namespace LetsEncryptAcmeReg
             init += mo.Certificates.Bind(() => this.cmbCertificate.Items.OfType<string>().ToArray());
             init += BindHelper.BindExpression(() => this.SetItemsOf_cmbCertificate(mo.Certificates.Value, mo.Domain.Value, mo.Date.Value));
 
+            init += mo.SsgName.BindControl(this.cmbSsg);
             init += mo.SsgTypes.Bind(
                 () => this.cmbSsg.Items.OfType<string>().ToArray(),
                 v => this.cmbSsg.SetItems(v));

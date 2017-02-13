@@ -3,6 +3,7 @@ using ACMESharp.ACME;
 using ACMESharp.POSH;
 using ACMESharp.Vault.Model;
 using JetBrains.Annotations;
+using LetsEncryptAcmeReg.SSG;
 using LibGit2Sharp;
 using System;
 using System.Diagnostics;
@@ -10,11 +11,8 @@ using System.IO;
 using System.Linq;
 using System.Management.Automation;
 using System.Net;
-using System.Reflection;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using LetsEncryptAcmeReg.SSG;
 using Signature = LibGit2Sharp.Signature;
 #pragma warning disable 1998
 
@@ -42,6 +40,8 @@ namespace LetsEncryptAcmeReg
         public Action<string> Warn { get; set; }
         public Action<string> Success { get; set; }
         public Action<string> Log { get; set; }
+
+        public IUIServices UIServices { get; }
 
         public BindResult Initialize()
         {
@@ -109,7 +109,7 @@ namespace LetsEncryptAcmeReg
 
             init += mo.IsPasswordEnabled.BindExpression(() => mo.CertificateType.Value == CertType.Pkcs12);
 
-            init += mo.SsgTypes.BindExpression(() => _ssgTypes.Value.Select(t => t.Name).ToArray());
+            init += mo.SsgTypes.BindExpression(() => _ssgTypes.Value.Select(SsgNameFromType).ToArray());
             init += mo.CurrentSsg.BindExpression(() => this.CurrentSsg_Value(mo.SsgName.Value));
 
             init += mo.ExpandedSavePath.BindExpression(() => this.ExpandedSavePath_Value(mo.SavePath.Value, mo.CertificateType.Value, mo.Certificate.Value));
@@ -126,13 +126,36 @@ namespace LetsEncryptAcmeReg
             // when the key changes, the domain must be tested again
             mo.Key.Changed += s => mo.CanValidateChallenge.Value = false;
 
+            mo.CurrentSsg.Changed += CurrentSsgOnChanged;
+
             return init;
+        }
+
+        private void CurrentSsgOnChanged(ISsg ssg)
+        {
+            var panel = this.UIServices.CreatePanelForSsg();
+            var ok = ssg.Initialize(this, this.Model, panel);
+
+            if (ok)
+            {
+                
+            }
+        }
+
+        [NotNull]
+        private static string SsgNameFromType([NotNull] Type t)
+        {
+            if (t == null) throw new ArgumentNullException(nameof(t));
+
+            return t.Name.EndsWith("SSG", StringComparison.InvariantCultureIgnoreCase)
+                ? t.Name.Substring(0, t.Name.Length - 3)
+                : t.Name;
         }
 
         [CanBeNull]
         private ISsg CurrentSsg_Value([CanBeNull] string value)
         {
-            var ssgType = _ssgTypes.Value.FirstOrDefault(t => t.Name == value);
+            var ssgType = _ssgTypes.Value.FirstOrDefault(t => SsgNameFromType(t) == value);
 
             if (ssgType == null)
                 return null;
@@ -146,7 +169,7 @@ namespace LetsEncryptAcmeReg
             var type = typeof(ISsg);
             var types = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
-                .Where(p => type.IsAssignableFrom(p))
+                .Where(p => type.IsAssignableFrom(p) && p != typeof(ISsg))
                 .ToArray();
             return types;
         }
