@@ -9,7 +9,7 @@ actually, you can use it with any site you can write to.
 You name it... for example, *Microsoft Windows Azure*. It's ok.
 If you settup your Windows Azure with Git publish you're done.
 
-## It's all automatic, except for DNS setup
+## It's all automatic
 
 The application is very simple. You fill all the fields with your information,
 click a button and it does everything that's needed to create the certificate.
@@ -42,6 +42,10 @@ When you open the program you will see this window:
  - **Target** and **Key** are just there for information. They get filled when the challenge is created.
  - **Local root**: is the root of your static site repository.
     Point to that repository so the files that are needed for the challenge are created for you.
+ - **SSG**: is the static site generator being used.
+    Each SSG needs it's own set of files and patches so that the challenge file is exposed.
+    If your SSG is not in the list, open an issue, and consider creating a pull request. =D
+    Also, you can always do this step manually, creating only the challenge file and setting up the SSG manually.
  - **Git username**: the username that will be used to push the needed files back to the origin (e.g. GitHub or GitLab).
  - **Git password**: guess what
 
@@ -99,4 +103,4 @@ In this tutorial I will guide you in the process of creating a
 certificate for a site hosted at GitLab pages.
 The focus will be the usage of the tool, and not GitLab pages.
 
-... too late now, have to sleep...
+... soon ...
