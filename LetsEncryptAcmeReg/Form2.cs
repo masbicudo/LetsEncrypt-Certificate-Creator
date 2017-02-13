@@ -1,4 +1,5 @@
 ﻿using ACMESharp.Vault.Model;
+using LetsEncryptAcmeReg.SSG;
 using System;
 using System.Drawing;
 using System.IO;
@@ -7,7 +8,9 @@ using System.Windows.Forms;
 
 namespace LetsEncryptAcmeReg
 {
-    public partial class Form2 : Form
+    public partial class Form2 : Form,
+        IUIServices,
+        ITooltipCreator
     {
         private readonly Controller controller;
         private readonly Acme acme = new Acme();
@@ -268,7 +271,7 @@ namespace LetsEncryptAcmeReg
 
         #region UI tips and messages
 
-        private void ToolTipFor(Control ctl, string message, string positionPreferences = ">,v,^,<,>v,>^,<v,<^")
+        public void ToolTipFor(Control ctl, string message, string positionPreferences = ">,v,^,<,>v,>^,<v,<^")
         {
             var tt = this.tooltip.ToolTipFor(ctl, "Help")
                 .AutoPopup(message, useMarkdown: true);
@@ -566,6 +569,11 @@ namespace LetsEncryptAcmeReg
         private void Form2_Resize(object sender, EventArgs e)
         {
             this.tableCertDomains.Width = this.Width / 2;
+        }
+
+        public IControlCreatorAndBinder CreatePanelForSsg()
+        {
+            return new WinFormsControlCreatorAndBinder(new FlowLayoutAppender(this.flowSsgControls), this);
         }
     }
 }
