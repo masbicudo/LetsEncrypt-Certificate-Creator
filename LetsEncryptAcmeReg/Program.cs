@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
 using System.Windows.Forms;
 
 namespace LetsEncryptAcmeReg
@@ -12,6 +13,15 @@ namespace LetsEncryptAcmeReg
         [STAThread]
         static void Main()
         {
+            WindowsIdentity identity = WindowsIdentity.GetCurrent();
+            WindowsPrincipal principal = new WindowsPrincipal(identity);
+            var isElevated = principal.IsInRole(WindowsBuiltInRole.Administrator);
+            if (!isElevated)
+            {
+                MessageBox.Show("This program requires Administrator privileges.", "Error!", MessageBoxButtons.OK);
+                return;
+            }
+
             if (Environment.OSVersion.Version.Major >= 6)
                 SetProcessDpiAwareness(_Process_DPI_Awareness.Process_Per_Monitor_DPI_Aware);
 
