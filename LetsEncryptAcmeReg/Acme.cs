@@ -3,6 +3,7 @@ using ACMESharp.POSH;
 using ACMESharp.POSH.Util;
 using ACMESharp.Vault;
 using ACMESharp.Vault.Model;
+using ACMESharp.Vault.Providers;
 using ACMESharp.Vault.Util;
 using JetBrains.Annotations;
 using System;
@@ -10,23 +11,64 @@ using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Management.Automation;
+using System.Reflection;
 
 namespace LetsEncryptAcmeReg
 {
     public class Acme
     {
-        public VaultInfo Vault()
+        private static IVault GetVault()
         {
-            var vlt = new GetVault().GetValue<VaultInfo>()
-                      ??
-                      new InitializeVault { BaseUri = "https://acme-v01.api.letsencrypt.org/" }
-                          .GetValue<VaultInfo>();
-            return vlt;
+            var rootPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "wizVault");
+            var vlt = new LocalDiskVault();
+            var ok = false;
+            try
+            {
+                vlt.RootPath = rootPath;
+                vlt.BypassEFS = false;
+                vlt.CreatePath = true;
+                vlt.Init();
+                ok = true;
+                return vlt;
+            }
+            finally
+            {
+                if (!ok) vlt.Dispose();
+            }
+        }
+
+        public VaultInfo GetVaultInfo()
+        {
+            using (var vlt = GetVault())
+            {
+                if (!vlt.TestStorage())
+                {
+                    vlt.InitStorage(false);
+                    var v = new VaultInfo
+                    {
+                        Id = EntityHelper.NewId(),
+                        Alias = null,
+                        Label = null,
+                        Memo = null,
+                        BaseService = null,
+                        BaseUri = "https://acme-v01.api.letsencrypt.org/",
+                        ServerDirectory = new AcmeServerDirectory()
+                    };
+
+                    vlt.SaveVault(v);
+                    return v;
+                }
+                else
+                {
+                    vlt.OpenStorage(false);
+                    return vlt.LoadVault(true);
+                }
+            }
         }
 
         public RegistrationInfo[] GetRegistrations()
         {
-            var vaultInfo = this.Vault();
+            var vaultInfo = this.GetVaultInfo();
             var registrationInfos = vaultInfo.Registrations?.Values?.ToArray();
             return registrationInfos ?? new RegistrationInfo[0];
         }
@@ -75,7 +117,7 @@ namespace LetsEncryptAcmeReg
 
         private RegistrationInfo CreateOrUpdateRegistration(RegistrationInfo regInfo, string[] emails = null, bool acceptTos = false)
         {
-            using (var vlt = VaultHelper.GetVault(null))
+            using (var vlt = GetVault())
             {
                 vlt.OpenStorage();
                 var v = vlt.LoadVault();
@@ -142,7 +184,7 @@ namespace LetsEncryptAcmeReg
         [ItemNotNull]
         private IdentifierInfo[] GetAllIdentifiers()
         {
-            using (var vlt = VaultHelper.GetVault(null))
+            using (var vlt = GetVault())
             {
                 vlt.OpenStorage();
                 var v = vlt.LoadVault();
@@ -165,7 +207,7 @@ namespace LetsEncryptAcmeReg
             string idref = identifierInfo?.Alias;
             if (identifierInfo == null)
             {
-                using (var vlt = VaultHelper.GetVault(null))
+                using (var vlt = GetVault())
                 {
                     vlt.OpenStorage();
                     var v = vlt.LoadVault();
@@ -208,7 +250,7 @@ namespace LetsEncryptAcmeReg
         [ItemNotNull]
         private IdentifierInfo[] GetOrCreateIdentifiers([CanBeNull] RegistrationInfo regInfo, [CanBeNull] string alias, [CanBeNull] string dns, bool allowCreation = true)
         {
-            using (var vlt = VaultHelper.GetVault(null))
+            using (var vlt = GetVault())
             {
                 vlt.OpenStorage();
                 var v = vlt.LoadVault();
@@ -293,7 +335,7 @@ namespace LetsEncryptAcmeReg
         [ItemNotNull]
         public CertificateInfo[] GetCertificates([CanBeNull] RegistrationInfo regInfo, [CanBeNull] params string[] domain)
         {
-            var v = this.Vault();
+            var v = this.GetVaultInfo();
 
             if (regInfo == null && domain == null)
                 return v.Certificates?.Values.ToArray() ?? new CertificateInfo[0];
@@ -309,7 +351,7 @@ namespace LetsEncryptAcmeReg
         [CanBeNull]
         public CertificateInfo GetCertificate(string certRef)
         {
-            var v = this.Vault();
+            var v = this.GetVaultInfo();
             if (v.Certificates == null || v.Certificates.Count < 1)
                 return null;
 
@@ -322,7 +364,7 @@ namespace LetsEncryptAcmeReg
             if (value == null)
                 return;
 
-            using (var vlt = VaultHelper.GetVault(null))
+            using (var vlt = GetVault())
             {
                 vlt.OpenStorage();
                 var v = vlt.LoadVault();
@@ -362,7 +404,7 @@ namespace LetsEncryptAcmeReg
             if (regInfo == null)
                 return;
 
-            using (var vlt = VaultHelper.GetVault(null))
+            using (var vlt = GetVault())
             {
                 vlt.OpenStorage();
                 var v = vlt.LoadVault();
@@ -390,7 +432,7 @@ namespace LetsEncryptAcmeReg
 
         public AcmeTextAssets GetTextAssets(string certRef)
         {
-            using (var vlt = VaultHelper.GetVault(null))
+            using (var vlt = GetVault())
             {
                 vlt.OpenStorage();
                 var v = vlt.LoadVault();
