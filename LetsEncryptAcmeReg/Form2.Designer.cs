@@ -532,6 +532,8 @@
             this.chkAutoCreateChallenge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.chkAutoCreateChallenge.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoCreateChallenge.AutoSize = true;
+            this.chkAutoCreateChallenge.Checked = true;
+            this.chkAutoCreateChallenge.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkAutoCreateChallenge.Cursor = System.Windows.Forms.Cursors.Hand;
             this.chkAutoCreateChallenge.Location = new System.Drawing.Point(378, 122);
             this.chkAutoCreateChallenge.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
@@ -547,6 +549,8 @@
             this.chkAutoCreateCertificate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.chkAutoCreateCertificate.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoCreateCertificate.AutoSize = true;
+            this.chkAutoCreateCertificate.Checked = true;
+            this.chkAutoCreateCertificate.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkAutoCreateCertificate.Cursor = System.Windows.Forms.Cursors.Hand;
             this.chkAutoCreateCertificate.Location = new System.Drawing.Point(378, 314);
             this.chkAutoCreateCertificate.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
@@ -651,6 +655,8 @@
             // 
             this.chkAutoRegister.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoRegister.AutoSize = true;
+            this.chkAutoRegister.Checked = true;
+            this.chkAutoRegister.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkAutoRegister.Cursor = System.Windows.Forms.Cursors.Hand;
             this.chkAutoRegister.Location = new System.Drawing.Point(378, 19);
             this.chkAutoRegister.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
@@ -1817,7 +1823,7 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(47, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(78, 17);
             this.toolStripStatusLabel1.Spring = true;
             // 
             // Form2

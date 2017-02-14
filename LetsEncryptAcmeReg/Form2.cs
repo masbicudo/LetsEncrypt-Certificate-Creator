@@ -183,7 +183,7 @@ namespace LetsEncryptAcmeReg
 
             mo.IsPasswordEnabled.Changed += v => this.txtPassword.Enabled = this.chkShowPassword.Enabled = v;
             mo.Files.Changed += this.UpdateFiles;
-            mo.CurrentAuthState.Changing += this.CurrentAuthState_Changing;
+            //mo.CurrentAuthState.Changing += this.CurrentAuthState_Changing;
             mo.CurrentAuthState.Changed += this.CurrentAuthState_Changed;
             mo.CurrentIdentifier.Changed += s => this.tableCertDomains.Hide();
             mo.CurrentSsg.Changed += this.CurrentSsg_Changed;
@@ -287,19 +287,19 @@ namespace LetsEncryptAcmeReg
                     whatToDo();
         }
 
-        private void CurrentAuthState_Changing(Bindable<ACMESharp.AuthorizationState> sender, ACMESharp.AuthorizationState value, ACMESharp.AuthorizationState prev, ref bool cancel)
-        {
-            // if values are equal, then we must cancel the change event from happening
-            cancel |= sender.Version > 0
-                     && (value == prev
-                         ||
-                         value != null && prev != null
-                         && value.Status == prev.Status
-                         && value.Challenges.All(c => prev.Challenges.Any(pc =>
-                             c.Type == pc.Type
-                             && c.Token == pc.Token
-                             && c.SubmitDate == pc.SubmitDate)));
-        }
+        //private void CurrentAuthState_Changing(Bindable<ACMESharp.AuthorizationState> sender, ACMESharp.AuthorizationState value, ACMESharp.AuthorizationState prev, ref bool cancel)
+        //{
+        //    // if values are equal, then we must cancel the change event from happening
+        //    cancel |= sender.Version > 0
+        //             && (value == prev
+        //                 ||
+        //                 value != null && prev != null
+        //                 && value.Status == prev.Status
+        //                 && value.Challenges.All(c => prev.Challenges.Any(pc =>
+        //                     c.Type == pc.Type
+        //                     && c.Token == pc.Token
+        //                     && c.SubmitDate == pc.SubmitDate)));
+        //}
 
         private void UpdateFiles(string[] v)
         {
