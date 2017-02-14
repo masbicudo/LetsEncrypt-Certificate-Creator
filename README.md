@@ -104,3 +104,7 @@ certificate for a site hosted at GitLab pages.
 The focus will be the usage of the tool, and not GitLab pages.
 
 ... soon ...
+
+## License
+
+Apache 2.0
