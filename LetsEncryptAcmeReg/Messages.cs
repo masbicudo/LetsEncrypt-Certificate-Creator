@@ -13,8 +13,11 @@ namespace LetsEncryptAcmeReg
         public static string DomainNotFound { get; }
             = "Cannot find the specified domain.";
 
-        public static string CannotCreateIdentifierDomainAlreadyUsed { get; }
+        public static string CannotCreateIdentifier_DomainAlreadyUsed { get; }
             = "Cannot create identifier. The alias or domain is already used by another identifier.";
+
+        public static string CannotCreateIdentifier_NoRegistrationProvided { get; }
+            = "Cannot create identifier. Registration argument is null.";
 
         public static string ToolTipForConfigYml { get; }
             = "Updates or creates a ` _config.yml ` file,\n" +
@@ -86,7 +89,7 @@ namespace LetsEncryptAcmeReg
                         "If this is the case, you need to create a new challenge."
                     },
                     {
-                        CannotCreateIdentifierDomainAlreadyUsed,
+                        CannotCreateIdentifier_DomainAlreadyUsed,
 
                         "There is another registration that alrady contains the domain you are trying to use.\n" +
                         "This is not an error, but can be a source of confusion when creating certificates."

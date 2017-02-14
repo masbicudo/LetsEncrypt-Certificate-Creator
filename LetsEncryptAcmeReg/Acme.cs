@@ -256,26 +256,34 @@ namespace LetsEncryptAcmeReg
                 var v = vlt.LoadVault();
 
                 var alias2 = alias;
-                var iis = v.Identifiers?.Values?.Where(x => (alias2 == null || x.Alias == alias2) && (dns == null || x.Dns == dns));
+                var iis0 = v.Identifiers?.Values;
 
-                if (iis == null)
+                if (iis0 != null)
+                {
+                    var iis = iis0.Where(x => (alias2 == null || x.Alias == alias2) && (dns == null || x.Dns == dns));
+
+                    if (regInfo == null)
+                        return iis.ToArray();
+
+                    var iisOfReg = iis.Where(ii => ii.RegistrationRef == regInfo.Id).ToArray();
+                    if (iisOfReg.Length > 0)
+                        return iisOfReg;
+
+                    iis = iis0.Where(x => x.Alias == alias2 || x.Dns == dns);
+
+                    if (!allowCreation)
+                        return new IdentifierInfo[0];
+
+                    if (iis.Any())
+                        throw new InvalidOperationException(Messages.CannotCreateIdentifier_DomainAlreadyUsed);
+                }
+                else if (!allowCreation)
                     return new IdentifierInfo[0];
 
                 if (regInfo == null)
-                    return iis.ToArray();
+                    throw new InvalidOperationException(Messages.CannotCreateIdentifier_NoRegistrationProvided);
 
-                var iisOfReg = iis.Where(ii => ii.RegistrationRef == regInfo.Id);
-                var iisOfRegArray = iisOfReg as IdentifierInfo[] ?? iisOfReg.ToArray();
-                if (iisOfRegArray.Any())
-                    return iisOfRegArray.ToArray();
-
-                iis = v.Identifiers.Values.Where(x => x.Alias == alias2 || x.Dns == dns);
-
-                if (!allowCreation)
-                    return new IdentifierInfo[0];
-
-                if (iis.Any())
-                    throw new InvalidOperationException(Messages.CannotCreateIdentifierDomainAlreadyUsed);
+                v.Identifiers = v.Identifiers ?? new EntityDictionary<IdentifierInfo>();
 
                 // if alias was not provided, get a valid one that is not used alrady
                 var count = v.Identifiers.Values.Count();
@@ -287,7 +295,6 @@ namespace LetsEncryptAcmeReg
                 }
 
                 // see ACMESharp.POSH.NewIdentifier
-                AuthorizationState authzState = null;
                 var iiNew = new IdentifierInfo
                 {
                     Id = EntityHelper.NewId(),
@@ -301,11 +308,8 @@ namespace LetsEncryptAcmeReg
                     c.Init();
                     c.GetDirectory(true);
 
-                    authzState = c.AuthorizeIdentifier(dns);
+                    var authzState = c.AuthorizeIdentifier(dns);
                     iiNew.Authorization = authzState;
-
-                    if (v.Identifiers == null)
-                        v.Identifiers = new EntityDictionary<IdentifierInfo>();
 
                     v.Identifiers.Add(iiNew);
                 }
