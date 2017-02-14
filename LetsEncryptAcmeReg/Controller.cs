@@ -591,7 +591,7 @@ namespace LetsEncryptAcmeReg
                             .ToArray();
 
                         foreach (var eachPath in filesToAdd)
-                            repo.Index.Add(eachPath);
+                            repo.Index.Add(eachPath.TrimStart('\\', '/'));
 
                         // Create the committer's signature and commit
                         Signature author = new Signature(username, email, DateTime.Now);
