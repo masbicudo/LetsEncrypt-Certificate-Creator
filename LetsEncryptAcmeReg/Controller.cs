@@ -55,12 +55,12 @@ namespace LetsEncryptAcmeReg
             init += new BindResult(() => mo.Registrations.Value = this.acme.GetRegistrations());
             init += new BindResult(() => mo.Now.Value = DateTime.Now);
             init += mo.Date.BindExpression(() => mo.Now.Value.Date);
-            init += mo.TOSLink.BindExpression(() => this.acme.GetTos(this.Model.Email.Value));
+            init += mo.TOSLink.BindExpression(() => this.acme.GetTos(mo.Registrations.Value, mo.Email.Value));
 
             // Collections
-            init += mo.Domains.BindExpression(() => this.acme.GetDomainsByEmail(mo.Email.Value).OrderBy(x => x).ToArray());
+            init += mo.Domains.BindExpression(() => this.acme.GetDomainsByEmail(mo.Registrations.Value, mo.Email.Value).OrderBy(x => x).ToArray());
             init += mo.Certificates.BindExpression(
-                () => this.acme.GetCertificates(this.Model.CurrentRegistration.Value, this.Model.Domain.Value).Select(c => c.Alias).ToArray());
+                () => this.acme.GetCertificates(mo.CurrentRegistration.Value, mo.Domain.Value).Select(c => c.Alias).ToArray());
 
             // Complex relations:
             //      These relations are built by using expressions.
@@ -96,17 +96,17 @@ namespace LetsEncryptAcmeReg
             init += mo.CanAddDomain.BindExpression(() => mo.IsDomainValid.Value && !mo.IsDomainCreated.Value);
             init += mo.CanCreateChallenge.BindExpression(() => mo.IsChallengeValid.Value);
             init += mo.CanSaveChallenge.BindExpression(() => mo.ChallengeHasFile.Value);
-            init += mo.CanCommitChallenge.BindExpression(() => this.CanCommitChallenge_Value(this.Model.SiteRoot.Value));
+            init += mo.CanCommitChallenge.BindExpression(() => this.CanCommitChallenge_Value(mo.SiteRoot.Value));
             init += mo.CanTestChallenge.BindExpression(() => mo.IsTargetValid.Value && mo.IsKeyValid.Value);
             init += mo.CanUpdateStatus.BindExpression(() => mo.CurrentAuthState.Value != null);
             init += mo.CanValidateChallenge.BindExpression(() => false); // this value is changed after testing the challenge (it's not bound to anything)
             init += mo.CanCreateCertificate.BindExpression(() => mo.CurrentAuthState.Value.With(v => v != null && v.Status == "valid"));
             init += mo.CanSubmitCertificate.BindExpression(() => mo.CurrentCertificate.Value.With(v => v != null && v.CertificateRequest == null && string.IsNullOrWhiteSpace(v.IssuerSerialNumber)));
             init += mo.CanGetIssuerCertificate.BindExpression(() => mo.CurrentCertificate.Value.With(v => v != null && v.CertificateRequest != null && string.IsNullOrWhiteSpace(v.IssuerSerialNumber)));
-            init += mo.CanSaveCertificate.BindExpression(() => mo.CurrentCertificate.Value.With(v => v != null && !string.IsNullOrWhiteSpace(v.IssuerSerialNumber)) && this.Model.CertificateType.Value != 0);
+            init += mo.CanSaveCertificate.BindExpression(() => mo.CurrentCertificate.Value.With(v => v != null && !string.IsNullOrWhiteSpace(v.IssuerSerialNumber)) && mo.CertificateType.Value != 0);
 
             var viewableCertTypes = new[] { CertType.CertificatePEM, CertType.CsrPEM, CertType.IssuerPEM, CertType.KeyPEM };
-            init += mo.CanShowCertificate.BindExpression(() => mo.CurrentCertificate.Value.With(v => v != null && !string.IsNullOrWhiteSpace(v.IssuerSerialNumber)) && Array.IndexOf(viewableCertTypes, this.Model.CertificateType.Value) >= 0);
+            init += mo.CanShowCertificate.BindExpression(() => mo.CurrentCertificate.Value.With(v => v != null && !string.IsNullOrWhiteSpace(v.IssuerSerialNumber)) && Array.IndexOf(viewableCertTypes, mo.CertificateType.Value) >= 0);
 
             init += mo.IsPasswordEnabled.BindExpression(() => mo.CertificateType.Value == CertType.Pkcs12);
 
@@ -449,7 +449,7 @@ namespace LetsEncryptAcmeReg
                 this.Model.AutoRegisterTimer,
                 async () =>
                 {
-                    var newRegistration = this.acme.Register(this.Model.Email.Value);
+                    var newRegistration = this.acme.Register(this.Model.Registrations.Value, this.Model.Email.Value);
                     if (newRegistration != null)
                     {
                         var newList = this.Model.Registrations.Value.Concat(new[] { newRegistration }).ToArray();

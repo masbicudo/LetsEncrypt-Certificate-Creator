@@ -27,15 +27,13 @@ namespace LetsEncryptAcmeReg
         public RegistrationInfo[] GetRegistrations()
         {
             var vaultInfo = this.Vault();
-            var registrationInfos = vaultInfo.Registrations.Values.ToArray();
-            return registrationInfos;
+            var registrationInfos = vaultInfo.Registrations?.Values?.ToArray();
+            return registrationInfos ?? new RegistrationInfo[0];
         }
 
-        public string[] GetDomainsByEmail(string email)
+        public string[] GetDomainsByEmail(RegistrationInfo[] regs, string email)
         {
-            var v = Vault();
-
-            var r = v.Registrations.Values
+            var r = regs
                 .FirstOrDefault(x => x.Registration.Contacts.Any(c => c == $"mailto:{email}"));
 
             if (r != null)
@@ -53,19 +51,17 @@ namespace LetsEncryptAcmeReg
             return allids.Select(x => (x.Dns ?? "").ToString()).ToArray();
         }
 
-        public RegistrationInfo Register(string email)
+        public RegistrationInfo Register(RegistrationInfo[] regs, string email)
         {
             var emails = email.Split(';').Select(s => $"mailto:{s?.Trim()}").ToArray();
-            var regInfo = GetRegistrationByEmail(emails);
+            var regInfo = this.GetRegistrationByEmail(regs, emails);
             regInfo = regInfo != null ? null : this.CreateOrUpdateRegistration(null, emails);
             return regInfo;
         }
 
-        private RegistrationInfo GetRegistrationByEmail(string[] emails)
+        private RegistrationInfo GetRegistrationByEmail(RegistrationInfo[] regs, string[] emails)
         {
-            var v = Vault();
-            var regInfo = v.Registrations.Values
-                .FirstOrDefault(x => x.Registration.Contacts.Intersect(emails).Any());
+            var regInfo = regs.FirstOrDefault(x => x.Registration.Contacts.Intersect(emails).Any());
             return regInfo;
         }
 
@@ -218,7 +214,11 @@ namespace LetsEncryptAcmeReg
                 var v = vlt.LoadVault();
 
                 var alias2 = alias;
-                var iis = v.Identifiers.Values.Where(x => (alias2 == null || x.Alias == alias2) && (dns == null || x.Dns == dns));
+                var iis = v.Identifiers?.Values?.Where(x => (alias2 == null || x.Alias == alias2) && (dns == null || x.Dns == dns));
+
+                if (iis == null)
+                    return new IdentifierInfo[0];
+
                 if (regInfo == null)
                     return iis.ToArray();
 
@@ -274,10 +274,9 @@ namespace LetsEncryptAcmeReg
             }
         }
 
-        public string GetTos(string email)
+        public string GetTos(RegistrationInfo[] regs, string email)
         {
-            var v = this.Vault();
-            var r = v.Registrations.Values
+            var r = regs
                 .Where(x => x.Registration.Contacts.Any(c => c == $"mailto:{email}"))
                 .Select(x => x.Registration.TosLinkUri)
                 .FirstOrDefault();
