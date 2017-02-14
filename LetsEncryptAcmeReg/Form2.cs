@@ -558,9 +558,9 @@ namespace LetsEncryptAcmeReg
                 Clipboard.SetText(value);
         }
 
-        private void lnkGitLabCertHelp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private async void lnkGitLabCertHelp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            this.controller.OpenPemConcatHelpInBrowser().RunSynchronously();
+            await this.controller.OpenPemConcatHelpInBrowser();
         }
 
         private void btnHideCertDomains_Click(object sender, EventArgs e)
