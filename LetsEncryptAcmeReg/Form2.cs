@@ -622,7 +622,7 @@ namespace LetsEncryptAcmeReg
             this.flowSsgControls.Controls.Clear();
         }
 
-        private void linkProject_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void linkProject_LinkClicked(object sender, EventArgs e)
         {
             Process.Start("https://github.com/masbicudo/LetsEncrypt-Certificate-Creator");
         }
