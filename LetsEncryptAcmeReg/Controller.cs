@@ -91,7 +91,7 @@ namespace LetsEncryptAcmeReg
 
             init += mo.Issuer.BindExpression(() => mo.CurrentCertificate.Value.With(v => v != null ? v.IssuerSerialNumber : ""));
 
-            init += mo.CanRegister.BindExpression(() => mo.IsEmailValid.Value);
+            init += mo.CanRegister.BindExpression(() => this.CanRegister_Value(mo.Registrations.Value, mo.Email.Value, mo.IsEmailValid.Value));
             init += mo.CanAcceptTos.BindExpression(() => this.CanAcceptTos_Value(mo.CurrentRegistration.Value));
             init += mo.CanAddDomain.BindExpression(() => mo.IsDomainValid.Value && !mo.IsDomainCreated.Value);
             init += mo.CanCreateChallenge.BindExpression(() => mo.IsChallengeValid.Value);
@@ -131,6 +131,15 @@ namespace LetsEncryptAcmeReg
             mo.CurrentSsg.Changed += this.CurrentSsg_Changed;
 
             return init;
+        }
+
+        private bool CanRegister_Value(RegistrationInfo[] regs, string email, bool isEmailValid)
+        {
+            if (!isEmailValid)
+                return false;
+            if (regs.Any(x => x.Registration.Contacts.Any(c => c == $"mailto:{email}")))
+                return false;
+            return true;
         }
 
         private void CurrentSsg_Changing(Bindable<ISsg> sender, ISsg value, ISsg prev, ref bool cancel)
@@ -454,6 +463,7 @@ namespace LetsEncryptAcmeReg
                     {
                         var newList = this.Model.Registrations.Value.Concat(new[] { newRegistration }).ToArray();
                         this.Model.Registrations.Value = newList;
+                        this.Model.CurrentRegistration.Value = newRegistration;
                         this.Success("Registration created.");
                     }
                     else
