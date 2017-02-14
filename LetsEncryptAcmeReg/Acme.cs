@@ -8,6 +8,7 @@ using ACMESharp.Vault.Util;
 using JetBrains.Annotations;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Management.Automation;
@@ -17,6 +18,7 @@ namespace LetsEncryptAcmeReg
 {
     public class Acme
     {
+#if CUSTOM_VAULT
         private static IVault GetVault()
         {
             var rootPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "wizVault");
@@ -65,6 +67,25 @@ namespace LetsEncryptAcmeReg
                 }
             }
         }
+#else
+        private static IVault GetVault()
+        {
+            return VaultHelper.GetVault(null);
+        }
+
+        public VaultInfo GetVaultInfo()
+        {
+            VaultInfo vlt = null;
+            for (int it = 0; it < 2 && vlt == null; it++)
+            {
+                vlt = new GetVault().GetValue<VaultInfo>()
+                          ??
+                          new InitializeVault { BaseUri = "https://acme-v01.api.letsencrypt.org/" }
+                              .GetValue<VaultInfo>();
+            }
+            return vlt;
+        }
+#endif
 
         public RegistrationInfo[] GetRegistrations()
         {
