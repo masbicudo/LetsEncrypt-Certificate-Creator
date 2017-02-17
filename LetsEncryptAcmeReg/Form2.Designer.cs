@@ -89,7 +89,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.btnChallengeFile = new System.Windows.Forms.Button();
             this.txtChallengeKey = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -210,7 +209,7 @@
             this.tableLayoutPanel1.ColumnCount = 4;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 0F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 13);
             this.tableLayoutPanel1.Controls.Add(this.btnCreateChallenge, 3, 5);
@@ -228,8 +227,6 @@
             this.tableLayoutPanel1.Controls.Add(this.btnAcceptTos, 3, 2);
             this.tableLayoutPanel1.Controls.Add(this.btnRegister, 3, 1);
             this.tableLayoutPanel1.Controls.Add(this.chkAutoRegister, 2, 1);
-            this.tableLayoutPanel1.Controls.Add(this.chkAutoUpdateStatus, 2, 7);
-            this.tableLayoutPanel1.Controls.Add(this.btnUpdateStatus, 3, 7);
             this.tableLayoutPanel1.Controls.Add(this.label3, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.cmbChallenge, 0, 5);
             this.tableLayoutPanel1.Controls.Add(this.label7, 0, 8);
@@ -332,8 +329,6 @@
             this.chkAutoAddDomain.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.chkAutoAddDomain.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoAddDomain.AutoSize = true;
-            this.chkAutoAddDomain.Checked = true;
-            this.chkAutoAddDomain.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkAutoAddDomain.Cursor = System.Windows.Forms.Cursors.Hand;
             this.chkAutoAddDomain.Location = new System.Drawing.Point(378, 69);
             this.chkAutoAddDomain.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
@@ -343,6 +338,7 @@
             this.chkAutoAddDomain.Text = ">";
             this.chkAutoAddDomain.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.chkAutoAddDomain.UseVisualStyleBackColor = true;
+            this.chkAutoAddDomain.Visible = false;
             // 
             // label2
             // 
@@ -377,16 +373,18 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel3.AutoSize = true;
             this.tableLayoutPanel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanel3.ColumnCount = 8;
-            this.tableLayoutPanel1.SetColumnSpan(this.tableLayoutPanel3, 2);
+            this.tableLayoutPanel3.ColumnCount = 10;
+            this.tableLayoutPanel1.SetColumnSpan(this.tableLayoutPanel3, 4);
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel3.Controls.Add(this.chkAutoSaveChallenge, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.btnSaveChallenge, 1, 0);
             this.tableLayoutPanel3.Controls.Add(this.btnCommitChallenge, 3, 0);
@@ -395,12 +393,14 @@
             this.tableLayoutPanel3.Controls.Add(this.chkAutoCommit, 2, 0);
             this.tableLayoutPanel3.Controls.Add(this.chkAutoTest, 4, 0);
             this.tableLayoutPanel3.Controls.Add(this.chkAutoValidate, 6, 0);
+            this.tableLayoutPanel3.Controls.Add(this.chkAutoUpdateStatus, 8, 0);
+            this.tableLayoutPanel3.Controls.Add(this.btnUpdateStatus, 9, 0);
             this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 260);
             this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(377, 25);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(458, 25);
             this.tableLayoutPanel3.TabIndex = 17;
             // 
             // chkAutoSaveChallenge
@@ -408,8 +408,6 @@
             this.chkAutoSaveChallenge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.chkAutoSaveChallenge.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoSaveChallenge.AutoSize = true;
-            this.chkAutoSaveChallenge.Checked = true;
-            this.chkAutoSaveChallenge.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkAutoSaveChallenge.Cursor = System.Windows.Forms.Cursors.Hand;
             this.chkAutoSaveChallenge.Location = new System.Drawing.Point(1, 1);
             this.chkAutoSaveChallenge.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
@@ -419,6 +417,7 @@
             this.chkAutoSaveChallenge.Text = ">";
             this.chkAutoSaveChallenge.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.chkAutoSaveChallenge.UseVisualStyleBackColor = true;
+            this.chkAutoSaveChallenge.Visible = false;
             // 
             // btnSaveChallenge
             // 
@@ -428,7 +427,7 @@
             this.btnSaveChallenge.Location = new System.Drawing.Point(24, 1);
             this.btnSaveChallenge.Margin = new System.Windows.Forms.Padding(0, 1, 1, 1);
             this.btnSaveChallenge.Name = "btnSaveChallenge";
-            this.btnSaveChallenge.Size = new System.Drawing.Size(69, 23);
+            this.btnSaveChallenge.Size = new System.Drawing.Size(66, 23);
             this.btnSaveChallenge.TabIndex = 10;
             this.btnSaveChallenge.Text = "Save";
             this.btnSaveChallenge.UseVisualStyleBackColor = true;
@@ -439,10 +438,10 @@
             this.btnCommitChallenge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCommitChallenge.AutoSize = true;
             this.btnCommitChallenge.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnCommitChallenge.Location = new System.Drawing.Point(118, 1);
+            this.btnCommitChallenge.Location = new System.Drawing.Point(115, 1);
             this.btnCommitChallenge.Margin = new System.Windows.Forms.Padding(0, 1, 1, 1);
             this.btnCommitChallenge.Name = "btnCommitChallenge";
-            this.btnCommitChallenge.Size = new System.Drawing.Size(69, 23);
+            this.btnCommitChallenge.Size = new System.Drawing.Size(66, 23);
             this.btnCommitChallenge.TabIndex = 10;
             this.btnCommitChallenge.Text = "Commit";
             this.btnCommitChallenge.UseVisualStyleBackColor = true;
@@ -453,10 +452,10 @@
             this.btnTestChallenge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.btnTestChallenge.AutoSize = true;
             this.btnTestChallenge.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnTestChallenge.Location = new System.Drawing.Point(212, 1);
+            this.btnTestChallenge.Location = new System.Drawing.Point(206, 1);
             this.btnTestChallenge.Margin = new System.Windows.Forms.Padding(0, 1, 1, 1);
             this.btnTestChallenge.Name = "btnTestChallenge";
-            this.btnTestChallenge.Size = new System.Drawing.Size(69, 23);
+            this.btnTestChallenge.Size = new System.Drawing.Size(66, 23);
             this.btnTestChallenge.TabIndex = 10;
             this.btnTestChallenge.Text = "Test";
             this.btnTestChallenge.UseVisualStyleBackColor = true;
@@ -467,10 +466,10 @@
             this.btnValidate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.btnValidate.AutoSize = true;
             this.btnValidate.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnValidate.Location = new System.Drawing.Point(306, 1);
+            this.btnValidate.Location = new System.Drawing.Point(297, 1);
             this.btnValidate.Margin = new System.Windows.Forms.Padding(0, 1, 1, 1);
             this.btnValidate.Name = "btnValidate";
-            this.btnValidate.Size = new System.Drawing.Size(70, 23);
+            this.btnValidate.Size = new System.Drawing.Size(66, 23);
             this.btnValidate.TabIndex = 10;
             this.btnValidate.Text = "Validate";
             this.btnValidate.UseVisualStyleBackColor = true;
@@ -481,10 +480,8 @@
             this.chkAutoCommit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.chkAutoCommit.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoCommit.AutoSize = true;
-            this.chkAutoCommit.Checked = true;
-            this.chkAutoCommit.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkAutoCommit.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkAutoCommit.Location = new System.Drawing.Point(95, 1);
+            this.chkAutoCommit.Location = new System.Drawing.Point(92, 1);
             this.chkAutoCommit.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.chkAutoCommit.Name = "chkAutoCommit";
             this.chkAutoCommit.Size = new System.Drawing.Size(23, 23);
@@ -492,16 +489,15 @@
             this.chkAutoCommit.Text = ">";
             this.chkAutoCommit.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.chkAutoCommit.UseVisualStyleBackColor = true;
+            this.chkAutoCommit.Visible = false;
             // 
             // chkAutoTest
             // 
             this.chkAutoTest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.chkAutoTest.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoTest.AutoSize = true;
-            this.chkAutoTest.Checked = true;
-            this.chkAutoTest.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkAutoTest.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkAutoTest.Location = new System.Drawing.Point(189, 1);
+            this.chkAutoTest.Location = new System.Drawing.Point(183, 1);
             this.chkAutoTest.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.chkAutoTest.Name = "chkAutoTest";
             this.chkAutoTest.Size = new System.Drawing.Size(23, 23);
@@ -509,16 +505,15 @@
             this.chkAutoTest.Text = ">";
             this.chkAutoTest.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.chkAutoTest.UseVisualStyleBackColor = true;
+            this.chkAutoTest.Visible = false;
             // 
             // chkAutoValidate
             // 
             this.chkAutoValidate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.chkAutoValidate.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoValidate.AutoSize = true;
-            this.chkAutoValidate.Checked = true;
-            this.chkAutoValidate.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkAutoValidate.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkAutoValidate.Location = new System.Drawing.Point(283, 1);
+            this.chkAutoValidate.Location = new System.Drawing.Point(274, 1);
             this.chkAutoValidate.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.chkAutoValidate.Name = "chkAutoValidate";
             this.chkAutoValidate.Size = new System.Drawing.Size(23, 23);
@@ -526,14 +521,13 @@
             this.chkAutoValidate.Text = ">";
             this.chkAutoValidate.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.chkAutoValidate.UseVisualStyleBackColor = true;
+            this.chkAutoValidate.Visible = false;
             // 
             // chkAutoCreateChallenge
             // 
             this.chkAutoCreateChallenge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.chkAutoCreateChallenge.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoCreateChallenge.AutoSize = true;
-            this.chkAutoCreateChallenge.Checked = true;
-            this.chkAutoCreateChallenge.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkAutoCreateChallenge.Cursor = System.Windows.Forms.Cursors.Hand;
             this.chkAutoCreateChallenge.Location = new System.Drawing.Point(378, 122);
             this.chkAutoCreateChallenge.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
@@ -543,14 +537,13 @@
             this.chkAutoCreateChallenge.Text = ">";
             this.chkAutoCreateChallenge.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.chkAutoCreateChallenge.UseVisualStyleBackColor = true;
+            this.chkAutoCreateChallenge.Visible = false;
             // 
             // chkAutoCreateCertificate
             // 
             this.chkAutoCreateCertificate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.chkAutoCreateCertificate.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoCreateCertificate.AutoSize = true;
-            this.chkAutoCreateCertificate.Checked = true;
-            this.chkAutoCreateCertificate.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkAutoCreateCertificate.Cursor = System.Windows.Forms.Cursors.Hand;
             this.chkAutoCreateCertificate.Location = new System.Drawing.Point(378, 314);
             this.chkAutoCreateCertificate.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
@@ -560,6 +553,7 @@
             this.chkAutoCreateCertificate.Text = ">";
             this.chkAutoCreateCertificate.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.chkAutoCreateCertificate.UseVisualStyleBackColor = true;
+            this.chkAutoCreateCertificate.Visible = false;
             // 
             // tableLayoutPanel6
             // 
@@ -611,8 +605,6 @@
             this.chkAutoAcceptTos.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.chkAutoAcceptTos.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoAcceptTos.AutoSize = true;
-            this.chkAutoAcceptTos.Checked = true;
-            this.chkAutoAcceptTos.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkAutoAcceptTos.Cursor = System.Windows.Forms.Cursors.Hand;
             this.chkAutoAcceptTos.Location = new System.Drawing.Point(378, 44);
             this.chkAutoAcceptTos.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
@@ -622,6 +614,7 @@
             this.chkAutoAcceptTos.Text = ">";
             this.chkAutoAcceptTos.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.chkAutoAcceptTos.UseVisualStyleBackColor = true;
+            this.chkAutoAcceptTos.Visible = false;
             // 
             // btnAcceptTos
             // 
@@ -655,8 +648,6 @@
             // 
             this.chkAutoRegister.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoRegister.AutoSize = true;
-            this.chkAutoRegister.Checked = true;
-            this.chkAutoRegister.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkAutoRegister.Cursor = System.Windows.Forms.Cursors.Hand;
             this.chkAutoRegister.Location = new System.Drawing.Point(378, 19);
             this.chkAutoRegister.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
@@ -666,6 +657,7 @@
             this.chkAutoRegister.Text = ">";
             this.chkAutoRegister.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.chkAutoRegister.UseVisualStyleBackColor = true;
+            this.chkAutoRegister.Visible = false;
             // 
             // chkAutoUpdateStatus
             // 
@@ -673,10 +665,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chkAutoUpdateStatus.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoUpdateStatus.AutoSize = true;
-            this.chkAutoUpdateStatus.Checked = true;
-            this.chkAutoUpdateStatus.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkAutoUpdateStatus.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkAutoUpdateStatus.Location = new System.Drawing.Point(378, 261);
+            this.chkAutoUpdateStatus.Location = new System.Drawing.Point(365, 1);
             this.chkAutoUpdateStatus.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.chkAutoUpdateStatus.Name = "chkAutoUpdateStatus";
             this.chkAutoUpdateStatus.Size = new System.Drawing.Size(23, 23);
@@ -684,6 +674,7 @@
             this.chkAutoUpdateStatus.Text = ">";
             this.chkAutoUpdateStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.chkAutoUpdateStatus.UseVisualStyleBackColor = true;
+            this.chkAutoUpdateStatus.Visible = false;
             // 
             // btnUpdateStatus
             // 
@@ -691,10 +682,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnUpdateStatus.AutoSize = true;
             this.btnUpdateStatus.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnUpdateStatus.Location = new System.Drawing.Point(401, 261);
+            this.btnUpdateStatus.Location = new System.Drawing.Point(388, 1);
             this.btnUpdateStatus.Margin = new System.Windows.Forms.Padding(0, 1, 1, 1);
             this.btnUpdateStatus.Name = "btnUpdateStatus";
-            this.btnUpdateStatus.Size = new System.Drawing.Size(56, 23);
+            this.btnUpdateStatus.Size = new System.Drawing.Size(69, 23);
             this.btnUpdateStatus.TabIndex = 10;
             this.btnUpdateStatus.Text = "Update";
             this.btnUpdateStatus.UseVisualStyleBackColor = true;
@@ -779,8 +770,6 @@
             this.chkAutoSubmit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.chkAutoSubmit.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoSubmit.AutoSize = true;
-            this.chkAutoSubmit.Checked = true;
-            this.chkAutoSubmit.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkAutoSubmit.Cursor = System.Windows.Forms.Cursors.Hand;
             this.chkAutoSubmit.Location = new System.Drawing.Point(245, 1);
             this.chkAutoSubmit.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
@@ -790,6 +779,7 @@
             this.chkAutoSubmit.Text = ">";
             this.chkAutoSubmit.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.chkAutoSubmit.UseVisualStyleBackColor = true;
+            this.chkAutoSubmit.Visible = false;
             // 
             // btnSubmit
             // 
@@ -811,8 +801,6 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chkAutoGetIssuerCert.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoGetIssuerCert.AutoSize = true;
-            this.chkAutoGetIssuerCert.Checked = true;
-            this.chkAutoGetIssuerCert.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkAutoGetIssuerCert.Cursor = System.Windows.Forms.Cursors.Hand;
             this.chkAutoGetIssuerCert.Location = new System.Drawing.Point(319, 1);
             this.chkAutoGetIssuerCert.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
@@ -822,6 +810,7 @@
             this.chkAutoGetIssuerCert.Text = ">";
             this.chkAutoGetIssuerCert.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.chkAutoGetIssuerCert.UseVisualStyleBackColor = true;
+            this.chkAutoGetIssuerCert.Visible = false;
             // 
             // btnGetIssuerCert
             // 
@@ -960,8 +949,6 @@
             this.chkAutoSaveOrShowCertificate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.chkAutoSaveOrShowCertificate.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoSaveOrShowCertificate.AutoSize = true;
-            this.chkAutoSaveOrShowCertificate.Checked = true;
-            this.chkAutoSaveOrShowCertificate.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkAutoSaveOrShowCertificate.Cursor = System.Windows.Forms.Cursors.Hand;
             this.chkAutoSaveOrShowCertificate.Location = new System.Drawing.Point(346, 1);
             this.chkAutoSaveOrShowCertificate.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
@@ -971,6 +958,7 @@
             this.chkAutoSaveOrShowCertificate.Text = ">";
             this.chkAutoSaveOrShowCertificate.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.chkAutoSaveOrShowCertificate.UseVisualStyleBackColor = true;
+            this.chkAutoSaveOrShowCertificate.Visible = false;
             // 
             // label8
             // 
@@ -1138,7 +1126,6 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel2.Controls.Add(this.btnChallengeFile, 2, 2);
             this.tableLayoutPanel2.Controls.Add(this.txtChallengeKey, 1, 1);
             this.tableLayoutPanel2.Controls.Add(this.label5, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.label4, 0, 0);
@@ -1163,19 +1150,6 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(458, 114);
             this.tableLayoutPanel2.TabIndex = 11;
-            // 
-            // btnChallengeFile
-            // 
-            this.btnChallengeFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnChallengeFile.AutoSize = true;
-            this.btnChallengeFile.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnChallengeFile.Location = new System.Drawing.Point(431, 45);
-            this.btnChallengeFile.Margin = new System.Windows.Forms.Padding(1);
-            this.btnChallengeFile.Name = "btnChallengeFile";
-            this.btnChallengeFile.Size = new System.Drawing.Size(26, 23);
-            this.btnChallengeFile.TabIndex = 10;
-            this.btnChallengeFile.Text = "...";
-            this.btnChallengeFile.UseVisualStyleBackColor = true;
             // 
             // txtChallengeKey
             // 
@@ -1227,7 +1201,7 @@
             // 
             this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(1, 50);
+            this.label6.Location = new System.Drawing.Point(1, 48);
             this.label6.Margin = new System.Windows.Forms.Padding(1);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(54, 13);
@@ -1240,10 +1214,11 @@
             this.txtSiteRoot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSiteRoot.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.txtSiteRoot.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystemDirectories;
-            this.txtSiteRoot.Location = new System.Drawing.Point(57, 46);
+            this.tableLayoutPanel2.SetColumnSpan(this.txtSiteRoot, 2);
+            this.txtSiteRoot.Location = new System.Drawing.Point(57, 45);
             this.txtSiteRoot.Margin = new System.Windows.Forms.Padding(1);
             this.txtSiteRoot.Name = "txtSiteRoot";
-            this.txtSiteRoot.Size = new System.Drawing.Size(372, 20);
+            this.txtSiteRoot.Size = new System.Drawing.Size(400, 20);
             this.txtSiteRoot.TabIndex = 15;
             // 
             // tableLayoutPanel9
@@ -1261,7 +1236,7 @@
             this.tableLayoutPanel9.Controls.Add(this.label16, 2, 0);
             this.tableLayoutPanel9.Controls.Add(this.txtGitPassword, 3, 0);
             this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel9.Location = new System.Drawing.Point(0, 92);
+            this.tableLayoutPanel9.Location = new System.Drawing.Point(0, 89);
             this.tableLayoutPanel9.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel9.Name = "tableLayoutPanel9";
             this.tableLayoutPanel9.RowCount = 1;
@@ -1318,7 +1293,7 @@
             // 
             this.label19.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(1, 74);
+            this.label19.Location = new System.Drawing.Point(1, 71);
             this.label19.Margin = new System.Windows.Forms.Padding(1);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(54, 13);
@@ -1332,7 +1307,7 @@
             this.tableLayoutPanel2.SetColumnSpan(this.cmbSsg, 2);
             this.cmbSsg.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbSsg.FormattingEnabled = true;
-            this.cmbSsg.Location = new System.Drawing.Point(57, 70);
+            this.cmbSsg.Location = new System.Drawing.Point(57, 67);
             this.cmbSsg.Margin = new System.Windows.Forms.Padding(1);
             this.cmbSsg.Name = "cmbSsg";
             this.cmbSsg.Size = new System.Drawing.Size(400, 21);
@@ -1346,7 +1321,7 @@
             this.flowSsgControls.AutoSize = true;
             this.flowSsgControls.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.tableLayoutPanel2.SetColumnSpan(this.flowSsgControls, 2);
-            this.flowSsgControls.Location = new System.Drawing.Point(56, 92);
+            this.flowSsgControls.Location = new System.Drawing.Point(56, 89);
             this.flowSsgControls.Margin = new System.Windows.Forms.Padding(0);
             this.flowSsgControls.Name = "flowSsgControls";
             this.flowSsgControls.Size = new System.Drawing.Size(402, 1);
@@ -1917,7 +1892,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private System.Windows.Forms.Button btnChallengeFile;
         private System.Windows.Forms.TextBox txtChallengeKey;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
