@@ -139,8 +139,8 @@
             this.toolStripContainer5 = new System.Windows.Forms.ToolStripContainer();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.labVer = new System.Windows.Forms.ToolStripStatusLabel();
-            this.lnkProject = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lnkProject = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -1358,7 +1358,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(451, 410);
+            this.tabPage2.Size = new System.Drawing.Size(464, 536);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Manager";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -1388,7 +1388,7 @@
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(445, 411);
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(458, 537);
             this.tableLayoutPanel7.TabIndex = 1;
             // 
             // toolStripContainer2
@@ -1400,10 +1400,10 @@
             // toolStripContainer2.ContentPanel
             // 
             this.toolStripContainer2.ContentPanel.Controls.Add(this.lstChallenges);
-            this.toolStripContainer2.ContentPanel.Size = new System.Drawing.Size(143, 161);
-            this.toolStripContainer2.Location = new System.Drawing.Point(299, 16);
+            this.toolStripContainer2.ContentPanel.Size = new System.Drawing.Size(148, 224);
+            this.toolStripContainer2.Location = new System.Drawing.Point(307, 16);
             this.toolStripContainer2.Name = "toolStripContainer2";
-            this.toolStripContainer2.Size = new System.Drawing.Size(143, 186);
+            this.toolStripContainer2.Size = new System.Drawing.Size(148, 249);
             this.toolStripContainer2.TabIndex = 2;
             this.toolStripContainer2.Text = "toolStripContainer2";
             // 
@@ -1414,16 +1414,16 @@
             this.lstChallenges.IntegralHeight = false;
             this.lstChallenges.Location = new System.Drawing.Point(0, 0);
             this.lstChallenges.Name = "lstChallenges";
-            this.lstChallenges.Size = new System.Drawing.Size(143, 161);
+            this.lstChallenges.Size = new System.Drawing.Size(148, 224);
             this.lstChallenges.TabIndex = 0;
             // 
             // label13
             // 
             this.label13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(299, 0);
+            this.label13.Location = new System.Drawing.Point(307, 0);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(143, 13);
+            this.label13.Size = new System.Drawing.Size(148, 13);
             this.label13.TabIndex = 2;
             this.label13.Text = "Challenges";
             // 
@@ -1432,9 +1432,9 @@
             this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label14.AutoSize = true;
             this.tableLayoutPanel7.SetColumnSpan(this.label14, 2);
-            this.label14.Location = new System.Drawing.Point(151, 205);
+            this.label14.Location = new System.Drawing.Point(155, 268);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(291, 13);
+            this.label14.Size = new System.Drawing.Size(300, 13);
             this.label14.TabIndex = 4;
             this.label14.Text = "Certificates";
             // 
@@ -1452,10 +1452,10 @@
             // toolStripContainer4.ContentPanel
             // 
             this.toolStripContainer4.ContentPanel.Controls.Add(this.lstDomains);
-            this.toolStripContainer4.ContentPanel.Size = new System.Drawing.Size(142, 136);
-            this.toolStripContainer4.Location = new System.Drawing.Point(151, 16);
+            this.toolStripContainer4.ContentPanel.Size = new System.Drawing.Size(146, 199);
+            this.toolStripContainer4.Location = new System.Drawing.Point(155, 16);
             this.toolStripContainer4.Name = "toolStripContainer4";
-            this.toolStripContainer4.Size = new System.Drawing.Size(142, 186);
+            this.toolStripContainer4.Size = new System.Drawing.Size(146, 249);
             this.toolStripContainer4.TabIndex = 5;
             this.toolStripContainer4.Text = "toolStripContainer4";
             // 
@@ -1488,7 +1488,7 @@
             this.lstDomains.IntegralHeight = false;
             this.lstDomains.Location = new System.Drawing.Point(0, 0);
             this.lstDomains.Name = "lstDomains";
-            this.lstDomains.Size = new System.Drawing.Size(142, 136);
+            this.lstDomains.Size = new System.Drawing.Size(146, 199);
             this.lstDomains.TabIndex = 0;
             this.lstDomains.SelectedIndexChanged += new System.EventHandler(this.lstDomains_SelectedIndexChanged);
             // 
@@ -1507,10 +1507,10 @@
             // toolStripContainer3.ContentPanel
             // 
             this.toolStripContainer3.ContentPanel.Controls.Add(this.lstCertificates);
-            this.toolStripContainer3.ContentPanel.Size = new System.Drawing.Size(291, 137);
-            this.toolStripContainer3.Location = new System.Drawing.Point(151, 221);
+            this.toolStripContainer3.ContentPanel.Size = new System.Drawing.Size(300, 200);
+            this.toolStripContainer3.Location = new System.Drawing.Point(155, 284);
             this.toolStripContainer3.Name = "toolStripContainer3";
-            this.toolStripContainer3.Size = new System.Drawing.Size(291, 187);
+            this.toolStripContainer3.Size = new System.Drawing.Size(300, 250);
             this.toolStripContainer3.TabIndex = 3;
             this.toolStripContainer3.Text = "toolStripContainer3";
             // 
@@ -1541,7 +1541,7 @@
             this.lstCertificates.IntegralHeight = false;
             this.lstCertificates.Location = new System.Drawing.Point(0, 0);
             this.lstCertificates.Name = "lstCertificates";
-            this.lstCertificates.Size = new System.Drawing.Size(291, 137);
+            this.lstCertificates.Size = new System.Drawing.Size(300, 200);
             this.lstCertificates.TabIndex = 3;
             // 
             // toolStripContainer1
@@ -1558,11 +1558,11 @@
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.lstRegistrations);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(142, 342);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(146, 468);
             this.toolStripContainer1.Location = new System.Drawing.Point(3, 16);
             this.toolStripContainer1.Name = "toolStripContainer1";
             this.tableLayoutPanel7.SetRowSpan(this.toolStripContainer1, 3);
-            this.toolStripContainer1.Size = new System.Drawing.Size(142, 392);
+            this.toolStripContainer1.Size = new System.Drawing.Size(146, 518);
             this.toolStripContainer1.TabIndex = 2;
             this.toolStripContainer1.Text = "toolStripContainer1";
             // 
@@ -1594,7 +1594,7 @@
             this.lstRegistrations.IntegralHeight = false;
             this.lstRegistrations.Location = new System.Drawing.Point(0, 0);
             this.lstRegistrations.Name = "lstRegistrations";
-            this.lstRegistrations.Size = new System.Drawing.Size(142, 342);
+            this.lstRegistrations.Size = new System.Drawing.Size(146, 468);
             this.lstRegistrations.TabIndex = 0;
             this.lstRegistrations.SelectedIndexChanged += new System.EventHandler(this.lstRegistrations_SelectedIndexChanged);
             // 
@@ -1604,7 +1604,7 @@
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(3, 0);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(142, 13);
+            this.label11.Size = new System.Drawing.Size(146, 13);
             this.label11.TabIndex = 2;
             this.label11.Text = "Registrations";
             // 
@@ -1612,9 +1612,9 @@
             // 
             this.label12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(151, 0);
+            this.label12.Location = new System.Drawing.Point(155, 0);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(142, 13);
+            this.label12.Size = new System.Drawing.Size(146, 13);
             this.label12.TabIndex = 2;
             this.label12.Text = "Domains";
             // 
@@ -1624,7 +1624,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(451, 410);
+            this.tabPage3.Size = new System.Drawing.Size(464, 536);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Certificate View";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -1645,7 +1645,7 @@
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(445, 404);
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(458, 530);
             this.tableLayoutPanel8.TabIndex = 0;
             // 
             // flowLayoutPanel1
@@ -1655,7 +1655,7 @@
             this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.flowLayoutPanel1.Controls.Add(this.lnkGitLabCertHelp);
             this.flowLayoutPanel1.Controls.Add(this.btnCopyCertBase64Data);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(252, 375);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(265, 501);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(193, 29);
@@ -1695,7 +1695,7 @@
             this.cmbAllCerts.Location = new System.Drawing.Point(1, 1);
             this.cmbAllCerts.Margin = new System.Windows.Forms.Padding(1);
             this.cmbAllCerts.Name = "cmbAllCerts";
-            this.cmbAllCerts.Size = new System.Drawing.Size(443, 21);
+            this.cmbAllCerts.Size = new System.Drawing.Size(456, 21);
             this.cmbAllCerts.TabIndex = 11;
             // 
             // cmbCertViewType
@@ -1712,7 +1712,7 @@
             this.cmbCertViewType.Location = new System.Drawing.Point(1, 24);
             this.cmbCertViewType.Margin = new System.Windows.Forms.Padding(1);
             this.cmbCertViewType.Name = "cmbCertViewType";
-            this.cmbCertViewType.Size = new System.Drawing.Size(443, 21);
+            this.cmbCertViewType.Size = new System.Drawing.Size(456, 21);
             this.cmbCertViewType.TabIndex = 10;
             // 
             // txtCertBase64Data
@@ -1725,7 +1725,7 @@
             this.txtCertBase64Data.Name = "txtCertBase64Data";
             this.txtCertBase64Data.ReadOnly = true;
             this.txtCertBase64Data.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtCertBase64Data.Size = new System.Drawing.Size(439, 323);
+            this.txtCertBase64Data.Size = new System.Drawing.Size(452, 449);
             this.txtCertBase64Data.TabIndex = 12;
             this.txtCertBase64Data.WordWrap = false;
             // 
@@ -1812,6 +1812,12 @@
             this.labVer.Size = new System.Drawing.Size(37, 17);
             this.labVer.Text = "v0.0.0";
             // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(78, 17);
+            this.toolStripStatusLabel1.Spring = true;
+            // 
             // lnkProject
             // 
             this.lnkProject.IsLink = true;
@@ -1819,12 +1825,6 @@
             this.lnkProject.Size = new System.Drawing.Size(342, 17);
             this.lnkProject.Text = "https://github.com/masbicudo/LetsEncrypt-Certificate-Creator";
             this.lnkProject.Click += new System.EventHandler(this.linkProject_LinkClicked);
-            // 
-            // toolStripStatusLabel1
-            // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(78, 17);
-            this.toolStripStatusLabel1.Spring = true;
             // 
             // Form2
             // 

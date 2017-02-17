@@ -536,7 +536,7 @@ namespace LetsEncryptAcmeReg
                             Handler = "Manual",
                             IdentifierRef = idref,
                             ChallengeType = this.Model.Challenge.Value,
-                            Repeat = SwitchParameter.Present,
+                            Force = SwitchParameter.Present,
                             Regenerate = SwitchParameter.Present,
                         }
                         .GetValue<AuthorizationState>();
