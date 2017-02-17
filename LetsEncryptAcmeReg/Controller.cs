@@ -61,8 +61,7 @@ namespace LetsEncryptAcmeReg
 
             // Collections
             init += mo.Domains.BindExpression(() => this.acme.GetDomainsByEmail(mo.Registrations.Value, mo.Email.Value).OrderBy(x => x).ToArray());
-            init += mo.Certificates.BindExpression(
-                () => this.acme.GetCertificates(mo.CurrentRegistration.Value, mo.Domain.Value).Select(c => c.Alias).ToArray());
+            init += mo.Certificates.BindExpression(() => this.Certifcates_value(mo.CurrentRegistration.Value, mo.CurrentIdentifier.Value));
 
             // Complex relations:
             //      These relations are built by using expressions.
@@ -96,8 +95,8 @@ namespace LetsEncryptAcmeReg
 
             init += mo.CanRegister.BindExpression(() => this.CanRegister_Value(mo.Registrations.Value, mo.Email.Value, mo.IsEmailValid.Value));
             init += mo.CanAcceptTos.BindExpression(() => this.CanAcceptTos_Value(mo.CurrentRegistration.Value));
-            init += mo.CanAddDomain.BindExpression(() => mo.IsDomainValid.Value && !mo.IsDomainCreated.Value);
-            init += mo.CanCreateChallenge.BindExpression(() => mo.IsChallengeValid.Value);
+            init += mo.CanAddDomain.BindExpression(() => mo.CurrentRegistration.Value != null && mo.IsDomainValid.Value && !mo.IsDomainCreated.Value);
+            init += mo.CanCreateChallenge.BindExpression(() => mo.CurrentIdentifier.Value != null && mo.IsChallengeValid.Value);
             init += mo.CanSaveChallenge.BindExpression(() => mo.ChallengeHasFile.Value);
             init += mo.CanCommitChallenge.BindExpression(() => this.CanCommitChallenge_Value(mo.SiteRoot.Value));
             init += mo.CanTestChallenge.BindExpression(() => mo.IsTargetValid.Value && mo.IsKeyValid.Value);
@@ -134,6 +133,14 @@ namespace LetsEncryptAcmeReg
             mo.CurrentSsg.Changed += this.CurrentSsg_Changed;
 
             return init;
+        }
+
+        private string[] Certifcates_value(RegistrationInfo registrationInfo, IdentifierInfo domain)
+        {
+            if (domain == null)
+                return new string[0];
+
+            return this.acme.GetCertificates(registrationInfo, domain?.Alias).Select(c => c.Alias).ToArray();
         }
 
         private X509Certificate2 X509Certificate_Value(CertificateInfo certInfo)
@@ -564,6 +571,9 @@ namespace LetsEncryptAcmeReg
                 this.Model.AutoCreateChallengeTimer,
                 async () =>
                 {
+                    if (this.Model.CurrentIdentifier.Value == null)
+                        return;
+
                     var idref = this.acme.GetIdentifierAlias(
                         this.Model.CurrentRegistration.Value,
                         this.Model.Domain.Value);
