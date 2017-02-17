@@ -57,6 +57,7 @@ namespace LetsEncryptAcmeReg
             init += new BindResult(() => mo.Now.Value = DateTime.Now);
             init += mo.Date.BindExpression(() => mo.Now.Value.Date);
             init += mo.TOSLink.BindExpression(() => this.acme.GetTos(mo.Registrations.Value, mo.Email.Value));
+            mo.Domain.Changed += strings => mo.Certificate.Value = "";
 
             // Collections
             init += mo.Domains.BindExpression(() => this.acme.GetDomainsByEmail(mo.Registrations.Value, mo.Email.Value).OrderBy(x => x).ToArray());
@@ -634,6 +635,7 @@ namespace LetsEncryptAcmeReg
                         Signature author = new Signature(username, email, DateTime.Now);
                         Signature committer = author;
 
+                        bool ok = false;
                         try
                         {
                             // Commit to the repository
@@ -641,19 +643,23 @@ namespace LetsEncryptAcmeReg
                                 Messages.CommitMessage,
                                 author,
                                 committer);
+                            ok = true;
                         }
                         catch (EmptyCommitException)
                         {
                             // ignore empty commit exception
                         }
 
-                        // Push to origin
-                        var remote = repo.Network.Remotes["origin"];
-                        var options = new PushOptions();
-                        var credentials = new UsernamePasswordCredentials { Username = username, Password = password };
-                        options.CredentialsProvider = (url, usernameFromUrl, types) => credentials;
-                        var pushRefSpec = @"refs/heads/master";
-                        repo.Network.Push(remote, pushRefSpec, options);
+                        if (ok)
+                        {
+                            // Push to origin
+                            var remote = repo.Network.Remotes["origin"];
+                            var options = new PushOptions();
+                            var credentials = new UsernamePasswordCredentials { Username = username, Password = password };
+                            options.CredentialsProvider = (url, usernameFromUrl, types) => credentials;
+                            var pushRefSpec = @"refs/heads/master";
+                            repo.Network.Push(remote, pushRefSpec, options);
+                        }
                     }
                 },
                 this.Model.AutoTestChallenge,
@@ -722,7 +728,12 @@ namespace LetsEncryptAcmeReg
                 async () =>
                 {
                     var idref = this.acme.GetIdentifierAlias(this.Model.CurrentRegistration.Value, this.Model.CurrentAuthState.Value.Identifier);
-                    var state = new SubmitChallenge { IdentifierRef = idref, ChallengeType = "http-01" }.GetValue<AuthorizationState>();
+                    var state = new SubmitChallenge
+                    {
+                        IdentifierRef = idref,
+                        ChallengeType = "http-01",
+                        Force = SwitchParameter.Present
+                    }.GetValue<AuthorizationState>();
                     this.Model.CurrentAuthState.Value = state;
                 },
                 this.Model.AutoUpdateStatus,
@@ -767,14 +778,24 @@ namespace LetsEncryptAcmeReg
                     var idref = this.acme.GetIdentifierAlias(this.Model.CurrentRegistration.Value, this.Model.CurrentAuthState.Value.Identifier);
 
                     if (certificateInfo == null)
+                    {
+                        var altAliases = this.Model.CertificateDomains.Value
+                            ?.Select(d => this.acme.GetIdentifierAlias(this.Model.CurrentRegistration.Value, d))
+                            ?.ToArray();
                         new NewCertificate
                         {
                             IdentifierRef = idref,
                             Alias = this.Model.Certificate.Value,
                             Generate = SwitchParameter.Present,
-                            AlternativeIdentifierRefs = this.Model.CertificateDomains.Value,
+                            AlternativeIdentifierRefs = altAliases,
                         }
                         .GetValue<CertificateInfo>();
+                    }
+
+                    this.Model.Certificates.Value =
+                        this.acme.GetCertificates(this.Model.CurrentRegistration.Value, this.Model.Domain.Value)
+                            .Select(c => c.Alias)
+                            .ToArray();
 
                     // updates the certificate value
                     // force is used because the bindable object is flagged not to fire events if value does not chage.

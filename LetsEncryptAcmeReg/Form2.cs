@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
 
 namespace LetsEncryptAcmeReg
@@ -196,8 +197,7 @@ namespace LetsEncryptAcmeReg
             mo.CurrentIdentifier.Changed += s => this.tableCertDomains.Hide();
             mo.CurrentSsg.Changed += this.CurrentSsg_Changed;
 
-            mo.X509Certificate.Changed +=
-                certificate => this.labDates.Text = certificate == null ? "" : $"Valid from {certificate.NotBefore} to {certificate.NotAfter}";
+            mo.X509Certificate.Changed += this.X509Certificate_Changed;
 
             init.InitAction?.Invoke();
 
@@ -207,6 +207,44 @@ namespace LetsEncryptAcmeReg
                     a.NewValue = CheckState.Checked;
             };
             this.tableCertDomains.Width = this.Width / 2;
+        }
+
+        private void X509Certificate_Changed(X509Certificate2 certificate)
+        {
+            this.labDates.Text = certificate == null
+                ? ""
+                : $"Valid from {certificate.NotBefore} to {certificate.NotAfter}";
+
+            if (certificate == null)
+                this.ToolTipFor(this.labDates, null);
+            else
+            {
+                List<string> domains = new List<string>();
+                Debug.WriteLine("");
+                for (var it = 0; it < certificate.Extensions.Count; it++)
+                {
+                    var extension = certificate.Extensions[it];
+                    // Create an AsnEncodedData object using the extensions information.
+                    var asndata = new System.Security.Cryptography.AsnEncodedData(extension.Oid, extension.RawData);
+                    //Debug.WriteLine("======== {0} ========", it);
+                    //Debug.WriteLine($"Extension type: {extension.Oid.FriendlyName}");
+                    //Debug.WriteLine($"Oid value: {asndata.Oid.Value}");
+                    //Debug.WriteLine("Raw data length: {0} {1}", asndata.RawData.Length, Environment.NewLine);
+                    //Debug.WriteLine(asndata.Format(true));
+
+                    if (asndata.Oid.Value == "2.5.29.17")
+                    {
+                        domains.AddRange(asndata.Format(true).Split("\r\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
+                            .Select(x => x.Split(new[] { '=' }, 2).Skip(1).SingleOrDefault()?.Trim()));
+                    }
+                }
+
+                var main = certificate.GetNameInfo(X509NameType.SimpleName, false);
+                var alt = certificate.GetNameInfo(X509NameType.DnsFromAlternativeName, false);
+                if (!string.IsNullOrWhiteSpace(main)) domains.Add(main);
+                if (!string.IsNullOrWhiteSpace(alt)) domains.Add(alt);
+                this.ToolTipFor(this.labDates, string.Join("\n", domains.Distinct()));
+            }
         }
 
         #region Bind events
