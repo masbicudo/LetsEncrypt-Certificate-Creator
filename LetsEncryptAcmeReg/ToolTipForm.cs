@@ -28,6 +28,7 @@ namespace LetsEncryptAcmeReg
             this.manager = manager;
             this.control = control;
             this.InitializeComponent();
+            //this.Opacity = 0.9;
             this.CreateHandle();
         }
 
@@ -400,7 +401,7 @@ namespace LetsEncryptAcmeReg
                     val += myHandle == wndR ? 4 : 0;
 
                     // avoid mouse cursor
-                    val += !rect.Contains(Cursor.Position) ? 16 : 0;
+                    val += !rect.Contains(Cursor.Position) ? 32 : 0;
 
                     if (val > max)
                     {
