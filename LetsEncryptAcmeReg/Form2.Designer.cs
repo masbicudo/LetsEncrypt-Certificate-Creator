@@ -50,6 +50,8 @@
             this.chkAutoCommit = new System.Windows.Forms.CheckBox();
             this.chkAutoTest = new System.Windows.Forms.CheckBox();
             this.chkAutoValidate = new System.Windows.Forms.CheckBox();
+            this.chkAutoUpdateStatus = new System.Windows.Forms.CheckBox();
+            this.btnUpdateStatus = new System.Windows.Forms.Button();
             this.chkAutoCreateChallenge = new System.Windows.Forms.CheckBox();
             this.chkAutoCreateCertificate = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
@@ -59,8 +61,6 @@
             this.btnAcceptTos = new System.Windows.Forms.Button();
             this.btnRegister = new System.Windows.Forms.Button();
             this.chkAutoRegister = new System.Windows.Forms.CheckBox();
-            this.chkAutoUpdateStatus = new System.Windows.Forms.CheckBox();
-            this.btnUpdateStatus = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.cmbChallenge = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
@@ -76,6 +76,7 @@
             this.btnShowCertificate = new System.Windows.Forms.Button();
             this.btnSaveCertificate = new System.Windows.Forms.Button();
             this.chkAutoSaveOrShowCertificate = new System.Windows.Forms.CheckBox();
+            this.labDates = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.cmbCertificateType = new System.Windows.Forms.ComboBox();
             this.label9 = new System.Windows.Forms.Label();
@@ -265,9 +266,9 @@
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tableLayoutPanel1.SetColumnSpan(this.panel1, 4);
             this.panel1.Controls.Add(this.richTextBox1);
-            this.panel1.Location = new System.Drawing.Point(3, 493);
+            this.panel1.Location = new System.Drawing.Point(3, 490);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(452, 34);
+            this.panel1.Size = new System.Drawing.Size(452, 37);
             this.panel1.TabIndex = 2;
             // 
             // richTextBox1
@@ -279,7 +280,7 @@
             this.richTextBox1.Location = new System.Drawing.Point(0, 0);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(450, 32);
+            this.richTextBox1.Size = new System.Drawing.Size(450, 35);
             this.richTextBox1.TabIndex = 14;
             this.richTextBox1.Text = "";
             this.richTextBox1.MouseLeave += new System.EventHandler(this.richTextBox1_MouseLeave);
@@ -320,7 +321,7 @@
             this.cmbDomain.Location = new System.Drawing.Point(46, 70);
             this.cmbDomain.Margin = new System.Windows.Forms.Padding(1);
             this.cmbDomain.Name = "cmbDomain";
-            this.cmbDomain.Size = new System.Drawing.Size(330, 21);
+            this.cmbDomain.Size = new System.Drawing.Size(354, 21);
             this.cmbDomain.TabIndex = 4;
             this.cmbDomain.Text = "www.masbicudo.com";
             // 
@@ -330,10 +331,10 @@
             this.chkAutoAddDomain.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoAddDomain.AutoSize = true;
             this.chkAutoAddDomain.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkAutoAddDomain.Location = new System.Drawing.Point(378, 69);
+            this.chkAutoAddDomain.Location = new System.Drawing.Point(402, 69);
             this.chkAutoAddDomain.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.chkAutoAddDomain.Name = "chkAutoAddDomain";
-            this.chkAutoAddDomain.Size = new System.Drawing.Size(23, 23);
+            this.chkAutoAddDomain.Size = new System.Drawing.Size(1, 23);
             this.chkAutoAddDomain.TabIndex = 11;
             this.chkAutoAddDomain.Text = ">";
             this.chkAutoAddDomain.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -357,7 +358,7 @@
             this.btnCreateCertificate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCreateCertificate.AutoSize = true;
             this.btnCreateCertificate.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnCreateCertificate.Location = new System.Drawing.Point(401, 314);
+            this.btnCreateCertificate.Location = new System.Drawing.Point(401, 311);
             this.btnCreateCertificate.Margin = new System.Windows.Forms.Padding(0, 1, 1, 1);
             this.btnCreateCertificate.Name = "btnCreateCertificate";
             this.btnCreateCertificate.Size = new System.Drawing.Size(56, 23);
@@ -395,7 +396,7 @@
             this.tableLayoutPanel3.Controls.Add(this.chkAutoValidate, 6, 0);
             this.tableLayoutPanel3.Controls.Add(this.chkAutoUpdateStatus, 8, 0);
             this.tableLayoutPanel3.Controls.Add(this.btnUpdateStatus, 9, 0);
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 260);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 257);
             this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
@@ -523,16 +524,48 @@
             this.chkAutoValidate.UseVisualStyleBackColor = true;
             this.chkAutoValidate.Visible = false;
             // 
+            // chkAutoUpdateStatus
+            // 
+            this.chkAutoUpdateStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkAutoUpdateStatus.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkAutoUpdateStatus.AutoSize = true;
+            this.chkAutoUpdateStatus.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.chkAutoUpdateStatus.Location = new System.Drawing.Point(365, 1);
+            this.chkAutoUpdateStatus.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
+            this.chkAutoUpdateStatus.Name = "chkAutoUpdateStatus";
+            this.chkAutoUpdateStatus.Size = new System.Drawing.Size(23, 23);
+            this.chkAutoUpdateStatus.TabIndex = 11;
+            this.chkAutoUpdateStatus.Text = ">";
+            this.chkAutoUpdateStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.chkAutoUpdateStatus.UseVisualStyleBackColor = true;
+            this.chkAutoUpdateStatus.Visible = false;
+            // 
+            // btnUpdateStatus
+            // 
+            this.btnUpdateStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnUpdateStatus.AutoSize = true;
+            this.btnUpdateStatus.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnUpdateStatus.Location = new System.Drawing.Point(388, 1);
+            this.btnUpdateStatus.Margin = new System.Windows.Forms.Padding(0, 1, 1, 1);
+            this.btnUpdateStatus.Name = "btnUpdateStatus";
+            this.btnUpdateStatus.Size = new System.Drawing.Size(69, 23);
+            this.btnUpdateStatus.TabIndex = 10;
+            this.btnUpdateStatus.Text = "Update";
+            this.btnUpdateStatus.UseVisualStyleBackColor = true;
+            this.btnUpdateStatus.Click += new System.EventHandler(this.btnUpdateStatus_Click);
+            // 
             // chkAutoCreateChallenge
             // 
             this.chkAutoCreateChallenge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.chkAutoCreateChallenge.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoCreateChallenge.AutoSize = true;
             this.chkAutoCreateChallenge.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkAutoCreateChallenge.Location = new System.Drawing.Point(378, 122);
+            this.chkAutoCreateChallenge.Location = new System.Drawing.Point(402, 122);
             this.chkAutoCreateChallenge.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.chkAutoCreateChallenge.Name = "chkAutoCreateChallenge";
-            this.chkAutoCreateChallenge.Size = new System.Drawing.Size(23, 23);
+            this.chkAutoCreateChallenge.Size = new System.Drawing.Size(1, 23);
             this.chkAutoCreateChallenge.TabIndex = 11;
             this.chkAutoCreateChallenge.Text = ">";
             this.chkAutoCreateChallenge.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -545,10 +578,10 @@
             this.chkAutoCreateCertificate.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoCreateCertificate.AutoSize = true;
             this.chkAutoCreateCertificate.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkAutoCreateCertificate.Location = new System.Drawing.Point(378, 314);
+            this.chkAutoCreateCertificate.Location = new System.Drawing.Point(402, 311);
             this.chkAutoCreateCertificate.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.chkAutoCreateCertificate.Name = "chkAutoCreateCertificate";
-            this.chkAutoCreateCertificate.Size = new System.Drawing.Size(23, 23);
+            this.chkAutoCreateCertificate.Size = new System.Drawing.Size(1, 23);
             this.chkAutoCreateCertificate.TabIndex = 11;
             this.chkAutoCreateCertificate.Text = ">";
             this.chkAutoCreateCertificate.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -573,7 +606,7 @@
             this.tableLayoutPanel6.RowCount = 1;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(332, 25);
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(356, 25);
             this.tableLayoutPanel6.TabIndex = 17;
             // 
             // lnkTOS
@@ -596,7 +629,7 @@
             this.cmbRegistration.Location = new System.Drawing.Point(46, 20);
             this.cmbRegistration.Margin = new System.Windows.Forms.Padding(1);
             this.cmbRegistration.Name = "cmbRegistration";
-            this.cmbRegistration.Size = new System.Drawing.Size(330, 21);
+            this.cmbRegistration.Size = new System.Drawing.Size(354, 21);
             this.cmbRegistration.TabIndex = 4;
             this.cmbRegistration.Text = "masbicudo@gmail.com";
             // 
@@ -606,10 +639,10 @@
             this.chkAutoAcceptTos.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoAcceptTos.AutoSize = true;
             this.chkAutoAcceptTos.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkAutoAcceptTos.Location = new System.Drawing.Point(378, 44);
+            this.chkAutoAcceptTos.Location = new System.Drawing.Point(402, 44);
             this.chkAutoAcceptTos.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.chkAutoAcceptTos.Name = "chkAutoAcceptTos";
-            this.chkAutoAcceptTos.Size = new System.Drawing.Size(23, 23);
+            this.chkAutoAcceptTos.Size = new System.Drawing.Size(1, 23);
             this.chkAutoAcceptTos.TabIndex = 11;
             this.chkAutoAcceptTos.Text = ">";
             this.chkAutoAcceptTos.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -649,47 +682,15 @@
             this.chkAutoRegister.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoRegister.AutoSize = true;
             this.chkAutoRegister.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkAutoRegister.Location = new System.Drawing.Point(378, 19);
+            this.chkAutoRegister.Location = new System.Drawing.Point(402, 19);
             this.chkAutoRegister.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.chkAutoRegister.Name = "chkAutoRegister";
-            this.chkAutoRegister.Size = new System.Drawing.Size(23, 23);
+            this.chkAutoRegister.Size = new System.Drawing.Size(1, 23);
             this.chkAutoRegister.TabIndex = 11;
             this.chkAutoRegister.Text = ">";
             this.chkAutoRegister.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.chkAutoRegister.UseVisualStyleBackColor = true;
             this.chkAutoRegister.Visible = false;
-            // 
-            // chkAutoUpdateStatus
-            // 
-            this.chkAutoUpdateStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkAutoUpdateStatus.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkAutoUpdateStatus.AutoSize = true;
-            this.chkAutoUpdateStatus.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkAutoUpdateStatus.Location = new System.Drawing.Point(365, 1);
-            this.chkAutoUpdateStatus.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
-            this.chkAutoUpdateStatus.Name = "chkAutoUpdateStatus";
-            this.chkAutoUpdateStatus.Size = new System.Drawing.Size(23, 23);
-            this.chkAutoUpdateStatus.TabIndex = 11;
-            this.chkAutoUpdateStatus.Text = ">";
-            this.chkAutoUpdateStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.chkAutoUpdateStatus.UseVisualStyleBackColor = true;
-            this.chkAutoUpdateStatus.Visible = false;
-            // 
-            // btnUpdateStatus
-            // 
-            this.btnUpdateStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUpdateStatus.AutoSize = true;
-            this.btnUpdateStatus.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnUpdateStatus.Location = new System.Drawing.Point(388, 1);
-            this.btnUpdateStatus.Margin = new System.Windows.Forms.Padding(0, 1, 1, 1);
-            this.btnUpdateStatus.Name = "btnUpdateStatus";
-            this.btnUpdateStatus.Size = new System.Drawing.Size(69, 23);
-            this.btnUpdateStatus.TabIndex = 10;
-            this.btnUpdateStatus.Text = "Update";
-            this.btnUpdateStatus.UseVisualStyleBackColor = true;
-            this.btnUpdateStatus.Click += new System.EventHandler(this.btnUpdateStatus_Click);
             // 
             // label3
             // 
@@ -718,7 +719,7 @@
             this.cmbChallenge.Location = new System.Drawing.Point(1, 123);
             this.cmbChallenge.Margin = new System.Windows.Forms.Padding(1);
             this.cmbChallenge.Name = "cmbChallenge";
-            this.cmbChallenge.Size = new System.Drawing.Size(375, 21);
+            this.cmbChallenge.Size = new System.Drawing.Size(399, 21);
             this.cmbChallenge.TabIndex = 9;
             // 
             // label7
@@ -729,7 +730,7 @@
             this.tableLayoutPanel1.SetColumnSpan(this.label7, 4);
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(1, 296);
+            this.label7.Location = new System.Drawing.Point(1, 293);
             this.label7.Margin = new System.Windows.Forms.Padding(1, 11, 1, 1);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(456, 16);
@@ -757,7 +758,7 @@
             this.tableLayoutPanel10.Controls.Add(this.chkAutoGetIssuerCert, 4, 0);
             this.tableLayoutPanel10.Controls.Add(this.btnGetIssuerCert, 5, 0);
             this.tableLayoutPanel10.Controls.Add(this.btnCertDomains, 0, 0);
-            this.tableLayoutPanel10.Location = new System.Drawing.Point(0, 338);
+            this.tableLayoutPanel10.Location = new System.Drawing.Point(0, 335);
             this.tableLayoutPanel10.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel10.Name = "tableLayoutPanel10";
             this.tableLayoutPanel10.RowCount = 1;
@@ -865,7 +866,7 @@
             this.tableLayoutPanel4.Controls.Add(this.txtPassword, 1, 2);
             this.tableLayoutPanel4.Controls.Add(this.chkShowPassword, 2, 2);
             this.tableLayoutPanel4.Controls.Add(this.label10, 0, 0);
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(0, 363);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(0, 360);
             this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 6;
@@ -908,6 +909,7 @@
             this.tableLayoutPanel5.Controls.Add(this.btnShowCertificate, 3, 0);
             this.tableLayoutPanel5.Controls.Add(this.btnSaveCertificate, 2, 0);
             this.tableLayoutPanel5.Controls.Add(this.chkAutoSaveOrShowCertificate, 1, 0);
+            this.tableLayoutPanel5.Controls.Add(this.labDates, 0, 0);
             this.tableLayoutPanel5.Location = new System.Drawing.Point(0, 92);
             this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
@@ -959,6 +961,15 @@
             this.chkAutoSaveOrShowCertificate.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.chkAutoSaveOrShowCertificate.UseVisualStyleBackColor = true;
             this.chkAutoSaveOrShowCertificate.Visible = false;
+            // 
+            // labDates
+            // 
+            this.labDates.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.labDates.AutoSize = true;
+            this.labDates.Location = new System.Drawing.Point(172, 6);
+            this.labDates.Name = "labDates";
+            this.labDates.Size = new System.Drawing.Size(0, 13);
+            this.labDates.TabIndex = 12;
             // 
             // label8
             // 
@@ -1080,10 +1091,10 @@
             this.cmbCertificate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel1.SetColumnSpan(this.cmbCertificate, 2);
             this.cmbCertificate.FormattingEnabled = true;
-            this.cmbCertificate.Location = new System.Drawing.Point(1, 315);
+            this.cmbCertificate.Location = new System.Drawing.Point(1, 312);
             this.cmbCertificate.Margin = new System.Windows.Forms.Padding(1);
             this.cmbCertificate.Name = "cmbCertificate";
-            this.cmbCertificate.Size = new System.Drawing.Size(375, 21);
+            this.cmbCertificate.Size = new System.Drawing.Size(399, 21);
             this.cmbCertificate.TabIndex = 1;
             // 
             // label1
@@ -1148,7 +1159,7 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(458, 114);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(458, 111);
             this.tableLayoutPanel2.TabIndex = 11;
             // 
             // txtChallengeKey
@@ -1728,6 +1739,7 @@
             this.tableCertDomains.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableCertDomains.Controls.Add(this.lstCertDomains, 0, 0);
             this.tableCertDomains.Controls.Add(this.btnHideCertDomains, 0, 1);
+            this.tableCertDomains.Dock = System.Windows.Forms.DockStyle.Right;
             this.tableCertDomains.Location = new System.Drawing.Point(454, 0);
             this.tableCertDomains.Name = "tableCertDomains";
             this.tableCertDomains.RowCount = 2;
@@ -1990,5 +2002,6 @@
         private System.Windows.Forms.ToolStripStatusLabel labVer;
         private System.Windows.Forms.ToolStripStatusLabel lnkProject;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.Label labDates;
     }
 }

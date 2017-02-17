@@ -196,6 +196,9 @@ namespace LetsEncryptAcmeReg
             mo.CurrentIdentifier.Changed += s => this.tableCertDomains.Hide();
             mo.CurrentSsg.Changed += this.CurrentSsg_Changed;
 
+            mo.X509Certificate.Changed +=
+                certificate => this.labDates.Text = certificate == null ? "" : $"Valid from {certificate.NotBefore} to {certificate.NotAfter}";
+
             init.InitAction?.Invoke();
 
             this.lstCertDomains.ItemCheck += (s, a) =>

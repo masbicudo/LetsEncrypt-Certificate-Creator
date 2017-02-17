@@ -452,7 +452,7 @@ namespace LetsEncryptAcmeReg
             }
         }
 
-        public AcmeTextAssets GetTextAssets(string certRef)
+        public AcmeTextAssets GetTextAssets(string certRef, bool noThrow = false)
         {
             using (var vlt = GetVault())
             {
@@ -469,65 +469,79 @@ namespace LetsEncryptAcmeReg
                 if (ci == null)
                     throw new ItemNotFoundException("Unable to find a Certificate for the given reference");
 
-                var ta = new AcmeTextAssets
-                {
-                    KeyPem = GetKeyPem(ci, vlt),
-                    CsrPem = GetCsrPem(ci, vlt),
-                    CrtPem = GetCrtPem(ci, vlt),
-                    CrtDer = GetCrtDer(ci, vlt),
-                    IssuerPem = GetIssuerPem(ci, v, vlt),
-                    IssuerDer = GetIssuerDer(ci, v, vlt),
-                };
+                var ta = GetTextAssets(ci, vlt, v, noThrow);
 
                 return ta;
             }
         }
 
-        private static string GetIssuerDer(CertificateInfo ci, VaultInfo v, IVault vlt)
+        private static AcmeTextAssets GetTextAssets(CertificateInfo ci, IVault vlt, VaultInfo v, bool noThrow = false)
+        {
+            var result = new AcmeTextAssets
+            {
+                KeyPem = GetKeyPem(ci, vlt, noThrow),
+                CsrPem = GetCsrPem(ci, vlt, noThrow),
+                CrtPem = GetCrtPem(ci, vlt, noThrow),
+                CrtDer = GetCrtDer(ci, vlt, noThrow),
+                IssuerPem = GetIssuerPem(ci, v, vlt, noThrow),
+                IssuerDer = GetIssuerDer(ci, v, vlt, noThrow),
+            };
+            return result;
+        }
+
+        private static string GetIssuerDer(CertificateInfo ci, VaultInfo v, IVault vlt, bool noThrow = false)
         {
             if (ci.CertificateRequest == null || string.IsNullOrEmpty(ci.CrtDerFile))
-                throw new InvalidOperationException("Cannot export CRT; CSR hasn't been submitted or CRT hasn't been retrieved");
+                if (noThrow) return null;
+                else throw new InvalidOperationException("Cannot export CRT; CSR hasn't been submitted or CRT hasn't been retrieved");
             if (string.IsNullOrEmpty(ci.IssuerSerialNumber) || !v.IssuerCertificates.ContainsKey(ci.IssuerSerialNumber))
-                throw new InvalidOperationException("Issuer certificate hasn't been resolved");
+                if (noThrow) return null;
+                else throw new InvalidOperationException("Issuer certificate hasn't been resolved");
             return GetAssetText(vlt, VaultAssetType.IssuerDer,
                 v.IssuerCertificates[ci.IssuerSerialNumber].CrtDerFile);
         }
 
-        private static string GetIssuerPem(CertificateInfo ci, VaultInfo v, IVault vlt)
+        private static string GetIssuerPem(CertificateInfo ci, VaultInfo v, IVault vlt, bool noThrow = false)
         {
             if (ci.CertificateRequest == null || string.IsNullOrEmpty(ci.CrtPemFile))
-                throw new InvalidOperationException("Cannot export CRT; CSR hasn't been submitted or CRT hasn't been retrieved");
+                if (noThrow) return null;
+                else throw new InvalidOperationException("Cannot export CRT; CSR hasn't been submitted or CRT hasn't been retrieved");
             if (string.IsNullOrEmpty(ci.IssuerSerialNumber) || !v.IssuerCertificates.ContainsKey(ci.IssuerSerialNumber))
-                throw new InvalidOperationException("Issuer certificate hasn't been resolved");
+                if (noThrow) return null;
+                else throw new InvalidOperationException("Issuer certificate hasn't been resolved");
             return GetAssetText(vlt, VaultAssetType.IssuerPem,
                 v.IssuerCertificates[ci.IssuerSerialNumber].CrtPemFile);
         }
 
-        private static string GetCrtDer(CertificateInfo ci, IVault vlt)
+        private static string GetCrtDer(CertificateInfo ci, IVault vlt, bool noThrow = false)
         {
             if (ci.CertificateRequest == null || string.IsNullOrEmpty(ci.CrtDerFile))
-                throw new InvalidOperationException("Cannot export CRT; CSR hasn't been submitted or CRT hasn't been retrieved");
+                if (noThrow) return null;
+                else throw new InvalidOperationException("Cannot export CRT; CSR hasn't been submitted or CRT hasn't been retrieved");
             return GetAssetText(vlt, VaultAssetType.CrtDer, ci.CrtDerFile);
         }
 
-        private static string GetCrtPem(CertificateInfo ci, IVault vlt)
+        private static string GetCrtPem(CertificateInfo ci, IVault vlt, bool noThrow = false)
         {
             if (ci.CertificateRequest == null || string.IsNullOrEmpty(ci.CrtPemFile))
-                throw new InvalidOperationException("Cannot export CRT; CSR hasn't been submitted or CRT hasn't been retrieved");
+                if (noThrow) return null;
+                else throw new InvalidOperationException("Cannot export CRT; CSR hasn't been submitted or CRT hasn't been retrieved");
             return GetAssetText(vlt, VaultAssetType.CrtPem, ci.CrtPemFile);
         }
 
-        private static string GetCsrPem(CertificateInfo ci, IVault vlt)
+        private static string GetCsrPem(CertificateInfo ci, IVault vlt, bool noThrow = false)
         {
             if (string.IsNullOrEmpty(ci.CsrPemFile))
-                throw new InvalidOperationException("Cannot export CSR; it hasn't been imported or generated");
+                if (noThrow) return null;
+                else throw new InvalidOperationException("Cannot export CSR; it hasn't been imported or generated");
             return GetAssetText(vlt, VaultAssetType.CsrPem, ci.CsrPemFile);
         }
 
-        private static string GetKeyPem(CertificateInfo ci, IVault vlt)
+        private static string GetKeyPem(CertificateInfo ci, IVault vlt, bool noThrow = false)
         {
             if (string.IsNullOrEmpty(ci.KeyPemFile))
-                throw new InvalidOperationException("Cannot export private key; it hasn't been imported or generated");
+                if (noThrow) return null;
+                else throw new InvalidOperationException("Cannot export private key; it hasn't been imported or generated");
             return GetAssetText(vlt, VaultAssetType.KeyPem, ci.KeyPemFile);
         }
 

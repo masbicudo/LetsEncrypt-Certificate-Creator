@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Management.Automation;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 using Signature = LibGit2Sharp.Signature;
@@ -82,6 +83,7 @@ namespace LetsEncryptAcmeReg
             init += mo.CurrentAuthState.BindExpression(() => this.CurrentAuthState_Value(mo.CurrentIdentifier.Value));
             init += mo.CurrentChallenge.BindExpression(() => this.CurrentChallenge_Value(mo.CurrentAuthState.Value, mo.Challenge.Value));
             init += mo.CurrentCertificate.BindExpression(() => this.CurrentCertificate_Value(mo.CurrentRegistration.Value, mo.Domain.Value, mo.Certificate.Value));
+            init += mo.X509Certificate.BindExpression(() => this.X509Certificate_Value(mo.CurrentCertificate.Value));
 
             init += mo.Target.BindExpression(() => mo.CurrentChallenge.Value._(v => (v.Challenge as HttpChallenge)._(c => c.FileUrl)) ?? "");
             init += mo.Key.BindExpression(() => mo.CurrentChallenge.Value._(v => v.Challenge._(c => (c.Answer as HttpChallengeAnswer)._(a => a.KeyAuthorization))) ?? "");
@@ -121,7 +123,7 @@ namespace LetsEncryptAcmeReg
 
             init += mc.CurrentCertificate.BindExpression(() => this.CurrentCertificate_Value(null, null, mc.Certificate.Value));
             init += mc.Certificates.BindExpression(() => this.acme.GetCertificates(null, null).Where(c => c.IssuerSerialNumber != null).Select(c => c.Alias).ToArray());
-            init += mc.TextAssets.BindExpression(() => this.acme.GetTextAssets(mc.Certificate.Value));
+            init += mc.TextAssets.BindExpression(() => this.acme.GetTextAssets(mc.Certificate.Value, false));
             init += mc.Base64Data.BindExpression(() => mc.TextAssets.Value == null ? null : mc.TextAssets.Value.GetAsset(mc.CertificateType.Value));
 
             // when the key changes, the domain must be tested again
@@ -131,6 +133,41 @@ namespace LetsEncryptAcmeReg
             mo.CurrentSsg.Changed += this.CurrentSsg_Changed;
 
             return init;
+        }
+
+        private X509Certificate2 X509Certificate_Value(CertificateInfo certInfo)
+        {
+            if (certInfo == null)
+                return null;
+
+            var textAssets = this.acme.GetTextAssets(certInfo.Alias, noThrow: true);
+            var pem = textAssets.GetAsset(CertType.CertificatePEM);
+
+            if (pem == null)
+                return null;
+
+            byte[] certBuffer = GetBytesFromPEM(pem, "CERTIFICATE");
+            var certificate = new X509Certificate2(certBuffer);
+
+            return certificate;
+        }
+
+        byte[] GetBytesFromPEM(string pemString, string section)
+        {
+            var header = String.Format("-----BEGIN {0}-----", section);
+            var footer = String.Format("-----END {0}-----", section);
+
+            var start = pemString.IndexOf(header, StringComparison.Ordinal);
+            if (start < 0)
+                return null;
+
+            start += header.Length;
+            var end = pemString.IndexOf(footer, start, StringComparison.Ordinal) - start;
+
+            if (end < 0)
+                return null;
+
+            return Convert.FromBase64String(pemString.Substring(start, end));
         }
 
         private bool CanRegister_Value(RegistrationInfo[] regs, string email, bool isEmailValid)

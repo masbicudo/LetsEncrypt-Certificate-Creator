@@ -1,4 +1,5 @@
 using System;
+using System.Security.Cryptography.X509Certificates;
 using ACMESharp;
 using ACMESharp.Vault.Model;
 using LetsEncryptAcmeReg.SSG;
@@ -44,6 +45,7 @@ namespace LetsEncryptAcmeReg
         public Bindable<AuthorizationState> CurrentAuthState { get; } = new Bindable<AuthorizationState>(nameof(CurrentAuthState));
         public Bindable<AuthorizeChallenge> CurrentChallenge { get; } = new Bindable<AuthorizeChallenge>(nameof(CurrentChallenge));
         public Bindable<CertificateInfo> CurrentCertificate { get; } = new Bindable<CertificateInfo>(nameof(CurrentCertificate));
+        public Bindable<X509Certificate2> X509Certificate { get; } = new Bindable<X509Certificate2>(nameof(X509Certificate));
         public Bindable<string[]> Certificates { get; } = new Bindable<string[]>(nameof(Certificates));
 
         public Bindable<string[]> SsgTypes { get; } = new Bindable<string[]>(nameof(SsgTypes));
