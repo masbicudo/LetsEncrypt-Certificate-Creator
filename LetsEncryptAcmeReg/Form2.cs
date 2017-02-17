@@ -44,6 +44,14 @@ namespace LetsEncryptAcmeReg
             this.ToolTipFor(this.btnAddDomain, Messages.ToolTipForAddDomain);
             this.ToolTipFor(this.cmbDomain, Messages.ToolTipForDomain);
 
+            this.ToolTipFor(this.btnCreateChallenge, Messages.ToolTipForCreateChallenge);
+            this.ToolTipFor(this.txtChallengeTarget, Messages.ToolTipForChallengeTarget);
+            this.ToolTipFor(this.txtChallengeKey, Messages.ToolTipForChallengeKey);
+            this.ToolTipFor(this.cmbSsg, Messages.ToolTipForSsg);
+            this.ToolTipFor(this.btnSaveChallenge, Messages.ToolTipForSaveChallenge);
+            this.ToolTipFor(this.btnCommitChallenge, Messages.ToolTipForCommitChallenge);
+            this.ToolTipFor(this.btnTestChallenge, Messages.ToolTipForTestChallenge);
+            this.ToolTipFor(this.btnValidate, Messages.ToolTipForValidate);
             this.ToolTipFor(this.btnUpdateStatus, Messages.ToolTipForUpdateStatus);
 
             this.ToolTipFor(this.btnRegister, Messages.ToolTipForRegister);

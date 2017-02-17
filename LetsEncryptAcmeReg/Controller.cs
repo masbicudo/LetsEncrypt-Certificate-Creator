@@ -601,7 +601,7 @@ namespace LetsEncryptAcmeReg
                         {
                             // Commit to the repository
                             Commit commit = repo.Commit(
-                                "Let's Encrypt HTTP challenge files.",
+                                Messages.CommitMessage,
                                 author,
                                 committer);
                         }

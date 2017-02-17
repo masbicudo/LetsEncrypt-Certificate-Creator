@@ -41,6 +41,51 @@ namespace LetsEncryptAcmeReg
               "Though this is intended to be used after the validation command is issued, there is no harm in using it before.\n" +
               "In this case, LetsEncrypt will simply state that validation command is pending.";
 
+        public static string ToolTipForCreateChallenge { get; }
+            = "Creates a new challenge for the selected domain.\n" +
+              "If a challenge exists already, it will be replaced\n" +
+              "by the new one.";
+
+        public static string ToolTipForChallengeTarget { get; }
+            = "URL that Let's Encrypt will look for when validating the challenge.\n" +
+              "It must contain the challenge key data to prove that the site is yours.";
+
+        public static string ToolTipForChallengeKey { get; }
+            = "Key data that must be found at the challenge URL.\n" +
+              "This is the proof that the site is yours.";
+
+        public static string ToolTipForSsg { get; }
+            = "Static site generator being used to build your site.\n" +
+              "Each SSG has it's own settings on how to expose the\n" +
+              "challenge data publicly (so that Let's Encrypt can see it).\n" +
+              "** Manual **: this option lets you setup your SSG manually.\n" +
+              "  This is the case if the SSG is not in the list, or if you\n" +
+              "  feel that you should do it yourself. Maybe your settings\n" +
+              "  file is too much modified to be updated automatically.";
+
+        public static string ToolTipForSaveChallenge { get; }
+            = "Saves all the files needed to fulfill the challenge, including needed directories.\n" +
+              "The files are the main key file and directory, and also settings files for the given\n" +
+              "static site generator (if one is selected).";
+
+        public static string ToolTipForCommitChallenge { get; }
+            = "If a GIT repository is detected at your site's location,\n" +
+              "you can use this button to automatically create a commit\n" +
+              "with the text `\"Let's Encrypt HTTP challenge files.\"`,\n" +
+              "and then push the changes back to the origin using the given\n" +
+              "GIT credentials.";
+
+        public static string CommitMessage { get; } = "Let's Encrypt HTTP challenge files.";
+
+        public static string ToolTipForTestChallenge { get; }
+            = "Before asking Let's Encrypt to validate your site,\n" +
+              "you should test to see if the file is really visible.\n" +
+              "Let's Encrypt won't allow you to reuse a failed challenge.";
+
+        public static string ToolTipForValidate { get; }
+            = "Asks Let's Encrypt to validate your site by looking at the exposed key file.\n" +
+              "The file must be there, otherwise the challenge fails.";
+
         public static string ToolTipForRegister { get; }
             = "Creates a new registration at **LetsEncrypt.com** using the given e-mail.";
 
