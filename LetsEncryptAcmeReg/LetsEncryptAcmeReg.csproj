@@ -42,6 +42,9 @@
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="JetBrains.Annotations, Version=10.2.1.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <HintPath>..\packages\JetBrains.Annotations.10.2.1\lib\net\JetBrains.Annotations.dll</HintPath>
@@ -209,6 +212,13 @@ echo "$(MSBuildBinPath)\msbuild.exe" "$(SolutionDir)ACMESharp\ACMESharp\ACMEShar
 "$(MSBuildBinPath)\msbuild.exe" "$(SolutionDir)ACMESharp\ACMESharp\ACMESharp.sln" /t:ACMESharp;ACMESharp_PKI_Providers_BouncyCastle;ACMESharp_POSH;ACMESharp_Vault /p:Configuration="Debug"
 echo ENDPREBUILD
 exit 0</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>echo POSTBUILD
+Robocopy "$(TargetDir)." "$(ProjectDir)publish-portable\." *.exe *.dll /XF *.vshost.* AWSSDK.* /XO /FFT /PURGE
+del "$(ProjectDir)publish-portable\AWSSDK.*"
+del "$(ProjectDir)publish-portable\*.zip"
+exit /b 0</PostBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

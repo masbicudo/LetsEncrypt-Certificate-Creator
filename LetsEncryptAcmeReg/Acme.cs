@@ -3,16 +3,13 @@ using ACMESharp.POSH;
 using ACMESharp.POSH.Util;
 using ACMESharp.Vault;
 using ACMESharp.Vault.Model;
-using ACMESharp.Vault.Providers;
 using ACMESharp.Vault.Util;
 using JetBrains.Annotations;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Management.Automation;
-using System.Reflection;
 
 namespace LetsEncryptAcmeReg
 {
