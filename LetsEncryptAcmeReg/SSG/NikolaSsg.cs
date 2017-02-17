@@ -69,7 +69,7 @@ namespace LetsEncryptAcmeReg.SSG
             var confPath = Path.Combine(this.mainModel.SiteRoot.Value, "conf.py");
             var conf = Singletons.File.ReadAllText(confPath);
 
-            var matches = Regex.Matches(conf, @"(?<=^|\n|\r\n)\s*#?\s*FILES_FOLDERS\s*=\s*\{('.*?':\s*'.*?'(?:,'.*?':\s*'.*?')*)\}").Cast<Match>();
+            var matches = Regex.Matches(conf, @"(?<=^|\n|\r\n)\s*#?\s*FILES_FOLDERS\s*=\s*\{('.*?':\s*'.*?'(?:,'.*?':\s*'.*?')*)\}", RegexOptions.Singleline).Cast<Match>();
             // ReSharper disable once PossibleMultipleEnumeration
             var commented = matches.Where(m => m.Value.Trim().StartsWith("#")).ToArray();
             // ReSharper disable once PossibleMultipleEnumeration
@@ -124,7 +124,7 @@ namespace LetsEncryptAcmeReg.SSG
                     return new string[0];
 
                 var items = Enumerable.Empty<string>();
-                items = items.Append(Path.Combine(siteRoot, "_output_", indexRelative, "index.html"));
+                items = items.Append(Path.Combine(siteRoot, indexRelative, "index.html"));
                 if (updateConfPy) items = items.Append(Path.Combine(siteRoot, "conf.py"));
                 return items.Where(x => x != null).ToArray();
             });
