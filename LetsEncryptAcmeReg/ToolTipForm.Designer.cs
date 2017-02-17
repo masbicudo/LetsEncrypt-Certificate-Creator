@@ -1,6 +1,6 @@
 ﻿namespace LetsEncryptAcmeReg
 {
-    partial class ToolTipForm
+    sealed partial class ToolTipForm
     {
         /// <summary>
         /// Required designer variable.

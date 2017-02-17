@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace LetsEncryptAcmeReg
 {
-    public partial class ToolTipForm : Form
+    public sealed partial class ToolTipForm : Form
     {
         private readonly ToolTipManager manager;
         private readonly Control control;
@@ -27,7 +27,8 @@ namespace LetsEncryptAcmeReg
         {
             this.manager = manager;
             this.control = control;
-            InitializeComponent();
+            this.InitializeComponent();
+            this.CreateHandle();
         }
 
         public string PositionPreferences { get; set; } = ">,v,^,<,>v,>^,<v,<^";
@@ -68,11 +69,15 @@ namespace LetsEncryptAcmeReg
             this.control.MouseEnter -= Control_MouseEnter;
             this.control.MouseHover -= Control_MouseHover;
             this.control.MouseLeave -= Control_MouseLeave;
+            this.control.GotFocus -= Control_GotFocus;
+            this.control.LostFocus -= Control_LostFocus;
             if (!string.IsNullOrWhiteSpace(message))
             {
                 this.control.MouseEnter += Control_MouseEnter;
                 this.control.MouseHover += Control_MouseHover;
                 this.control.MouseLeave += Control_MouseLeave;
+                this.control.GotFocus += Control_GotFocus;
+                this.control.LostFocus += Control_LostFocus;
             }
             else
             {
@@ -105,7 +110,7 @@ namespace LetsEncryptAcmeReg
             return this;
         }
 
-        protected virtual void ShowMessageInternal(string message, bool updateLocation = false)
+        private void ShowMessageInternal(string message, bool updateLocation = false)
         {
             bool invalidate = message != this.currentMessage;
 
@@ -142,19 +147,27 @@ namespace LetsEncryptAcmeReg
             }
             else
             {
-                using (var g = this.CreateGraphics())
+                IntPtr desktopPtr = User32.GetDC(IntPtr.Zero);
+                try
                 {
-                    if (this.useMarkdown)
+                    using (var g = Graphics.FromHdc(desktopPtr))
                     {
-                        this.messageItems = this.GetMarkDownMessageParts(message, g, out size);
+                        if (this.useMarkdown)
+                        {
+                            this.messageItems = this.GetMarkDownMessageParts(message, g, out size);
+                        }
+                        else
+                        {
+                            var format = StringFormat.GenericTypographic;
+                            format.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces;
+                            size = g.MeasureString(message, this.Font, new PointF(0f, 0f), format);
+                            this.messageItems = new[] { new MessagePart { Text = message, Size = size } };
+                        }
                     }
-                    else
-                    {
-                        var format = StringFormat.GenericTypographic;
-                        format.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces;
-                        size = g.MeasureString(message, this.Font, new PointF(0f, 0f), format);
-                        this.messageItems = new[] { new MessagePart { Text = message, Size = size } };
-                    }
+                }
+                finally
+                {
+                    User32.ReleaseDC(IntPtr.Zero, desktopPtr);
                 }
             }
 
@@ -243,6 +256,19 @@ namespace LetsEncryptAcmeReg
             return list.ToArray();
         }
 
+        private void Control_LostFocus(object sender, EventArgs e)
+        {
+            this.isMouseOverControl = this.control.ClientRectangle.Contains(this.control.PointToClient(Cursor.Position));
+            if (!this.isMouseOverControl)
+                this.Hide();
+        }
+
+        private void Control_GotFocus(object sender, EventArgs e)
+        {
+            this.isMouseOverControl = true;
+            this.ShowMessageInternal(this.currentMessage);
+        }
+
         private void Control_MouseHover(object sender, EventArgs e)
         {
             this.isMouseOverControl = true;
@@ -263,6 +289,9 @@ namespace LetsEncryptAcmeReg
 
         private void UpdateFormLocation()
         {
+            if (!this.IsHandleCreated)
+                return;
+
             var size = this.currentTextSize.ToSize();
 
             var cw = this.fixedLocation == null ? this.control.Width : 0;

@@ -6,6 +6,10 @@ namespace LetsEncryptAcmeReg.WinAPI
 {
     static class User32
     {
+        [DllImport("User32.dll")]
+        public static extern IntPtr GetDC(IntPtr hwnd);
+        [DllImport("User32.dll")]
+        public static extern void ReleaseDC(IntPtr hwnd, IntPtr dc);
 
         [DllImport("user32.dll", EntryPoint = "SetWindowPos")]
         public static extern bool SetWindowPos(
