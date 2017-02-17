@@ -69,7 +69,6 @@
             this.btnSubmit = new System.Windows.Forms.Button();
             this.chkAutoGetIssuerCert = new System.Windows.Forms.CheckBox();
             this.btnGetIssuerCert = new System.Windows.Forms.Button();
-            this.btnCertDomains = new System.Windows.Forms.Button();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.btnChangeSavePath = new System.Windows.Forms.Button();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
@@ -141,6 +140,8 @@
             this.labVer = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lnkProject = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tableLayoutPanel11 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnCertDomains = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -176,6 +177,7 @@
             this.toolStripContainer5.ContentPanel.SuspendLayout();
             this.toolStripContainer5.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.tableLayoutPanel11.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -212,6 +214,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 0F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel11, 0, 9);
             this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 13);
             this.tableLayoutPanel1.Controls.Add(this.btnCreateChallenge, 3, 5);
             this.tableLayoutPanel1.Controls.Add(this.btnAddDomain, 3, 3);
@@ -233,7 +236,6 @@
             this.tableLayoutPanel1.Controls.Add(this.label7, 0, 8);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel10, 0, 10);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel4, 0, 11);
-            this.tableLayoutPanel1.Controls.Add(this.cmbCertificate, 0, 9);
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.label18, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 6);
@@ -711,6 +713,7 @@
             // cmbChallenge
             // 
             this.cmbChallenge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbChallenge.BackColor = System.Drawing.Color.White;
             this.tableLayoutPanel1.SetColumnSpan(this.cmbChallenge, 2);
             this.cmbChallenge.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbChallenge.FormattingEnabled = true;
@@ -757,7 +760,6 @@
             this.tableLayoutPanel10.Controls.Add(this.btnSubmit, 3, 0);
             this.tableLayoutPanel10.Controls.Add(this.chkAutoGetIssuerCert, 4, 0);
             this.tableLayoutPanel10.Controls.Add(this.btnGetIssuerCert, 5, 0);
-            this.tableLayoutPanel10.Controls.Add(this.btnCertDomains, 0, 0);
             this.tableLayoutPanel10.Location = new System.Drawing.Point(0, 335);
             this.tableLayoutPanel10.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel10.Name = "tableLayoutPanel10";
@@ -827,20 +829,6 @@
             this.btnGetIssuerCert.Text = "Get Issuer Certificate";
             this.btnGetIssuerCert.UseVisualStyleBackColor = true;
             this.btnGetIssuerCert.Click += new System.EventHandler(this.btnGetIssuerCert_Click);
-            // 
-            // btnCertDomains
-            // 
-            this.btnCertDomains.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCertDomains.AutoSize = true;
-            this.btnCertDomains.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnCertDomains.Location = new System.Drawing.Point(1, 1);
-            this.btnCertDomains.Margin = new System.Windows.Forms.Padding(1);
-            this.btnCertDomains.Name = "btnCertDomains";
-            this.btnCertDomains.Size = new System.Drawing.Size(92, 23);
-            this.btnCertDomains.TabIndex = 12;
-            this.btnCertDomains.Text = "More domains...";
-            this.btnCertDomains.UseVisualStyleBackColor = true;
-            this.btnCertDomains.Click += new System.EventHandler(this.btnCertDomains_Click);
             // 
             // tableLayoutPanel4
             // 
@@ -1089,12 +1077,11 @@
             // cmbCertificate
             // 
             this.cmbCertificate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel1.SetColumnSpan(this.cmbCertificate, 2);
             this.cmbCertificate.FormattingEnabled = true;
-            this.cmbCertificate.Location = new System.Drawing.Point(1, 312);
+            this.cmbCertificate.Location = new System.Drawing.Point(1, 2);
             this.cmbCertificate.Margin = new System.Windows.Forms.Padding(1);
             this.cmbCertificate.Name = "cmbCertificate";
-            this.cmbCertificate.Size = new System.Drawing.Size(399, 21);
+            this.cmbCertificate.Size = new System.Drawing.Size(305, 21);
             this.cmbCertificate.TabIndex = 1;
             // 
             // label1
@@ -1739,8 +1726,8 @@
             this.tableCertDomains.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableCertDomains.Controls.Add(this.lstCertDomains, 0, 0);
             this.tableCertDomains.Controls.Add(this.btnHideCertDomains, 0, 1);
-            this.tableCertDomains.Dock = System.Windows.Forms.DockStyle.Right;
-            this.tableCertDomains.Location = new System.Drawing.Point(454, 0);
+            this.tableCertDomains.Dock = System.Windows.Forms.DockStyle.Left;
+            this.tableCertDomains.Location = new System.Drawing.Point(0, 0);
             this.tableCertDomains.Name = "tableCertDomains";
             this.tableCertDomains.RowCount = 2;
             this.tableCertDomains.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -1812,6 +1799,42 @@
             this.lnkProject.Size = new System.Drawing.Size(342, 17);
             this.lnkProject.Text = "https://github.com/masbicudo/LetsEncrypt-Certificate-Creator";
             this.lnkProject.Click += new System.EventHandler(this.linkProject_LinkClicked);
+            // 
+            // tableLayoutPanel11
+            // 
+            this.tableLayoutPanel11.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel11.AutoSize = true;
+            this.tableLayoutPanel11.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.tableLayoutPanel11.ColumnCount = 2;
+            this.tableLayoutPanel1.SetColumnSpan(this.tableLayoutPanel11, 2);
+            this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel11.Controls.Add(this.btnCertDomains, 1, 0);
+            this.tableLayoutPanel11.Controls.Add(this.cmbCertificate, 0, 0);
+            this.tableLayoutPanel11.Location = new System.Drawing.Point(0, 310);
+            this.tableLayoutPanel11.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanel11.Name = "tableLayoutPanel11";
+            this.tableLayoutPanel11.RowCount = 1;
+            this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel11.Size = new System.Drawing.Size(401, 25);
+            this.tableLayoutPanel11.TabIndex = 2;
+            // 
+            // btnCertDomains
+            // 
+            this.btnCertDomains.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCertDomains.AutoSize = true;
+            this.btnCertDomains.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnCertDomains.Location = new System.Drawing.Point(308, 1);
+            this.btnCertDomains.Margin = new System.Windows.Forms.Padding(1);
+            this.btnCertDomains.Name = "btnCertDomains";
+            this.btnCertDomains.Size = new System.Drawing.Size(92, 23);
+            this.btnCertDomains.TabIndex = 12;
+            this.btnCertDomains.Text = "More domains...";
+            this.btnCertDomains.UseVisualStyleBackColor = true;
+            this.btnCertDomains.Click += new System.EventHandler(this.btnCertDomains_Click);
             // 
             // Form2
             // 
@@ -1886,6 +1909,8 @@
             this.toolStripContainer5.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.tableLayoutPanel11.ResumeLayout(false);
+            this.tableLayoutPanel11.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1990,7 +2015,6 @@
         private System.Windows.Forms.Button btnCopyCertBase64Data;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.LinkLabel lnkGitLabCertHelp;
-        private System.Windows.Forms.Button btnCertDomains;
         private System.Windows.Forms.CheckedListBox lstCertDomains;
         private System.Windows.Forms.TableLayoutPanel tableCertDomains;
         private System.Windows.Forms.Button btnHideCertDomains;
@@ -2003,5 +2027,7 @@
         private System.Windows.Forms.ToolStripStatusLabel lnkProject;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.Label labDates;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel11;
+        private System.Windows.Forms.Button btnCertDomains;
     }
 }
