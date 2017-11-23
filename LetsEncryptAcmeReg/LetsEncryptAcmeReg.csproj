@@ -177,7 +177,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ACMESharp\ACMESharp\ACMESharp.PKI.Providers.BouncyCastle\ACMESharp.PKI.Providers.BouncyCastle.csproj">
+    <ProjectReference Include="..\ACMESharp\ACMESharp\ACMESharp.PKI.Providers.BouncyCastle\ACMESharp.PKI.Providers.BouncyCastle.csproj">
       <Project>{473bff7d-c7f0-471d-b7a3-19ad9adfdba9}</Project>
       <Name>ACMESharp.PKI.Providers.BouncyCastle</Name>
     </ProjectReference>
@@ -206,8 +206,8 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>echo PREBUILD
-echo call nuget restore "$(SolutionDir)ACMESharp\ACMESharp\ACMESharp.sln"
-call nuget restore "$(SolutionDir)ACMESharp\ACMESharp\ACMESharp.sln"
+echo call "$(SolutionDir)packages\NuGet.CommandLine.4.4.1\tools\NuGet.exe" restore "$(SolutionDir)ACMESharp\ACMESharp\ACMESharp.sln"
+call "$(SolutionDir)packages\NuGet.CommandLine.4.4.1\tools\NuGet.exe" restore "$(SolutionDir)ACMESharp\ACMESharp\ACMESharp.sln"
 echo "$(MSBuildBinPath)\msbuild.exe" "$(SolutionDir)ACMESharp\ACMESharp\ACMESharp.sln" /t:ACMESharp;ACMESharp_PKI_Providers_BouncyCastle;ACMESharp_POSH;ACMESharp_Vault /p:Configuration="Debug"
 "$(MSBuildBinPath)\msbuild.exe" "$(SolutionDir)ACMESharp\ACMESharp\ACMESharp.sln" /t:ACMESharp;ACMESharp_PKI_Providers_BouncyCastle;ACMESharp_POSH;ACMESharp_Vault /p:Configuration="Debug"
 echo ENDPREBUILD

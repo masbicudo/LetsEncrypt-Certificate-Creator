@@ -5,13 +5,13 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsEncryptAcmeReg", "LetsEncryptAcmeReg\LetsEncryptAcmeReg.csproj", "{40D74FB8-30E8-45D4-A7A2-8831945674FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ACMESharp", "..\ACMESharp\ACMESharp\ACMESharp\ACMESharp.csproj", "{D551234B-0A8D-4DEE-8178-A81998DF0EDB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ACMESharp", ".\ACMESharp\ACMESharp\ACMESharp\ACMESharp.csproj", "{D551234B-0A8D-4DEE-8178-A81998DF0EDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ACMESharp.POSH", "..\ACMESharp\ACMESharp\ACMESharp.POSH\ACMESharp.POSH.csproj", "{2F8D5934-B5A7-4983-8051-1F25882C7C30}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ACMESharp.POSH", ".\ACMESharp\ACMESharp\ACMESharp.POSH\ACMESharp.POSH.csproj", "{2F8D5934-B5A7-4983-8051-1F25882C7C30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ACMESharp.PKI.Providers.BouncyCastle", "..\ACMESharp\ACMESharp\ACMESharp.PKI.Providers.BouncyCastle\ACMESharp.PKI.Providers.BouncyCastle.csproj", "{473BFF7D-C7F0-471D-B7A3-19AD9ADFDBA9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ACMESharp.PKI.Providers.BouncyCastle", ".\ACMESharp\ACMESharp\ACMESharp.PKI.Providers.BouncyCastle\ACMESharp.PKI.Providers.BouncyCastle.csproj", "{473BFF7D-C7F0-471D-B7A3-19AD9ADFDBA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ACMESharp.Vault", "..\ACMESharp\ACMESharp\ACMESharp.Vault\ACMESharp.Vault.csproj", "{65B4C6E0-27A0-445C-ADAC-9D8308E2E4A6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ACMESharp.Vault", ".\ACMESharp\ACMESharp\ACMESharp.Vault\ACMESharp.Vault.csproj", "{65B4C6E0-27A0-445C-ADAC-9D8308E2E4A6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{BAFA22CB-1DE9-477A-86CE-B24D705547DE}"
 EndProject
