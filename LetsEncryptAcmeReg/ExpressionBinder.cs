@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace LetsEncryptAcmeReg
 {
-    public class BindableFinder<T> : ExpressionVisitor
+    public class ExpressionBinder<T> : ExpressionVisitor
     {
         [CanBeNull]
         private readonly Bindable<T> bindable;
@@ -19,21 +19,41 @@ namespace LetsEncryptAcmeReg
 
         public List<Expression> BindablesFound { get; } = new List<Expression>();
 
-        public BindableFinder(Action<T> action, Expression<Func<T>> exprLambda, bool init)
+        /// <summary>
+        /// Binder that makes each bindable in the <paramref name="exprLambda"/>
+        /// call the given action passing the resulting expression value.
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="exprLambda"></param>
+        /// <param name="init"></param>
+        public ExpressionBinder(Action<T> action, Expression<Func<T>> exprLambda, bool init)
         {
             this.action = action;
             this.exprLambda = exprLambda;
             this.init = init;
         }
 
-        public BindableFinder([CanBeNull] Bindable<T> bindable, Expression<Func<T>> exprLambda, bool init)
+        /// <summary>
+        /// Binder that makes each bindable in the <paramref name="exprLambda"/>
+        /// set the value of the given <paramref name="bindable"/> to the resulting expression value.
+        /// </summary>
+        /// <param name="bindable"></param>
+        /// <param name="exprLambda"></param>
+        /// <param name="init"></param>
+        public ExpressionBinder([CanBeNull] Bindable<T> bindable, Expression<Func<T>> exprLambda, bool init)
         {
             this.bindable = bindable;
             this.exprLambda = exprLambda;
             this.init = init;
         }
 
-        public BindableFinder(Expression<Action> exprLambda, bool init)
+        /// <summary>
+        /// Binder that makes each bindable in the <paramref name="exprLambda"/>
+        /// execute the whole expression.
+        /// </summary>
+        /// <param name="exprLambda"></param>
+        /// <param name="init"></param>
+        public ExpressionBinder(Expression<Action> exprLambda, bool init)
         {
             this.bindable = null;
             this.exprLambda = exprLambda;

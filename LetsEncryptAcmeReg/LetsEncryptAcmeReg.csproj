@@ -87,7 +87,7 @@
     <Compile Include="DynamicExtensions.cs" />
     <Compile Include="Acme.cs" />
     <Compile Include="Bindable.cs" />
-    <Compile Include="BindableFinder.cs" />
+    <Compile Include="ExpressionBinder.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="FlowLayoutAppender.cs" />
     <Compile Include="IControlAppender.cs" />

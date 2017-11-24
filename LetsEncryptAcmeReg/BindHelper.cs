@@ -340,7 +340,7 @@ namespace LetsEncryptAcmeReg
             if (valueExpression == null) throw new ArgumentNullException(nameof(valueExpression));
 
             // finding all bindables in the expression
-            var finder = new BindableFinder<T>(bindable, valueExpression, init);
+            var finder = new ExpressionBinder<T>(bindable, valueExpression, init);
             finder.Visit(valueExpression);
 
             if (finder.BindablesFound.Count != 0)
@@ -379,7 +379,7 @@ namespace LetsEncryptAcmeReg
             if (action == null) throw new ArgumentNullException(nameof(action));
 
             // finding all bindables in the expression
-            var finder = new BindableFinder<T>(action, valueExpression, init);
+            var finder = new ExpressionBinder<T>(action, valueExpression, init);
             finder.Visit(valueExpression);
 
             if (finder.BindablesFound.Count == 0)
@@ -410,7 +410,7 @@ namespace LetsEncryptAcmeReg
             if (boundExpression == null) throw new ArgumentNullException(nameof(boundExpression));
 
             // finding all bindables in the expression
-            var finder = new BindableFinder<string>(boundExpression, init);
+            var finder = new ExpressionBinder<string>(boundExpression, init);
             finder.Visit(boundExpression);
             return finder.BindResult;
         }
