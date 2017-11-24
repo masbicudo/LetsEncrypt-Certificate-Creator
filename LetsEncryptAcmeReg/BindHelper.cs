@@ -321,12 +321,14 @@ namespace LetsEncryptAcmeReg
         /// Whenever one of the bindable references changes, the value of the expression will be assigned to the bindable object.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="bindable">To bindable object that will be assigned to the expression.</param>
+        /// <param name="bindable">Bindable object that will be assigned to the expression.</param>
         /// <param name="valueExpression">Expression containing bindable references that is used as the value for the bindable object.</param>
         /// <param name="init">
-        /// If true, assigns the value of the expression to the bindable object using data from the bindable references if they contain data already.
-        /// If false, returns a delegate that does the same. In this case, if the delegate is not called
-        /// then the bindable object and the external data source will not be syncrhonized until
+        /// If true, initializes the value of the expression to the bindable object
+        /// using data from the bindable references if they contain data already.
+        /// If false, returns a delegate that can be used to initialize whenever the caller wants.
+        /// In this case, if the delegate is not called then the bindable object 
+        /// and the external data source will not be syncrhonized until
         /// an event is raised from either objects.
         /// </param>
         /// <returns>

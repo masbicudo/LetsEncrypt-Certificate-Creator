@@ -10,36 +10,83 @@ namespace LetsEncryptAcmeReg
 {
     public abstract class Bindable
     {
+        protected const int FALSE = 0;
+        protected const int TRUE = -1;
+
         private static int _lastId;
         protected static readonly object _Locker = new object();
 
         private readonly int id;
         private readonly string name;
 
-        protected Bindable(string name)
+        protected readonly BindableOptions flags;
+        protected sbyte isChanging;
+        protected sbyte isInit;
+        protected sbyte isUpdating;
+
+        protected Bindable(string name, BindableOptions flags)
         {
             this.id = Interlocked.Increment(ref _lastId);
             this.name = name ?? "";
+            this.flags = flags;
         }
+
+        protected abstract object Object { get; }
 
         public override string ToString()
         {
-            return string.IsNullOrWhiteSpace(this.name)
-                ? $"{nameof(Bindable<int>)}({this.id})"
-                : $"{nameof(Bindable<int>)}({this.id}): {this.name}";
+            var obj = this.Object;
+
+            var strName = "";
+            if (!string.IsNullOrWhiteSpace(this.name))
+                strName = $": {this.name}";
+
+            var strState = "";
+            strState += this.isChanging == FALSE ? " " : "C";
+            strState += this.isChanging == FALSE ? " " : "U";
+
+            strState = string.IsNullOrWhiteSpace(strState) ? "" : $" [{strState}]";
+
+            var strVal = "";
+            if (this.isInit != FALSE)
+            {
+                strVal += " = ";
+                if (obj == null) strVal += "null";
+                else if (obj is string)
+                    strVal += '"' + $"{obj}"
+                                  .Replace("\n", "\\n")
+                                  .Replace("\t", "\\t")
+                                  .Replace("\\", "\\\\")
+                                  .Replace("\0", "\\0")
+                                  .Replace("\f", "\\f")
+                                  .Replace("\"", "\\\"")
+                                  .Replace("\a", "\\a")
+                                  .Replace("\b", "\\b")
+                                  .Replace("\a", "\\a")
+                                  .Replace("\r", "\\r")
+                                  .Replace("\v", "\\v") + '"';
+                else if (obj is char)
+                    strVal += "'" + $"{obj}"
+                                  .Replace("\n", "\\n")
+                                  .Replace("\t", "\\t")
+                                  .Replace("\\", "\\\\")
+                                  .Replace("\0", "\\0")
+                                  .Replace("\f", "\\f")
+                                  .Replace("\'", "\\'")
+                                  .Replace("\a", "\\a")
+                                  .Replace("\b", "\\b")
+                                  .Replace("\a", "\\a")
+                                  .Replace("\r", "\\r")
+                                  .Replace("\v", "\\v") + "'";
+                else strVal += $"{obj}";
+            }
+
+            return $"{nameof(Bindable<int>)}({this.id}){strName}{strVal}{strState}";
         }
     }
 
     public class Bindable<T> : Bindable
     {
-        const int FALSE = 0;
-        const int TRUE = -1;
-
-        private readonly BindableOptions flags;
-        private sbyte isChanging;
-        private sbyte isInit;
-        private sbyte isUpdating;
-
         private readonly EqualityComparer<T> equalityComparer;
 
         private T value;
@@ -53,9 +100,8 @@ namespace LetsEncryptAcmeReg
         public int Version { get; private set; }
 
         public Bindable(string name = "", EqualityComparer<T> equalityComparer = null, BindableOptions flags = 0)
-            : base(name)
+            : base(name, flags)
         {
-            this.flags = flags;
             this.equalityComparer = equalityComparer;
         }
 
@@ -514,5 +560,7 @@ namespace LetsEncryptAcmeReg
                 return Comparer<Func<T, Task>>.Default.Compare(this.@async, other);
             }
         }
+
+        protected override object Object => this.Value;
     }
 }
