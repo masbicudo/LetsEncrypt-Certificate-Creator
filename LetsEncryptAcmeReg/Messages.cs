@@ -41,10 +41,8 @@ namespace LetsEncryptAcmeReg
               "Though this is intended to be used after the validation command is issued, there is no harm in using it before.\n" +
               "In this case, LetsEncrypt will simply state that validation command is pending.";
 
-        public static string ToolTipForCreateChallenge { get; }
-            = "Creates a new challenge for the selected domain.\n" +
-              "If a challenge exists already, it will be replaced\n" +
-              "by the new one.";
+        public static string ToolTipForInitializeChallenge { get; }
+            = "Initializes the challenge for the selected domain.";
 
         public static string ToolTipForChallengeTarget { get; }
             = "URL that Let's Encrypt will look for when validating the challenge.\n" +

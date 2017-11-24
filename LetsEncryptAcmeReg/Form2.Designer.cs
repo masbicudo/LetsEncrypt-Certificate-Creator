@@ -38,7 +38,7 @@
             this.cmbCertificate = new System.Windows.Forms.ComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.btnCreateChallenge = new System.Windows.Forms.Button();
+            this.btnInitializeChallenge = new System.Windows.Forms.Button();
             this.btnAddDomain = new System.Windows.Forms.Button();
             this.cmbDomain = new System.Windows.Forms.ComboBox();
             this.chkAutoAddDomain = new System.Windows.Forms.CheckBox();
@@ -55,7 +55,7 @@
             this.chkAutoValidate = new System.Windows.Forms.CheckBox();
             this.chkAutoUpdateStatus = new System.Windows.Forms.CheckBox();
             this.btnUpdateStatus = new System.Windows.Forms.Button();
-            this.chkAutoCreateChallenge = new System.Windows.Forms.CheckBox();
+            this.chkAutoInitializeChallenge = new System.Windows.Forms.CheckBox();
             this.chkAutoCreateCertificate = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.lnkTOS = new System.Windows.Forms.LinkLabel();
@@ -217,14 +217,14 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel11, 0, 9);
             this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 13);
-            this.tableLayoutPanel1.Controls.Add(this.btnCreateChallenge, 3, 5);
+            this.tableLayoutPanel1.Controls.Add(this.btnInitializeChallenge, 3, 5);
             this.tableLayoutPanel1.Controls.Add(this.btnAddDomain, 3, 3);
             this.tableLayoutPanel1.Controls.Add(this.cmbDomain, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.chkAutoAddDomain, 2, 3);
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.btnCreateCertificate, 3, 9);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 0, 7);
-            this.tableLayoutPanel1.Controls.Add(this.chkAutoCreateChallenge, 2, 5);
+            this.tableLayoutPanel1.Controls.Add(this.chkAutoInitializeChallenge, 2, 5);
             this.tableLayoutPanel1.Controls.Add(this.chkAutoCreateCertificate, 2, 9);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel6, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.cmbRegistration, 1, 1);
@@ -337,19 +337,19 @@
             this.richTextBox1.MouseLeave += new System.EventHandler(this.richTextBox1_MouseLeave);
             this.richTextBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.richTextBox1_MouseMove);
             // 
-            // btnCreateChallenge
+            // btnInitializeChallenge
             // 
-            this.btnCreateChallenge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCreateChallenge.AutoSize = true;
-            this.btnCreateChallenge.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnCreateChallenge.Location = new System.Drawing.Point(539, 145);
-            this.btnCreateChallenge.Margin = new System.Windows.Forms.Padding(0, 1, 1, 1);
-            this.btnCreateChallenge.Name = "btnCreateChallenge";
-            this.btnCreateChallenge.Size = new System.Drawing.Size(71, 27);
-            this.btnCreateChallenge.TabIndex = 10;
-            this.btnCreateChallenge.Text = "Create";
-            this.btnCreateChallenge.UseVisualStyleBackColor = true;
-            this.btnCreateChallenge.Click += new System.EventHandler(this.btnCreateChallenge_Click);
+            this.btnInitializeChallenge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnInitializeChallenge.AutoSize = true;
+            this.btnInitializeChallenge.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnInitializeChallenge.Location = new System.Drawing.Point(539, 145);
+            this.btnInitializeChallenge.Margin = new System.Windows.Forms.Padding(0, 1, 1, 1);
+            this.btnInitializeChallenge.Name = "btnInitializeChallenge";
+            this.btnInitializeChallenge.Size = new System.Drawing.Size(71, 27);
+            this.btnInitializeChallenge.TabIndex = 10;
+            this.btnInitializeChallenge.Text = "Initialize";
+            this.btnInitializeChallenge.UseVisualStyleBackColor = true;
+            this.btnInitializeChallenge.Click += new System.EventHandler(this.btnInitializeChallenge_Click);
             // 
             // btnAddDomain
             // 
@@ -607,21 +607,21 @@
             this.btnUpdateStatus.UseVisualStyleBackColor = true;
             this.btnUpdateStatus.Click += new System.EventHandler(this.btnUpdateStatus_Click);
             // 
-            // chkAutoCreateChallenge
+            // chkAutoInitializeChallenge
             // 
-            this.chkAutoCreateChallenge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkAutoCreateChallenge.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkAutoCreateChallenge.AutoSize = true;
-            this.chkAutoCreateChallenge.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkAutoCreateChallenge.Location = new System.Drawing.Point(540, 145);
-            this.chkAutoCreateChallenge.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
-            this.chkAutoCreateChallenge.Name = "chkAutoCreateChallenge";
-            this.chkAutoCreateChallenge.Size = new System.Drawing.Size(1, 27);
-            this.chkAutoCreateChallenge.TabIndex = 11;
-            this.chkAutoCreateChallenge.Text = ">";
-            this.chkAutoCreateChallenge.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.chkAutoCreateChallenge.UseVisualStyleBackColor = true;
-            this.chkAutoCreateChallenge.Visible = false;
+            this.chkAutoInitializeChallenge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkAutoInitializeChallenge.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkAutoInitializeChallenge.AutoSize = true;
+            this.chkAutoInitializeChallenge.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.chkAutoInitializeChallenge.Location = new System.Drawing.Point(540, 145);
+            this.chkAutoInitializeChallenge.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
+            this.chkAutoInitializeChallenge.Name = "chkAutoInitializeChallenge";
+            this.chkAutoInitializeChallenge.Size = new System.Drawing.Size(1, 27);
+            this.chkAutoInitializeChallenge.TabIndex = 11;
+            this.chkAutoInitializeChallenge.Text = ">";
+            this.chkAutoInitializeChallenge.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.chkAutoInitializeChallenge.UseVisualStyleBackColor = true;
+            this.chkAutoInitializeChallenge.Visible = false;
             // 
             // chkAutoCreateCertificate
             // 
@@ -1959,7 +1959,7 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Button btnCreateChallenge;
+        private System.Windows.Forms.Button btnInitializeChallenge;
         private System.Windows.Forms.ComboBox cmbChallenge;
         private System.Windows.Forms.Button btnAddDomain;
         private System.Windows.Forms.ComboBox cmbDomain;
@@ -1998,7 +1998,7 @@
         private System.Windows.Forms.TextBox txtPassword;
         private System.Windows.Forms.CheckBox chkShowPassword;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.CheckBox chkAutoCreateChallenge;
+        private System.Windows.Forms.CheckBox chkAutoInitializeChallenge;
         private System.Windows.Forms.CheckBox chkAutoCreateCertificate;
         private System.Windows.Forms.CheckBox chkAutoSubmit;
         private System.Windows.Forms.Button btnSubmit;

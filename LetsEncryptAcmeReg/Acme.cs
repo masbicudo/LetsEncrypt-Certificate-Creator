@@ -10,6 +10,8 @@ using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Management.Automation;
+using ACMESharp.ACME;
+using ACMESharp.Util;
 
 namespace LetsEncryptAcmeReg
 {
@@ -159,14 +161,11 @@ namespace LetsEncryptAcmeReg
             }
         }
 
-        public bool IdentifierExists(string idref)
+        public IdentifierInfo FindIdentifier(string idref)
         {
-            IDictionary[] allIds = GetAllIdentifiers()
-                .Where(x => x != null)
-                .Select(x => (x as object).ToDictionary()).ToArray();
-
-            return allIds
-                .Any(x => (x["Alias"] ?? "").ToString() == idref);
+            var result = GetAllIdentifiers()
+                .SingleOrDefault(x => (x.Alias ?? "").ToString() == idref);
+            return result;
         }
 
         [NotNull]
@@ -546,6 +545,50 @@ namespace LetsEncryptAcmeReg
                 var r = ri.Registration;
 
                 return v.Certificates.Values.ToArray();
+            }
+        }
+
+        public AuthorizationState SetupChallenge(string identifyerRef, string challengeType = "http-01")
+        {
+            using (var vlt = GetVault())
+            {
+                vlt.OpenStorage();
+                var v = vlt.LoadVault();
+
+                if (v.Registrations == null || v.Registrations.Count < 1)
+                    throw new InvalidOperationException("No registrations found");
+
+                var ri = v.Registrations[0];
+                var r = ri.Registration;
+
+                var ii = this.FindIdentifier(identifyerRef);
+
+                var authzState = ii.Authorization;
+
+                var c = ClientHelper.GetClient(v, ri);
+
+                var provider = ChallengeDecoderExtManager.GetProvider(challengeType);
+                //if (provider == null)
+                //    throw new NotSupportedException("no provider exists for requested challenge type")
+                //        .With("challengeType", challengeType);
+
+                var authzChallenge = authzState.Challenges.FirstOrDefault(x => x.Type == challengeType);
+                using (var decoder = provider.GetDecoder(authzState.IdentifierPart, authzChallenge.ChallengePart))
+                {
+                    authzChallenge.Challenge = decoder.Decode(authzState.IdentifierPart, authzChallenge.ChallengePart, c.Signer);
+
+                    //if (authzChallenge.Challenge == null)
+                    //    throw new InvalidDataException("challenge decoder produced no output");
+                }
+
+                c.HandleChallenge(authzState, challengeType, "Manual", null);
+                ii.ChallengeCompleted[challengeType] = DateTime.Now;
+
+                ii.Challenges[challengeType] = authzChallenge;
+
+                vlt.SaveVault(v);
+
+                return authzState;
             }
         }
     }

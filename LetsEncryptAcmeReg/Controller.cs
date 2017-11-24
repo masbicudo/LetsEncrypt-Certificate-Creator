@@ -96,7 +96,7 @@ namespace LetsEncryptAcmeReg
             init += mo.CanRegister.BindExpression(() => this.CanRegister_Value(mo.Registrations.Value, mo.Email.Value, mo.IsEmailValid.Value));
             init += mo.CanAcceptTos.BindExpression(() => this.CanAcceptTos_Value(mo.CurrentRegistration.Value));
             init += mo.CanAddDomain.BindExpression(() => mo.CurrentRegistration.Value != null && mo.IsDomainValid.Value && !mo.IsDomainCreated.Value);
-            init += mo.CanCreateChallenge.BindExpression(() => mo.CurrentIdentifier.Value != null && mo.IsChallengeValid.Value);
+            init += mo.CanInitializeChallenge.BindExpression(() => mo.CurrentIdentifier.Value != null && mo.IsChallengeValid.Value);
             init += mo.CanSaveChallenge.BindExpression(() => mo.ChallengeHasFile.Value);
             init += mo.CanCommitChallenge.BindExpression(() => this.CanCommitChallenge_Value(mo.SiteRoot.Value));
             init += mo.CanTestChallenge.BindExpression(() => mo.IsTargetValid.Value && mo.IsKeyValid.Value);
@@ -558,17 +558,17 @@ namespace LetsEncryptAcmeReg
                     this.Model.Domains.Value = this.Model.Domains.Value?.Append(states[0].Dns).Sort().Distinct().ToArray();
                     this.Model.Domain.Value = states[0].Dns;
                 },
-                this.Model.AutoCreateChallenge,
-                this.CreateChallenge);
+                this.Model.AutoInitializeChallenge,
+                this.InitializeChallenge);
         }
 
-        public async Task CreateChallenge()
+        public async Task InitializeChallenge()
         {
             await AutoCaller(
-                this.Model.CanCreateChallenge,
-                this.Model.AutoCreateChallenge,
-                this.Model.AutoCreateChallengeRetry,
-                this.Model.AutoCreateChallengeTimer,
+                this.Model.CanInitializeChallenge,
+                this.Model.AutoInitializeChallenge,
+                this.Model.AutoInitializeChallengeRetry,
+                this.Model.AutoInitializeChallengeTimer,
                 async () =>
                 {
                     if (this.Model.CurrentIdentifier.Value == null)
@@ -578,18 +578,7 @@ namespace LetsEncryptAcmeReg
                         this.Model.CurrentRegistration.Value,
                         this.Model.Domain.Value);
 
-                    var state =
-                        new CompleteChallenge
-                        {
-                            Handler = "Manual",
-                            IdentifierRef = idref,
-                            ChallengeType = this.Model.Challenge.Value,
-                            Force = SwitchParameter.Present,
-                            RepeatDecoder = SwitchParameter.Present,
-                            RepeatHandler = SwitchParameter.Present,
-                            //Regenerate = SwitchParameter.Present,
-                        }
-                        .GetValue<AuthorizationState>();
+                    var state = this.acme.SetupChallenge(idref, this.Model.Challenge.Value);
 
                     this.Model.CurrentAuthState.Value = state;
                 },
