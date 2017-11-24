@@ -15,16 +15,24 @@ namespace LetsEncryptAcmeReg
 {
     public class Acme
     {
-#if CUSTOM_VAULT
-        private static IVault GetVault()
+#if !DEFAULT_VAULT
+        static Acme()
         {
-            var rootPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "wizVault");
-            var vlt = new LocalDiskVault();
+            VaultHelper.CustomVaultGetter = GetCustomVault;
+        }
+#endif
+        private static IVault GetCustomVault()
+        {
+            var rootPath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                "wizVault");
+
+            var vlt = new ACMESharp.Vault.Providers.LocalDiskVault();
             var ok = false;
             try
             {
                 vlt.RootPath = rootPath;
-                vlt.BypassEFS = false;
+                vlt.BypassEFS = true;
                 vlt.CreatePath = true;
                 vlt.Init();
                 ok = true;
@@ -36,35 +44,6 @@ namespace LetsEncryptAcmeReg
             }
         }
 
-        public VaultInfo GetVaultInfo()
-        {
-            using (var vlt = GetVault())
-            {
-                if (!vlt.TestStorage())
-                {
-                    vlt.InitStorage(false);
-                    var v = new VaultInfo
-                    {
-                        Id = EntityHelper.NewId(),
-                        Alias = null,
-                        Label = null,
-                        Memo = null,
-                        BaseService = null,
-                        BaseUri = "https://acme-v01.api.letsencrypt.org/",
-                        ServerDirectory = new AcmeServerDirectory()
-                    };
-
-                    vlt.SaveVault(v);
-                    return v;
-                }
-                else
-                {
-                    vlt.OpenStorage(false);
-                    return vlt.LoadVault(true);
-                }
-            }
-        }
-#else
         private static IVault GetVault()
         {
             return VaultHelper.GetVault(null);
@@ -81,7 +60,6 @@ namespace LetsEncryptAcmeReg
             }
             return vlt;
         }
-#endif
 
         public RegistrationInfo[] GetRegistrations()
         {
