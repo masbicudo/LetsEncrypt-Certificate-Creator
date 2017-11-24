@@ -33,6 +33,9 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel11 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnCertDomains = new System.Windows.Forms.Button();
+            this.cmbCertificate = new System.Windows.Forms.ComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.btnCreateChallenge = new System.Windows.Forms.Button();
@@ -85,7 +88,6 @@
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.chkShowPassword = new System.Windows.Forms.CheckBox();
             this.label10 = new System.Windows.Forms.Label();
-            this.cmbCertificate = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -140,11 +142,10 @@
             this.labVer = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lnkProject = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tableLayoutPanel11 = new System.Windows.Forms.TableLayoutPanel();
-            this.btnCertDomains = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            this.tableLayoutPanel11.SuspendLayout();
             this.panel1.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
@@ -177,7 +178,6 @@
             this.toolStripContainer5.ContentPanel.SuspendLayout();
             this.toolStripContainer5.SuspendLayout();
             this.statusStrip1.SuspendLayout();
-            this.tableLayoutPanel11.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -190,17 +190,18 @@
             this.tabControl1.Margin = new System.Windows.Forms.Padding(0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(472, 562);
+            this.tabControl1.Size = new System.Drawing.Size(629, 700);
             this.tabControl1.TabIndex = 1;
             // 
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.White;
             this.tabPage1.Controls.Add(this.tableLayoutPanel1);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Location = new System.Drawing.Point(4, 25);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(464, 536);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(4);
+            this.tabPage1.Size = new System.Drawing.Size(621, 671);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Wizard";
             // 
@@ -239,7 +240,7 @@
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.label18, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 6);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(4, 4);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 14;
@@ -255,10 +256,56 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 12F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(458, 530);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(611, 657);
             this.tableLayoutPanel1.TabIndex = 1;
+            // 
+            // tableLayoutPanel11
+            // 
+            this.tableLayoutPanel11.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel11.AutoSize = true;
+            this.tableLayoutPanel11.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.tableLayoutPanel11.ColumnCount = 2;
+            this.tableLayoutPanel1.SetColumnSpan(this.tableLayoutPanel11, 2);
+            this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel11.Controls.Add(this.btnCertDomains, 1, 0);
+            this.tableLayoutPanel11.Controls.Add(this.cmbCertificate, 0, 0);
+            this.tableLayoutPanel11.Location = new System.Drawing.Point(0, 359);
+            this.tableLayoutPanel11.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanel11.Name = "tableLayoutPanel11";
+            this.tableLayoutPanel11.RowCount = 1;
+            this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
+            this.tableLayoutPanel11.Size = new System.Drawing.Size(539, 29);
+            this.tableLayoutPanel11.TabIndex = 2;
+            // 
+            // btnCertDomains
+            // 
+            this.btnCertDomains.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCertDomains.AutoSize = true;
+            this.btnCertDomains.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnCertDomains.Location = new System.Drawing.Point(419, 1);
+            this.btnCertDomains.Margin = new System.Windows.Forms.Padding(1);
+            this.btnCertDomains.Name = "btnCertDomains";
+            this.btnCertDomains.Size = new System.Drawing.Size(119, 27);
+            this.btnCertDomains.TabIndex = 12;
+            this.btnCertDomains.Text = "More domains...";
+            this.btnCertDomains.UseVisualStyleBackColor = true;
+            this.btnCertDomains.Click += new System.EventHandler(this.btnCertDomains_Click);
+            // 
+            // cmbCertificate
+            // 
+            this.cmbCertificate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbCertificate.FormattingEnabled = true;
+            this.cmbCertificate.Location = new System.Drawing.Point(1, 2);
+            this.cmbCertificate.Margin = new System.Windows.Forms.Padding(1);
+            this.cmbCertificate.Name = "cmbCertificate";
+            this.cmbCertificate.Size = new System.Drawing.Size(416, 24);
+            this.cmbCertificate.TabIndex = 1;
             // 
             // panel1
             // 
@@ -268,9 +315,10 @@
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tableLayoutPanel1.SetColumnSpan(this.panel1, 4);
             this.panel1.Controls.Add(this.richTextBox1);
-            this.panel1.Location = new System.Drawing.Point(3, 490);
+            this.panel1.Location = new System.Drawing.Point(4, 565);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(452, 37);
+            this.panel1.Size = new System.Drawing.Size(603, 88);
             this.panel1.TabIndex = 2;
             // 
             // richTextBox1
@@ -280,9 +328,10 @@
             this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.richTextBox1.HideSelection = false;
             this.richTextBox1.Location = new System.Drawing.Point(0, 0);
+            this.richTextBox1.Margin = new System.Windows.Forms.Padding(4);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(450, 35);
+            this.richTextBox1.Size = new System.Drawing.Size(601, 86);
             this.richTextBox1.TabIndex = 14;
             this.richTextBox1.Text = "";
             this.richTextBox1.MouseLeave += new System.EventHandler(this.richTextBox1_MouseLeave);
@@ -293,10 +342,10 @@
             this.btnCreateChallenge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCreateChallenge.AutoSize = true;
             this.btnCreateChallenge.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnCreateChallenge.Location = new System.Drawing.Point(401, 122);
+            this.btnCreateChallenge.Location = new System.Drawing.Point(539, 145);
             this.btnCreateChallenge.Margin = new System.Windows.Forms.Padding(0, 1, 1, 1);
             this.btnCreateChallenge.Name = "btnCreateChallenge";
-            this.btnCreateChallenge.Size = new System.Drawing.Size(56, 23);
+            this.btnCreateChallenge.Size = new System.Drawing.Size(71, 27);
             this.btnCreateChallenge.TabIndex = 10;
             this.btnCreateChallenge.Text = "Create";
             this.btnCreateChallenge.UseVisualStyleBackColor = true;
@@ -307,10 +356,10 @@
             this.btnAddDomain.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAddDomain.AutoSize = true;
             this.btnAddDomain.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnAddDomain.Location = new System.Drawing.Point(401, 69);
+            this.btnAddDomain.Location = new System.Drawing.Point(539, 81);
             this.btnAddDomain.Margin = new System.Windows.Forms.Padding(0, 1, 1, 1);
             this.btnAddDomain.Name = "btnAddDomain";
-            this.btnAddDomain.Size = new System.Drawing.Size(56, 23);
+            this.btnAddDomain.Size = new System.Drawing.Size(71, 27);
             this.btnAddDomain.TabIndex = 5;
             this.btnAddDomain.Text = "Add";
             this.btnAddDomain.UseVisualStyleBackColor = true;
@@ -320,10 +369,10 @@
             // 
             this.cmbDomain.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbDomain.FormattingEnabled = true;
-            this.cmbDomain.Location = new System.Drawing.Point(46, 70);
+            this.cmbDomain.Location = new System.Drawing.Point(59, 82);
             this.cmbDomain.Margin = new System.Windows.Forms.Padding(1);
             this.cmbDomain.Name = "cmbDomain";
-            this.cmbDomain.Size = new System.Drawing.Size(354, 21);
+            this.cmbDomain.Size = new System.Drawing.Size(479, 24);
             this.cmbDomain.TabIndex = 4;
             this.cmbDomain.Text = "www.masbicudo.com";
             // 
@@ -333,10 +382,10 @@
             this.chkAutoAddDomain.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoAddDomain.AutoSize = true;
             this.chkAutoAddDomain.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkAutoAddDomain.Location = new System.Drawing.Point(402, 69);
+            this.chkAutoAddDomain.Location = new System.Drawing.Point(540, 81);
             this.chkAutoAddDomain.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.chkAutoAddDomain.Name = "chkAutoAddDomain";
-            this.chkAutoAddDomain.Size = new System.Drawing.Size(1, 23);
+            this.chkAutoAddDomain.Size = new System.Drawing.Size(1, 27);
             this.chkAutoAddDomain.TabIndex = 11;
             this.chkAutoAddDomain.Text = ">";
             this.chkAutoAddDomain.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -347,10 +396,10 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(1, 74);
+            this.label2.Location = new System.Drawing.Point(1, 86);
             this.label2.Margin = new System.Windows.Forms.Padding(1);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(43, 13);
+            this.label2.Size = new System.Drawing.Size(56, 17);
             this.label2.TabIndex = 3;
             this.label2.Text = "Domain";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -360,10 +409,10 @@
             this.btnCreateCertificate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCreateCertificate.AutoSize = true;
             this.btnCreateCertificate.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnCreateCertificate.Location = new System.Drawing.Point(401, 311);
+            this.btnCreateCertificate.Location = new System.Drawing.Point(539, 360);
             this.btnCreateCertificate.Margin = new System.Windows.Forms.Padding(0, 1, 1, 1);
             this.btnCreateCertificate.Name = "btnCreateCertificate";
-            this.btnCreateCertificate.Size = new System.Drawing.Size(56, 23);
+            this.btnCreateCertificate.Size = new System.Drawing.Size(71, 27);
             this.btnCreateCertificate.TabIndex = 10;
             this.btnCreateCertificate.Text = "Create";
             this.btnCreateCertificate.UseVisualStyleBackColor = true;
@@ -398,12 +447,12 @@
             this.tableLayoutPanel3.Controls.Add(this.chkAutoValidate, 6, 0);
             this.tableLayoutPanel3.Controls.Add(this.chkAutoUpdateStatus, 8, 0);
             this.tableLayoutPanel3.Controls.Add(this.btnUpdateStatus, 9, 0);
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 257);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 295);
             this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(458, 25);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(611, 29);
             this.tableLayoutPanel3.TabIndex = 17;
             // 
             // chkAutoSaveChallenge
@@ -415,7 +464,7 @@
             this.chkAutoSaveChallenge.Location = new System.Drawing.Point(1, 1);
             this.chkAutoSaveChallenge.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.chkAutoSaveChallenge.Name = "chkAutoSaveChallenge";
-            this.chkAutoSaveChallenge.Size = new System.Drawing.Size(23, 23);
+            this.chkAutoSaveChallenge.Size = new System.Drawing.Size(26, 27);
             this.chkAutoSaveChallenge.TabIndex = 12;
             this.chkAutoSaveChallenge.Text = ">";
             this.chkAutoSaveChallenge.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -427,10 +476,10 @@
             this.btnSaveChallenge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSaveChallenge.AutoSize = true;
             this.btnSaveChallenge.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnSaveChallenge.Location = new System.Drawing.Point(24, 1);
+            this.btnSaveChallenge.Location = new System.Drawing.Point(27, 1);
             this.btnSaveChallenge.Margin = new System.Windows.Forms.Padding(0, 1, 1, 1);
             this.btnSaveChallenge.Name = "btnSaveChallenge";
-            this.btnSaveChallenge.Size = new System.Drawing.Size(66, 23);
+            this.btnSaveChallenge.Size = new System.Drawing.Size(94, 27);
             this.btnSaveChallenge.TabIndex = 10;
             this.btnSaveChallenge.Text = "Save";
             this.btnSaveChallenge.UseVisualStyleBackColor = true;
@@ -441,10 +490,10 @@
             this.btnCommitChallenge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCommitChallenge.AutoSize = true;
             this.btnCommitChallenge.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnCommitChallenge.Location = new System.Drawing.Point(115, 1);
+            this.btnCommitChallenge.Location = new System.Drawing.Point(149, 1);
             this.btnCommitChallenge.Margin = new System.Windows.Forms.Padding(0, 1, 1, 1);
             this.btnCommitChallenge.Name = "btnCommitChallenge";
-            this.btnCommitChallenge.Size = new System.Drawing.Size(66, 23);
+            this.btnCommitChallenge.Size = new System.Drawing.Size(94, 27);
             this.btnCommitChallenge.TabIndex = 10;
             this.btnCommitChallenge.Text = "Commit";
             this.btnCommitChallenge.UseVisualStyleBackColor = true;
@@ -455,10 +504,10 @@
             this.btnTestChallenge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.btnTestChallenge.AutoSize = true;
             this.btnTestChallenge.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnTestChallenge.Location = new System.Drawing.Point(206, 1);
+            this.btnTestChallenge.Location = new System.Drawing.Point(271, 1);
             this.btnTestChallenge.Margin = new System.Windows.Forms.Padding(0, 1, 1, 1);
             this.btnTestChallenge.Name = "btnTestChallenge";
-            this.btnTestChallenge.Size = new System.Drawing.Size(66, 23);
+            this.btnTestChallenge.Size = new System.Drawing.Size(94, 27);
             this.btnTestChallenge.TabIndex = 10;
             this.btnTestChallenge.Text = "Test";
             this.btnTestChallenge.UseVisualStyleBackColor = true;
@@ -469,10 +518,10 @@
             this.btnValidate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.btnValidate.AutoSize = true;
             this.btnValidate.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnValidate.Location = new System.Drawing.Point(297, 1);
+            this.btnValidate.Location = new System.Drawing.Point(393, 1);
             this.btnValidate.Margin = new System.Windows.Forms.Padding(0, 1, 1, 1);
             this.btnValidate.Name = "btnValidate";
-            this.btnValidate.Size = new System.Drawing.Size(66, 23);
+            this.btnValidate.Size = new System.Drawing.Size(94, 27);
             this.btnValidate.TabIndex = 10;
             this.btnValidate.Text = "Validate";
             this.btnValidate.UseVisualStyleBackColor = true;
@@ -484,10 +533,10 @@
             this.chkAutoCommit.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoCommit.AutoSize = true;
             this.chkAutoCommit.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkAutoCommit.Location = new System.Drawing.Point(92, 1);
+            this.chkAutoCommit.Location = new System.Drawing.Point(123, 1);
             this.chkAutoCommit.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.chkAutoCommit.Name = "chkAutoCommit";
-            this.chkAutoCommit.Size = new System.Drawing.Size(23, 23);
+            this.chkAutoCommit.Size = new System.Drawing.Size(26, 27);
             this.chkAutoCommit.TabIndex = 11;
             this.chkAutoCommit.Text = ">";
             this.chkAutoCommit.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -500,10 +549,10 @@
             this.chkAutoTest.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoTest.AutoSize = true;
             this.chkAutoTest.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkAutoTest.Location = new System.Drawing.Point(183, 1);
+            this.chkAutoTest.Location = new System.Drawing.Point(245, 1);
             this.chkAutoTest.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.chkAutoTest.Name = "chkAutoTest";
-            this.chkAutoTest.Size = new System.Drawing.Size(23, 23);
+            this.chkAutoTest.Size = new System.Drawing.Size(26, 27);
             this.chkAutoTest.TabIndex = 11;
             this.chkAutoTest.Text = ">";
             this.chkAutoTest.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -516,10 +565,10 @@
             this.chkAutoValidate.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoValidate.AutoSize = true;
             this.chkAutoValidate.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkAutoValidate.Location = new System.Drawing.Point(274, 1);
+            this.chkAutoValidate.Location = new System.Drawing.Point(367, 1);
             this.chkAutoValidate.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.chkAutoValidate.Name = "chkAutoValidate";
-            this.chkAutoValidate.Size = new System.Drawing.Size(23, 23);
+            this.chkAutoValidate.Size = new System.Drawing.Size(26, 27);
             this.chkAutoValidate.TabIndex = 11;
             this.chkAutoValidate.Text = ">";
             this.chkAutoValidate.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -533,10 +582,10 @@
             this.chkAutoUpdateStatus.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoUpdateStatus.AutoSize = true;
             this.chkAutoUpdateStatus.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkAutoUpdateStatus.Location = new System.Drawing.Point(365, 1);
+            this.chkAutoUpdateStatus.Location = new System.Drawing.Point(489, 1);
             this.chkAutoUpdateStatus.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.chkAutoUpdateStatus.Name = "chkAutoUpdateStatus";
-            this.chkAutoUpdateStatus.Size = new System.Drawing.Size(23, 23);
+            this.chkAutoUpdateStatus.Size = new System.Drawing.Size(26, 27);
             this.chkAutoUpdateStatus.TabIndex = 11;
             this.chkAutoUpdateStatus.Text = ">";
             this.chkAutoUpdateStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -549,10 +598,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnUpdateStatus.AutoSize = true;
             this.btnUpdateStatus.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnUpdateStatus.Location = new System.Drawing.Point(388, 1);
+            this.btnUpdateStatus.Location = new System.Drawing.Point(515, 1);
             this.btnUpdateStatus.Margin = new System.Windows.Forms.Padding(0, 1, 1, 1);
             this.btnUpdateStatus.Name = "btnUpdateStatus";
-            this.btnUpdateStatus.Size = new System.Drawing.Size(69, 23);
+            this.btnUpdateStatus.Size = new System.Drawing.Size(95, 27);
             this.btnUpdateStatus.TabIndex = 10;
             this.btnUpdateStatus.Text = "Update";
             this.btnUpdateStatus.UseVisualStyleBackColor = true;
@@ -564,10 +613,10 @@
             this.chkAutoCreateChallenge.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoCreateChallenge.AutoSize = true;
             this.chkAutoCreateChallenge.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkAutoCreateChallenge.Location = new System.Drawing.Point(402, 122);
+            this.chkAutoCreateChallenge.Location = new System.Drawing.Point(540, 145);
             this.chkAutoCreateChallenge.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.chkAutoCreateChallenge.Name = "chkAutoCreateChallenge";
-            this.chkAutoCreateChallenge.Size = new System.Drawing.Size(1, 23);
+            this.chkAutoCreateChallenge.Size = new System.Drawing.Size(1, 27);
             this.chkAutoCreateChallenge.TabIndex = 11;
             this.chkAutoCreateChallenge.Text = ">";
             this.chkAutoCreateChallenge.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -580,10 +629,10 @@
             this.chkAutoCreateCertificate.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoCreateCertificate.AutoSize = true;
             this.chkAutoCreateCertificate.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkAutoCreateCertificate.Location = new System.Drawing.Point(402, 311);
+            this.chkAutoCreateCertificate.Location = new System.Drawing.Point(540, 360);
             this.chkAutoCreateCertificate.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.chkAutoCreateCertificate.Name = "chkAutoCreateCertificate";
-            this.chkAutoCreateCertificate.Size = new System.Drawing.Size(1, 23);
+            this.chkAutoCreateCertificate.Size = new System.Drawing.Size(1, 27);
             this.chkAutoCreateCertificate.TabIndex = 11;
             this.chkAutoCreateCertificate.Text = ">";
             this.chkAutoCreateCertificate.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -602,13 +651,13 @@
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel6.Controls.Add(this.lnkTOS, 0, 0);
-            this.tableLayoutPanel6.Location = new System.Drawing.Point(45, 43);
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(58, 51);
             this.tableLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 1;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(356, 25);
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(481, 29);
             this.tableLayoutPanel6.TabIndex = 17;
             // 
             // lnkTOS
@@ -618,7 +667,7 @@
             this.lnkTOS.Location = new System.Drawing.Point(1, 6);
             this.lnkTOS.Margin = new System.Windows.Forms.Padding(1);
             this.lnkTOS.Name = "lnkTOS";
-            this.lnkTOS.Size = new System.Drawing.Size(85, 13);
+            this.lnkTOS.Size = new System.Drawing.Size(113, 17);
             this.lnkTOS.TabIndex = 16;
             this.lnkTOS.TabStop = true;
             this.lnkTOS.Text = "Terms of service";
@@ -628,10 +677,10 @@
             // 
             this.cmbRegistration.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbRegistration.FormattingEnabled = true;
-            this.cmbRegistration.Location = new System.Drawing.Point(46, 20);
+            this.cmbRegistration.Location = new System.Drawing.Point(59, 24);
             this.cmbRegistration.Margin = new System.Windows.Forms.Padding(1);
             this.cmbRegistration.Name = "cmbRegistration";
-            this.cmbRegistration.Size = new System.Drawing.Size(354, 21);
+            this.cmbRegistration.Size = new System.Drawing.Size(479, 24);
             this.cmbRegistration.TabIndex = 4;
             this.cmbRegistration.Text = "masbicudo@gmail.com";
             // 
@@ -641,10 +690,10 @@
             this.chkAutoAcceptTos.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoAcceptTos.AutoSize = true;
             this.chkAutoAcceptTos.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkAutoAcceptTos.Location = new System.Drawing.Point(402, 44);
+            this.chkAutoAcceptTos.Location = new System.Drawing.Point(540, 52);
             this.chkAutoAcceptTos.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.chkAutoAcceptTos.Name = "chkAutoAcceptTos";
-            this.chkAutoAcceptTos.Size = new System.Drawing.Size(1, 23);
+            this.chkAutoAcceptTos.Size = new System.Drawing.Size(1, 27);
             this.chkAutoAcceptTos.TabIndex = 11;
             this.chkAutoAcceptTos.Text = ">";
             this.chkAutoAcceptTos.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -656,10 +705,10 @@
             this.btnAcceptTos.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAcceptTos.AutoSize = true;
             this.btnAcceptTos.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnAcceptTos.Location = new System.Drawing.Point(401, 44);
+            this.btnAcceptTos.Location = new System.Drawing.Point(539, 52);
             this.btnAcceptTos.Margin = new System.Windows.Forms.Padding(0, 1, 1, 1);
             this.btnAcceptTos.Name = "btnAcceptTos";
-            this.btnAcceptTos.Size = new System.Drawing.Size(56, 23);
+            this.btnAcceptTos.Size = new System.Drawing.Size(71, 27);
             this.btnAcceptTos.TabIndex = 5;
             this.btnAcceptTos.Text = "Accept";
             this.btnAcceptTos.UseVisualStyleBackColor = true;
@@ -670,10 +719,10 @@
             this.btnRegister.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.btnRegister.AutoSize = true;
             this.btnRegister.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnRegister.Location = new System.Drawing.Point(401, 19);
+            this.btnRegister.Location = new System.Drawing.Point(539, 23);
             this.btnRegister.Margin = new System.Windows.Forms.Padding(0, 1, 1, 1);
             this.btnRegister.Name = "btnRegister";
-            this.btnRegister.Size = new System.Drawing.Size(56, 23);
+            this.btnRegister.Size = new System.Drawing.Size(71, 27);
             this.btnRegister.TabIndex = 2;
             this.btnRegister.Text = "Register";
             this.btnRegister.UseVisualStyleBackColor = true;
@@ -684,10 +733,10 @@
             this.chkAutoRegister.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoRegister.AutoSize = true;
             this.chkAutoRegister.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkAutoRegister.Location = new System.Drawing.Point(402, 19);
+            this.chkAutoRegister.Location = new System.Drawing.Point(540, 23);
             this.chkAutoRegister.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.chkAutoRegister.Name = "chkAutoRegister";
-            this.chkAutoRegister.Size = new System.Drawing.Size(1, 23);
+            this.chkAutoRegister.Size = new System.Drawing.Size(1, 27);
             this.chkAutoRegister.TabIndex = 11;
             this.chkAutoRegister.Text = ">";
             this.chkAutoRegister.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -702,10 +751,10 @@
             this.tableLayoutPanel1.SetColumnSpan(this.label3, 4);
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(1, 104);
-            this.label3.Margin = new System.Windows.Forms.Padding(1, 11, 1, 1);
+            this.label3.Location = new System.Drawing.Point(1, 123);
+            this.label3.Margin = new System.Windows.Forms.Padding(1, 14, 1, 1);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(456, 16);
+            this.label3.Size = new System.Drawing.Size(609, 20);
             this.label3.TabIndex = 6;
             this.label3.Text = "Challenge";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -719,10 +768,10 @@
             this.cmbChallenge.FormattingEnabled = true;
             this.cmbChallenge.Items.AddRange(new object[] {
             "http-01"});
-            this.cmbChallenge.Location = new System.Drawing.Point(1, 123);
+            this.cmbChallenge.Location = new System.Drawing.Point(1, 146);
             this.cmbChallenge.Margin = new System.Windows.Forms.Padding(1);
             this.cmbChallenge.Name = "cmbChallenge";
-            this.cmbChallenge.Size = new System.Drawing.Size(399, 21);
+            this.cmbChallenge.Size = new System.Drawing.Size(537, 24);
             this.cmbChallenge.TabIndex = 9;
             // 
             // label7
@@ -733,10 +782,10 @@
             this.tableLayoutPanel1.SetColumnSpan(this.label7, 4);
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(1, 293);
-            this.label7.Margin = new System.Windows.Forms.Padding(1, 11, 1, 1);
+            this.label7.Location = new System.Drawing.Point(1, 338);
+            this.label7.Margin = new System.Windows.Forms.Padding(1, 14, 1, 1);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(456, 16);
+            this.label7.Size = new System.Drawing.Size(609, 20);
             this.label7.TabIndex = 12;
             this.label7.Text = "Certificate";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -760,12 +809,12 @@
             this.tableLayoutPanel10.Controls.Add(this.btnSubmit, 3, 0);
             this.tableLayoutPanel10.Controls.Add(this.chkAutoGetIssuerCert, 4, 0);
             this.tableLayoutPanel10.Controls.Add(this.btnGetIssuerCert, 5, 0);
-            this.tableLayoutPanel10.Location = new System.Drawing.Point(0, 335);
+            this.tableLayoutPanel10.Location = new System.Drawing.Point(0, 388);
             this.tableLayoutPanel10.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel10.Name = "tableLayoutPanel10";
             this.tableLayoutPanel10.RowCount = 1;
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel10.Size = new System.Drawing.Size(458, 25);
+            this.tableLayoutPanel10.Size = new System.Drawing.Size(611, 29);
             this.tableLayoutPanel10.TabIndex = 17;
             // 
             // chkAutoSubmit
@@ -774,10 +823,10 @@
             this.chkAutoSubmit.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoSubmit.AutoSize = true;
             this.chkAutoSubmit.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkAutoSubmit.Location = new System.Drawing.Point(245, 1);
+            this.chkAutoSubmit.Location = new System.Drawing.Point(345, 1);
             this.chkAutoSubmit.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.chkAutoSubmit.Name = "chkAutoSubmit";
-            this.chkAutoSubmit.Size = new System.Drawing.Size(23, 23);
+            this.chkAutoSubmit.Size = new System.Drawing.Size(26, 27);
             this.chkAutoSubmit.TabIndex = 11;
             this.chkAutoSubmit.Text = ">";
             this.chkAutoSubmit.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -789,10 +838,10 @@
             this.btnSubmit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSubmit.AutoSize = true;
             this.btnSubmit.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnSubmit.Location = new System.Drawing.Point(268, 1);
+            this.btnSubmit.Location = new System.Drawing.Point(371, 1);
             this.btnSubmit.Margin = new System.Windows.Forms.Padding(0, 1, 1, 1);
             this.btnSubmit.Name = "btnSubmit";
-            this.btnSubmit.Size = new System.Drawing.Size(49, 23);
+            this.btnSubmit.Size = new System.Drawing.Size(61, 27);
             this.btnSubmit.TabIndex = 10;
             this.btnSubmit.Text = "Submit";
             this.btnSubmit.UseVisualStyleBackColor = true;
@@ -805,10 +854,10 @@
             this.chkAutoGetIssuerCert.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoGetIssuerCert.AutoSize = true;
             this.chkAutoGetIssuerCert.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkAutoGetIssuerCert.Location = new System.Drawing.Point(319, 1);
+            this.chkAutoGetIssuerCert.Location = new System.Drawing.Point(434, 1);
             this.chkAutoGetIssuerCert.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.chkAutoGetIssuerCert.Name = "chkAutoGetIssuerCert";
-            this.chkAutoGetIssuerCert.Size = new System.Drawing.Size(23, 23);
+            this.chkAutoGetIssuerCert.Size = new System.Drawing.Size(26, 27);
             this.chkAutoGetIssuerCert.TabIndex = 11;
             this.chkAutoGetIssuerCert.Text = ">";
             this.chkAutoGetIssuerCert.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -821,10 +870,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGetIssuerCert.AutoSize = true;
             this.btnGetIssuerCert.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnGetIssuerCert.Location = new System.Drawing.Point(342, 1);
+            this.btnGetIssuerCert.Location = new System.Drawing.Point(460, 1);
             this.btnGetIssuerCert.Margin = new System.Windows.Forms.Padding(0, 1, 1, 1);
             this.btnGetIssuerCert.Name = "btnGetIssuerCert";
-            this.btnGetIssuerCert.Size = new System.Drawing.Size(115, 23);
+            this.btnGetIssuerCert.Size = new System.Drawing.Size(150, 27);
             this.btnGetIssuerCert.TabIndex = 10;
             this.btnGetIssuerCert.Text = "Get Issuer Certificate";
             this.btnGetIssuerCert.UseVisualStyleBackColor = true;
@@ -854,7 +903,7 @@
             this.tableLayoutPanel4.Controls.Add(this.txtPassword, 1, 2);
             this.tableLayoutPanel4.Controls.Add(this.chkShowPassword, 2, 2);
             this.tableLayoutPanel4.Controls.Add(this.label10, 0, 0);
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(0, 360);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(0, 417);
             this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 6;
@@ -864,7 +913,7 @@
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(458, 117);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(611, 132);
             this.tableLayoutPanel4.TabIndex = 13;
             // 
             // btnChangeSavePath
@@ -872,10 +921,10 @@
             this.btnChangeSavePath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.btnChangeSavePath.AutoSize = true;
             this.btnChangeSavePath.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnChangeSavePath.Location = new System.Drawing.Point(431, 68);
+            this.btnChangeSavePath.Location = new System.Drawing.Point(580, 75);
             this.btnChangeSavePath.Margin = new System.Windows.Forms.Padding(1);
             this.btnChangeSavePath.Name = "btnChangeSavePath";
-            this.btnChangeSavePath.Size = new System.Drawing.Size(26, 23);
+            this.btnChangeSavePath.Size = new System.Drawing.Size(30, 27);
             this.btnChangeSavePath.TabIndex = 10;
             this.btnChangeSavePath.Text = "...";
             this.btnChangeSavePath.UseVisualStyleBackColor = true;
@@ -898,12 +947,12 @@
             this.tableLayoutPanel5.Controls.Add(this.btnSaveCertificate, 2, 0);
             this.tableLayoutPanel5.Controls.Add(this.chkAutoSaveOrShowCertificate, 1, 0);
             this.tableLayoutPanel5.Controls.Add(this.labDates, 0, 0);
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(0, 92);
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(0, 103);
             this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 1;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(458, 25);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(611, 29);
             this.tableLayoutPanel5.TabIndex = 18;
             // 
             // btnShowCertificate
@@ -911,10 +960,10 @@
             this.btnShowCertificate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.btnShowCertificate.AutoSize = true;
             this.btnShowCertificate.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnShowCertificate.Location = new System.Drawing.Point(413, 1);
+            this.btnShowCertificate.Location = new System.Drawing.Point(558, 1);
             this.btnShowCertificate.Margin = new System.Windows.Forms.Padding(1);
             this.btnShowCertificate.Name = "btnShowCertificate";
-            this.btnShowCertificate.Size = new System.Drawing.Size(44, 23);
+            this.btnShowCertificate.Size = new System.Drawing.Size(52, 27);
             this.btnShowCertificate.TabIndex = 10;
             this.btnShowCertificate.Text = "Show";
             this.btnShowCertificate.UseVisualStyleBackColor = true;
@@ -925,10 +974,10 @@
             this.btnSaveCertificate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSaveCertificate.AutoSize = true;
             this.btnSaveCertificate.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnSaveCertificate.Location = new System.Drawing.Point(369, 1);
+            this.btnSaveCertificate.Location = new System.Drawing.Point(506, 1);
             this.btnSaveCertificate.Margin = new System.Windows.Forms.Padding(0, 1, 1, 1);
             this.btnSaveCertificate.Name = "btnSaveCertificate";
-            this.btnSaveCertificate.Size = new System.Drawing.Size(42, 23);
+            this.btnSaveCertificate.Size = new System.Drawing.Size(50, 27);
             this.btnSaveCertificate.TabIndex = 10;
             this.btnSaveCertificate.Text = "Save";
             this.btnSaveCertificate.UseVisualStyleBackColor = true;
@@ -940,10 +989,10 @@
             this.chkAutoSaveOrShowCertificate.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoSaveOrShowCertificate.AutoSize = true;
             this.chkAutoSaveOrShowCertificate.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkAutoSaveOrShowCertificate.Location = new System.Drawing.Point(346, 1);
+            this.chkAutoSaveOrShowCertificate.Location = new System.Drawing.Point(480, 1);
             this.chkAutoSaveOrShowCertificate.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.chkAutoSaveOrShowCertificate.Name = "chkAutoSaveOrShowCertificate";
-            this.chkAutoSaveOrShowCertificate.Size = new System.Drawing.Size(23, 23);
+            this.chkAutoSaveOrShowCertificate.Size = new System.Drawing.Size(26, 27);
             this.chkAutoSaveOrShowCertificate.TabIndex = 11;
             this.chkAutoSaveOrShowCertificate.Text = ">";
             this.chkAutoSaveOrShowCertificate.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -954,19 +1003,20 @@
             // 
             this.labDates.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.labDates.AutoSize = true;
-            this.labDates.Location = new System.Drawing.Point(172, 6);
+            this.labDates.Location = new System.Drawing.Point(239, 6);
+            this.labDates.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labDates.Name = "labDates";
-            this.labDates.Size = new System.Drawing.Size(0, 13);
+            this.labDates.Size = new System.Drawing.Size(0, 17);
             this.labDates.TabIndex = 12;
             // 
             // label8
             // 
             this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(1, 27);
+            this.label8.Location = new System.Drawing.Point(1, 28);
             this.label8.Margin = new System.Windows.Forms.Padding(1);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(56, 13);
+            this.label8.Size = new System.Drawing.Size(72, 17);
             this.label8.TabIndex = 12;
             this.label8.Text = "Type";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -985,20 +1035,20 @@
             "Issuer PEM",
             "Issuer DER",
             "Pkcs12"});
-            this.cmbCertificateType.Location = new System.Drawing.Point(59, 23);
+            this.cmbCertificateType.Location = new System.Drawing.Point(75, 25);
             this.cmbCertificateType.Margin = new System.Windows.Forms.Padding(1);
             this.cmbCertificateType.Name = "cmbCertificateType";
-            this.cmbCertificateType.Size = new System.Drawing.Size(398, 21);
+            this.cmbCertificateType.Size = new System.Drawing.Size(535, 24);
             this.cmbCertificateType.TabIndex = 9;
             // 
             // label9
             // 
             this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(1, 49);
+            this.label9.Location = new System.Drawing.Point(1, 53);
             this.label9.Margin = new System.Windows.Forms.Padding(1);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(56, 13);
+            this.label9.Size = new System.Drawing.Size(72, 17);
             this.label9.TabIndex = 12;
             this.label9.Text = "Password";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1007,21 +1057,21 @@
             // 
             this.txtIssuer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel4.SetColumnSpan(this.txtIssuer, 3);
-            this.txtIssuer.Location = new System.Drawing.Point(59, 1);
+            this.txtIssuer.Location = new System.Drawing.Point(75, 1);
             this.txtIssuer.Margin = new System.Windows.Forms.Padding(1);
             this.txtIssuer.Name = "txtIssuer";
             this.txtIssuer.ReadOnly = true;
-            this.txtIssuer.Size = new System.Drawing.Size(398, 20);
+            this.txtIssuer.Size = new System.Drawing.Size(535, 22);
             this.txtIssuer.TabIndex = 13;
             // 
             // label17
             // 
             this.label17.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(1, 73);
+            this.label17.Location = new System.Drawing.Point(1, 80);
             this.label17.Margin = new System.Windows.Forms.Padding(1);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(56, 13);
+            this.label17.Size = new System.Drawing.Size(72, 17);
             this.label17.TabIndex = 16;
             this.label17.Text = "Save path";
             this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1032,20 +1082,20 @@
             this.txtSavePath.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.txtSavePath.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystemDirectories;
             this.tableLayoutPanel4.SetColumnSpan(this.txtSavePath, 2);
-            this.txtSavePath.Location = new System.Drawing.Point(59, 69);
+            this.txtSavePath.Location = new System.Drawing.Point(75, 77);
             this.txtSavePath.Margin = new System.Windows.Forms.Padding(1);
             this.txtSavePath.Name = "txtSavePath";
-            this.txtSavePath.Size = new System.Drawing.Size(370, 20);
+            this.txtSavePath.Size = new System.Drawing.Size(503, 22);
             this.txtSavePath.TabIndex = 15;
             this.txtSavePath.Text = "%Desktop%";
             // 
             // txtPassword
             // 
             this.txtPassword.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtPassword.Location = new System.Drawing.Point(59, 46);
+            this.txtPassword.Location = new System.Drawing.Point(75, 51);
             this.txtPassword.Margin = new System.Windows.Forms.Padding(1);
             this.txtPassword.Name = "txtPassword";
-            this.txtPassword.Size = new System.Drawing.Size(295, 20);
+            this.txtPassword.Size = new System.Drawing.Size(403, 22);
             this.txtPassword.TabIndex = 15;
             this.txtPassword.UseSystemPasswordChar = true;
             // 
@@ -1054,10 +1104,10 @@
             this.chkShowPassword.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.chkShowPassword.AutoSize = true;
             this.tableLayoutPanel4.SetColumnSpan(this.chkShowPassword, 2);
-            this.chkShowPassword.Location = new System.Drawing.Point(356, 47);
+            this.chkShowPassword.Location = new System.Drawing.Point(480, 51);
             this.chkShowPassword.Margin = new System.Windows.Forms.Padding(1);
             this.chkShowPassword.Name = "chkShowPassword";
-            this.chkShowPassword.Size = new System.Drawing.Size(101, 17);
+            this.chkShowPassword.Size = new System.Drawing.Size(130, 21);
             this.chkShowPassword.TabIndex = 16;
             this.chkShowPassword.Text = "Show password";
             this.chkShowPassword.UseVisualStyleBackColor = true;
@@ -1066,32 +1116,22 @@
             // 
             this.label10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(1, 4);
+            this.label10.Location = new System.Drawing.Point(1, 3);
             this.label10.Margin = new System.Windows.Forms.Padding(1);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(56, 13);
+            this.label10.Size = new System.Drawing.Size(72, 17);
             this.label10.TabIndex = 12;
             this.label10.Text = "Issuer";
             this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // cmbCertificate
-            // 
-            this.cmbCertificate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbCertificate.FormattingEnabled = true;
-            this.cmbCertificate.Location = new System.Drawing.Point(1, 2);
-            this.cmbCertificate.Margin = new System.Windows.Forms.Padding(1);
-            this.cmbCertificate.Name = "cmbCertificate";
-            this.cmbCertificate.Size = new System.Drawing.Size(305, 21);
-            this.cmbCertificate.TabIndex = 1;
             // 
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(1, 24);
+            this.label1.Location = new System.Drawing.Point(1, 28);
             this.label1.Margin = new System.Windows.Forms.Padding(1);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(43, 13);
+            this.label1.Size = new System.Drawing.Size(56, 17);
             this.label1.TabIndex = 0;
             this.label1.Text = "E-mail";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1107,7 +1147,7 @@
             this.label18.Location = new System.Drawing.Point(1, 1);
             this.label18.Margin = new System.Windows.Forms.Padding(1);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(456, 16);
+            this.label18.Size = new System.Drawing.Size(609, 20);
             this.label18.TabIndex = 0;
             this.label18.Text = "Registration";
             this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1134,7 +1174,7 @@
             this.tableLayoutPanel2.Controls.Add(this.label19, 0, 3);
             this.tableLayoutPanel2.Controls.Add(this.cmbSsg, 1, 3);
             this.tableLayoutPanel2.Controls.Add(this.flowSsgControls, 1, 4);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 146);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 173);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 8;
@@ -1146,28 +1186,28 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(458, 111);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(611, 122);
             this.tableLayoutPanel2.TabIndex = 11;
             // 
             // txtChallengeKey
             // 
             this.txtChallengeKey.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel2.SetColumnSpan(this.txtChallengeKey, 2);
-            this.txtChallengeKey.Location = new System.Drawing.Point(57, 23);
+            this.txtChallengeKey.Location = new System.Drawing.Point(74, 25);
             this.txtChallengeKey.Margin = new System.Windows.Forms.Padding(1);
             this.txtChallengeKey.Name = "txtChallengeKey";
             this.txtChallengeKey.ReadOnly = true;
-            this.txtChallengeKey.Size = new System.Drawing.Size(400, 20);
+            this.txtChallengeKey.Size = new System.Drawing.Size(536, 22);
             this.txtChallengeKey.TabIndex = 15;
             // 
             // label5
             // 
             this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(1, 26);
+            this.label5.Location = new System.Drawing.Point(1, 27);
             this.label5.Margin = new System.Windows.Forms.Padding(1);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(54, 13);
+            this.label5.Size = new System.Drawing.Size(71, 17);
             this.label5.TabIndex = 14;
             this.label5.Text = "Key";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1176,10 +1216,10 @@
             // 
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(1, 4);
+            this.label4.Location = new System.Drawing.Point(1, 3);
             this.label4.Margin = new System.Windows.Forms.Padding(1);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(54, 13);
+            this.label4.Size = new System.Drawing.Size(71, 17);
             this.label4.TabIndex = 12;
             this.label4.Text = "Target";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1188,21 +1228,21 @@
             // 
             this.txtChallengeTarget.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel2.SetColumnSpan(this.txtChallengeTarget, 2);
-            this.txtChallengeTarget.Location = new System.Drawing.Point(57, 1);
+            this.txtChallengeTarget.Location = new System.Drawing.Point(74, 1);
             this.txtChallengeTarget.Margin = new System.Windows.Forms.Padding(1);
             this.txtChallengeTarget.Name = "txtChallengeTarget";
             this.txtChallengeTarget.ReadOnly = true;
-            this.txtChallengeTarget.Size = new System.Drawing.Size(400, 20);
+            this.txtChallengeTarget.Size = new System.Drawing.Size(536, 22);
             this.txtChallengeTarget.TabIndex = 13;
             // 
             // label6
             // 
             this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(1, 48);
+            this.label6.Location = new System.Drawing.Point(1, 51);
             this.label6.Margin = new System.Windows.Forms.Padding(1);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(54, 13);
+            this.label6.Size = new System.Drawing.Size(71, 17);
             this.label6.TabIndex = 16;
             this.label6.Text = "Local root";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1213,10 +1253,10 @@
             this.txtSiteRoot.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.txtSiteRoot.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystemDirectories;
             this.tableLayoutPanel2.SetColumnSpan(this.txtSiteRoot, 2);
-            this.txtSiteRoot.Location = new System.Drawing.Point(57, 45);
+            this.txtSiteRoot.Location = new System.Drawing.Point(74, 49);
             this.txtSiteRoot.Margin = new System.Windows.Forms.Padding(1);
             this.txtSiteRoot.Name = "txtSiteRoot";
-            this.txtSiteRoot.Size = new System.Drawing.Size(400, 20);
+            this.txtSiteRoot.Size = new System.Drawing.Size(536, 22);
             this.txtSiteRoot.TabIndex = 15;
             // 
             // tableLayoutPanel9
@@ -1234,23 +1274,23 @@
             this.tableLayoutPanel9.Controls.Add(this.label16, 2, 0);
             this.tableLayoutPanel9.Controls.Add(this.txtGitPassword, 3, 0);
             this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel9.Location = new System.Drawing.Point(0, 89);
+            this.tableLayoutPanel9.Location = new System.Drawing.Point(0, 98);
             this.tableLayoutPanel9.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel9.Name = "tableLayoutPanel9";
             this.tableLayoutPanel9.RowCount = 1;
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayoutPanel9.Size = new System.Drawing.Size(458, 22);
+            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tableLayoutPanel9.Size = new System.Drawing.Size(611, 24);
             this.tableLayoutPanel9.TabIndex = 18;
             // 
             // label15
             // 
             this.label15.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(1, 4);
+            this.label15.Location = new System.Drawing.Point(1, 3);
             this.label15.Margin = new System.Windows.Forms.Padding(1);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(71, 13);
+            this.label15.Size = new System.Drawing.Size(95, 17);
             this.label15.TabIndex = 16;
             this.label15.Text = "Git Username";
             this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1258,10 +1298,10 @@
             // txtGitUserName
             // 
             this.txtGitUserName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtGitUserName.Location = new System.Drawing.Point(74, 1);
+            this.txtGitUserName.Location = new System.Drawing.Point(98, 1);
             this.txtGitUserName.Margin = new System.Windows.Forms.Padding(1);
             this.txtGitUserName.Name = "txtGitUserName";
-            this.txtGitUserName.Size = new System.Drawing.Size(155, 20);
+            this.txtGitUserName.Size = new System.Drawing.Size(208, 22);
             this.txtGitUserName.TabIndex = 15;
             this.txtGitUserName.Text = "masbicudo";
             // 
@@ -1269,10 +1309,10 @@
             // 
             this.label16.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(231, 4);
+            this.label16.Location = new System.Drawing.Point(308, 3);
             this.label16.Margin = new System.Windows.Forms.Padding(1);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(69, 13);
+            this.label16.Size = new System.Drawing.Size(91, 17);
             this.label16.TabIndex = 16;
             this.label16.Text = "Git Password";
             this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1280,10 +1320,10 @@
             // txtGitPassword
             // 
             this.txtGitPassword.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtGitPassword.Location = new System.Drawing.Point(302, 1);
+            this.txtGitPassword.Location = new System.Drawing.Point(401, 1);
             this.txtGitPassword.Margin = new System.Windows.Forms.Padding(1);
             this.txtGitPassword.Name = "txtGitPassword";
-            this.txtGitPassword.Size = new System.Drawing.Size(155, 20);
+            this.txtGitPassword.Size = new System.Drawing.Size(209, 22);
             this.txtGitPassword.TabIndex = 15;
             this.txtGitPassword.UseSystemPasswordChar = true;
             // 
@@ -1291,10 +1331,10 @@
             // 
             this.label19.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(1, 71);
+            this.label19.Location = new System.Drawing.Point(1, 76);
             this.label19.Margin = new System.Windows.Forms.Padding(1);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(54, 13);
+            this.label19.Size = new System.Drawing.Size(71, 17);
             this.label19.TabIndex = 16;
             this.label19.Text = "SSG";
             this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1305,10 +1345,10 @@
             this.tableLayoutPanel2.SetColumnSpan(this.cmbSsg, 2);
             this.cmbSsg.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbSsg.FormattingEnabled = true;
-            this.cmbSsg.Location = new System.Drawing.Point(57, 67);
+            this.cmbSsg.Location = new System.Drawing.Point(74, 73);
             this.cmbSsg.Margin = new System.Windows.Forms.Padding(1);
             this.cmbSsg.Name = "cmbSsg";
-            this.cmbSsg.Size = new System.Drawing.Size(400, 21);
+            this.cmbSsg.Size = new System.Drawing.Size(536, 24);
             this.cmbSsg.TabIndex = 1;
             // 
             // flowSsgControls
@@ -1319,19 +1359,20 @@
             this.flowSsgControls.AutoSize = true;
             this.flowSsgControls.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.tableLayoutPanel2.SetColumnSpan(this.flowSsgControls, 2);
-            this.flowSsgControls.Location = new System.Drawing.Point(56, 89);
+            this.flowSsgControls.Location = new System.Drawing.Point(73, 98);
             this.flowSsgControls.Margin = new System.Windows.Forms.Padding(0);
             this.flowSsgControls.Name = "flowSsgControls";
-            this.flowSsgControls.Size = new System.Drawing.Size(402, 1);
+            this.flowSsgControls.Size = new System.Drawing.Size(538, 1);
             this.flowSsgControls.TabIndex = 19;
             // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.tableLayoutPanel7);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Location = new System.Drawing.Point(4, 25);
+            this.tabPage2.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(464, 536);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(4);
+            this.tabPage2.Size = new System.Drawing.Size(621, 671);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Manager";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -1353,7 +1394,7 @@
             this.tableLayoutPanel7.Controls.Add(this.toolStripContainer1, 0, 1);
             this.tableLayoutPanel7.Controls.Add(this.label11, 0, 0);
             this.tableLayoutPanel7.Controls.Add(this.label12, 1, 0);
-            this.tableLayoutPanel7.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel7.Location = new System.Drawing.Point(4, 4);
             this.tableLayoutPanel7.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel7.Name = "tableLayoutPanel7";
             this.tableLayoutPanel7.RowCount = 4;
@@ -1361,7 +1402,7 @@
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(458, 537);
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(611, 663);
             this.tableLayoutPanel7.TabIndex = 1;
             // 
             // toolStripContainer2
@@ -1373,10 +1414,12 @@
             // toolStripContainer2.ContentPanel
             // 
             this.toolStripContainer2.ContentPanel.Controls.Add(this.lstChallenges);
-            this.toolStripContainer2.ContentPanel.Size = new System.Drawing.Size(148, 224);
-            this.toolStripContainer2.Location = new System.Drawing.Point(307, 16);
+            this.toolStripContainer2.ContentPanel.Margin = new System.Windows.Forms.Padding(4);
+            this.toolStripContainer2.ContentPanel.Size = new System.Drawing.Size(197, 281);
+            this.toolStripContainer2.Location = new System.Drawing.Point(410, 21);
+            this.toolStripContainer2.Margin = new System.Windows.Forms.Padding(4);
             this.toolStripContainer2.Name = "toolStripContainer2";
-            this.toolStripContainer2.Size = new System.Drawing.Size(148, 249);
+            this.toolStripContainer2.Size = new System.Drawing.Size(197, 306);
             this.toolStripContainer2.TabIndex = 2;
             this.toolStripContainer2.Text = "toolStripContainer2";
             // 
@@ -1385,18 +1428,21 @@
             this.lstChallenges.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lstChallenges.FormattingEnabled = true;
             this.lstChallenges.IntegralHeight = false;
+            this.lstChallenges.ItemHeight = 16;
             this.lstChallenges.Location = new System.Drawing.Point(0, 0);
+            this.lstChallenges.Margin = new System.Windows.Forms.Padding(4);
             this.lstChallenges.Name = "lstChallenges";
-            this.lstChallenges.Size = new System.Drawing.Size(148, 224);
+            this.lstChallenges.Size = new System.Drawing.Size(197, 281);
             this.lstChallenges.TabIndex = 0;
             // 
             // label13
             // 
             this.label13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(307, 0);
+            this.label13.Location = new System.Drawing.Point(410, 0);
+            this.label13.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(148, 13);
+            this.label13.Size = new System.Drawing.Size(197, 17);
             this.label13.TabIndex = 2;
             this.label13.Text = "Challenges";
             // 
@@ -1405,9 +1451,10 @@
             this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label14.AutoSize = true;
             this.tableLayoutPanel7.SetColumnSpan(this.label14, 2);
-            this.label14.Location = new System.Drawing.Point(155, 268);
+            this.label14.Location = new System.Drawing.Point(207, 331);
+            this.label14.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(300, 13);
+            this.label14.Size = new System.Drawing.Size(400, 17);
             this.label14.TabIndex = 4;
             this.label14.Text = "Certificates";
             // 
@@ -1425,10 +1472,12 @@
             // toolStripContainer4.ContentPanel
             // 
             this.toolStripContainer4.ContentPanel.Controls.Add(this.lstDomains);
-            this.toolStripContainer4.ContentPanel.Size = new System.Drawing.Size(146, 199);
-            this.toolStripContainer4.Location = new System.Drawing.Point(155, 16);
+            this.toolStripContainer4.ContentPanel.Margin = new System.Windows.Forms.Padding(4);
+            this.toolStripContainer4.ContentPanel.Size = new System.Drawing.Size(195, 254);
+            this.toolStripContainer4.Location = new System.Drawing.Point(207, 21);
+            this.toolStripContainer4.Margin = new System.Windows.Forms.Padding(4);
             this.toolStripContainer4.Name = "toolStripContainer4";
-            this.toolStripContainer4.Size = new System.Drawing.Size(146, 249);
+            this.toolStripContainer4.Size = new System.Drawing.Size(195, 306);
             this.toolStripContainer4.TabIndex = 5;
             this.toolStripContainer4.Text = "toolStripContainer4";
             // 
@@ -1437,11 +1486,12 @@
             this.toolStrip3.AllowMerge = false;
             this.toolStrip3.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip3.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip3.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnDeleteDomain});
             this.toolStrip3.Location = new System.Drawing.Point(3, 0);
             this.toolStrip3.Name = "toolStrip3";
-            this.toolStrip3.Size = new System.Drawing.Size(26, 25);
+            this.toolStrip3.Size = new System.Drawing.Size(27, 27);
             this.toolStrip3.TabIndex = 0;
             // 
             // btnDeleteDomain
@@ -1450,7 +1500,7 @@
             this.btnDeleteDomain.Image = global::LetsEncryptAcmeReg.Properties.Resources.DeleteIcon;
             this.btnDeleteDomain.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnDeleteDomain.Name = "btnDeleteDomain";
-            this.btnDeleteDomain.Size = new System.Drawing.Size(23, 22);
+            this.btnDeleteDomain.Size = new System.Drawing.Size(24, 24);
             this.btnDeleteDomain.Text = "toolStripButton1";
             this.btnDeleteDomain.Click += new System.EventHandler(this.btnDeleteDomain_Click);
             // 
@@ -1459,9 +1509,11 @@
             this.lstDomains.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lstDomains.FormattingEnabled = true;
             this.lstDomains.IntegralHeight = false;
+            this.lstDomains.ItemHeight = 16;
             this.lstDomains.Location = new System.Drawing.Point(0, 0);
+            this.lstDomains.Margin = new System.Windows.Forms.Padding(4);
             this.lstDomains.Name = "lstDomains";
-            this.lstDomains.Size = new System.Drawing.Size(146, 199);
+            this.lstDomains.Size = new System.Drawing.Size(195, 254);
             this.lstDomains.TabIndex = 0;
             this.lstDomains.SelectedIndexChanged += new System.EventHandler(this.lstDomains_SelectedIndexChanged);
             // 
@@ -1480,10 +1532,12 @@
             // toolStripContainer3.ContentPanel
             // 
             this.toolStripContainer3.ContentPanel.Controls.Add(this.lstCertificates);
-            this.toolStripContainer3.ContentPanel.Size = new System.Drawing.Size(300, 200);
-            this.toolStripContainer3.Location = new System.Drawing.Point(155, 284);
+            this.toolStripContainer3.ContentPanel.Margin = new System.Windows.Forms.Padding(4);
+            this.toolStripContainer3.ContentPanel.Size = new System.Drawing.Size(400, 255);
+            this.toolStripContainer3.Location = new System.Drawing.Point(207, 352);
+            this.toolStripContainer3.Margin = new System.Windows.Forms.Padding(4);
             this.toolStripContainer3.Name = "toolStripContainer3";
-            this.toolStripContainer3.Size = new System.Drawing.Size(300, 250);
+            this.toolStripContainer3.Size = new System.Drawing.Size(400, 307);
             this.toolStripContainer3.TabIndex = 3;
             this.toolStripContainer3.Text = "toolStripContainer3";
             // 
@@ -1491,11 +1545,12 @@
             // 
             this.toolStrip4.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip4.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip4.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStrip4.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnDeleteCertificate});
             this.toolStrip4.Location = new System.Drawing.Point(3, 0);
             this.toolStrip4.Name = "toolStrip4";
-            this.toolStrip4.Size = new System.Drawing.Size(26, 25);
+            this.toolStrip4.Size = new System.Drawing.Size(27, 27);
             this.toolStrip4.TabIndex = 0;
             // 
             // btnDeleteCertificate
@@ -1504,7 +1559,7 @@
             this.btnDeleteCertificate.Image = global::LetsEncryptAcmeReg.Properties.Resources.DeleteIcon;
             this.btnDeleteCertificate.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnDeleteCertificate.Name = "btnDeleteCertificate";
-            this.btnDeleteCertificate.Size = new System.Drawing.Size(23, 22);
+            this.btnDeleteCertificate.Size = new System.Drawing.Size(24, 24);
             this.btnDeleteCertificate.Text = "toolStripButton1";
             // 
             // lstCertificates
@@ -1512,9 +1567,11 @@
             this.lstCertificates.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lstCertificates.FormattingEnabled = true;
             this.lstCertificates.IntegralHeight = false;
+            this.lstCertificates.ItemHeight = 16;
             this.lstCertificates.Location = new System.Drawing.Point(0, 0);
+            this.lstCertificates.Margin = new System.Windows.Forms.Padding(4);
             this.lstCertificates.Name = "lstCertificates";
-            this.lstCertificates.Size = new System.Drawing.Size(300, 200);
+            this.lstCertificates.Size = new System.Drawing.Size(400, 255);
             this.lstCertificates.TabIndex = 3;
             // 
             // toolStripContainer1
@@ -1531,11 +1588,13 @@
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.lstRegistrations);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(146, 468);
-            this.toolStripContainer1.Location = new System.Drawing.Point(3, 16);
+            this.toolStripContainer1.ContentPanel.Margin = new System.Windows.Forms.Padding(4);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(195, 586);
+            this.toolStripContainer1.Location = new System.Drawing.Point(4, 21);
+            this.toolStripContainer1.Margin = new System.Windows.Forms.Padding(4);
             this.toolStripContainer1.Name = "toolStripContainer1";
             this.tableLayoutPanel7.SetRowSpan(this.toolStripContainer1, 3);
-            this.toolStripContainer1.Size = new System.Drawing.Size(146, 518);
+            this.toolStripContainer1.Size = new System.Drawing.Size(195, 638);
             this.toolStripContainer1.TabIndex = 2;
             this.toolStripContainer1.Text = "toolStripContainer1";
             // 
@@ -1543,11 +1602,12 @@
             // 
             this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnDeleteRegistration});
             this.toolStrip1.Location = new System.Drawing.Point(3, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(26, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(27, 27);
             this.toolStrip1.TabIndex = 0;
             // 
             // btnDeleteRegistration
@@ -1556,7 +1616,7 @@
             this.btnDeleteRegistration.Image = global::LetsEncryptAcmeReg.Properties.Resources.DeleteIcon;
             this.btnDeleteRegistration.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnDeleteRegistration.Name = "btnDeleteRegistration";
-            this.btnDeleteRegistration.Size = new System.Drawing.Size(23, 22);
+            this.btnDeleteRegistration.Size = new System.Drawing.Size(24, 24);
             this.btnDeleteRegistration.Text = "toolStripButton1";
             this.btnDeleteRegistration.Click += new System.EventHandler(this.btnDeleteRegistration_Click);
             // 
@@ -1565,9 +1625,11 @@
             this.lstRegistrations.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lstRegistrations.FormattingEnabled = true;
             this.lstRegistrations.IntegralHeight = false;
+            this.lstRegistrations.ItemHeight = 16;
             this.lstRegistrations.Location = new System.Drawing.Point(0, 0);
+            this.lstRegistrations.Margin = new System.Windows.Forms.Padding(4);
             this.lstRegistrations.Name = "lstRegistrations";
-            this.lstRegistrations.Size = new System.Drawing.Size(146, 468);
+            this.lstRegistrations.Size = new System.Drawing.Size(195, 586);
             this.lstRegistrations.TabIndex = 0;
             this.lstRegistrations.SelectedIndexChanged += new System.EventHandler(this.lstRegistrations_SelectedIndexChanged);
             // 
@@ -1575,9 +1637,10 @@
             // 
             this.label11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(3, 0);
+            this.label11.Location = new System.Drawing.Point(4, 0);
+            this.label11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(146, 13);
+            this.label11.Size = new System.Drawing.Size(195, 17);
             this.label11.TabIndex = 2;
             this.label11.Text = "Registrations";
             // 
@@ -1585,19 +1648,21 @@
             // 
             this.label12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(155, 0);
+            this.label12.Location = new System.Drawing.Point(207, 0);
+            this.label12.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(146, 13);
+            this.label12.Size = new System.Drawing.Size(195, 17);
             this.label12.TabIndex = 2;
             this.label12.Text = "Domains";
             // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.tableLayoutPanel8);
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Location = new System.Drawing.Point(4, 25);
+            this.tabPage3.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(464, 536);
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(4);
+            this.tabPage3.Size = new System.Drawing.Size(621, 671);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Certificate View";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -1611,14 +1676,15 @@
             this.tableLayoutPanel8.Controls.Add(this.cmbCertViewType, 0, 1);
             this.tableLayoutPanel8.Controls.Add(this.txtCertBase64Data, 0, 2);
             this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel8.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel8.Location = new System.Drawing.Point(4, 4);
+            this.tableLayoutPanel8.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel8.Name = "tableLayoutPanel8";
             this.tableLayoutPanel8.RowCount = 4;
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(458, 530);
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(613, 663);
             this.tableLayoutPanel8.TabIndex = 0;
             // 
             // flowLayoutPanel1
@@ -1628,19 +1694,20 @@
             this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.flowLayoutPanel1.Controls.Add(this.lnkGitLabCertHelp);
             this.flowLayoutPanel1.Controls.Add(this.btnCopyCertBase64Data);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(265, 501);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(362, 628);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(193, 29);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(251, 35);
             this.flowLayoutPanel1.TabIndex = 2;
             // 
             // lnkGitLabCertHelp
             // 
             this.lnkGitLabCertHelp.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lnkGitLabCertHelp.AutoSize = true;
-            this.lnkGitLabCertHelp.Location = new System.Drawing.Point(3, 8);
+            this.lnkGitLabCertHelp.Location = new System.Drawing.Point(4, 9);
+            this.lnkGitLabCertHelp.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lnkGitLabCertHelp.Name = "lnkGitLabCertHelp";
-            this.lnkGitLabCertHelp.Size = new System.Drawing.Size(140, 13);
+            this.lnkGitLabCertHelp.Size = new System.Drawing.Size(185, 17);
             this.lnkGitLabCertHelp.TabIndex = 14;
             this.lnkGitLabCertHelp.TabStop = true;
             this.lnkGitLabCertHelp.Text = "Using these PEMs at GitLab";
@@ -1651,9 +1718,10 @@
             this.btnCopyCertBase64Data.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnCopyCertBase64Data.AutoSize = true;
             this.btnCopyCertBase64Data.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnCopyCertBase64Data.Location = new System.Drawing.Point(149, 3);
+            this.btnCopyCertBase64Data.Location = new System.Drawing.Point(197, 4);
+            this.btnCopyCertBase64Data.Margin = new System.Windows.Forms.Padding(4);
             this.btnCopyCertBase64Data.Name = "btnCopyCertBase64Data";
-            this.btnCopyCertBase64Data.Size = new System.Drawing.Size(41, 23);
+            this.btnCopyCertBase64Data.Size = new System.Drawing.Size(50, 27);
             this.btnCopyCertBase64Data.TabIndex = 13;
             this.btnCopyCertBase64Data.Text = "Copy";
             this.btnCopyCertBase64Data.UseVisualStyleBackColor = true;
@@ -1668,7 +1736,7 @@
             this.cmbAllCerts.Location = new System.Drawing.Point(1, 1);
             this.cmbAllCerts.Margin = new System.Windows.Forms.Padding(1);
             this.cmbAllCerts.Name = "cmbAllCerts";
-            this.cmbAllCerts.Size = new System.Drawing.Size(456, 21);
+            this.cmbAllCerts.Size = new System.Drawing.Size(611, 24);
             this.cmbAllCerts.TabIndex = 11;
             // 
             // cmbCertViewType
@@ -1682,10 +1750,10 @@
             "Csr PEM",
             "Certificate PEM",
             "Issuer PEM"});
-            this.cmbCertViewType.Location = new System.Drawing.Point(1, 24);
+            this.cmbCertViewType.Location = new System.Drawing.Point(1, 27);
             this.cmbCertViewType.Margin = new System.Windows.Forms.Padding(1);
             this.cmbCertViewType.Name = "cmbCertViewType";
-            this.cmbCertViewType.Size = new System.Drawing.Size(456, 21);
+            this.cmbCertViewType.Size = new System.Drawing.Size(611, 24);
             this.cmbCertViewType.TabIndex = 10;
             // 
             // txtCertBase64Data
@@ -1693,12 +1761,13 @@
             this.txtCertBase64Data.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCertBase64Data.Location = new System.Drawing.Point(3, 49);
+            this.txtCertBase64Data.Location = new System.Drawing.Point(4, 56);
+            this.txtCertBase64Data.Margin = new System.Windows.Forms.Padding(4);
             this.txtCertBase64Data.Multiline = true;
             this.txtCertBase64Data.Name = "txtCertBase64Data";
             this.txtCertBase64Data.ReadOnly = true;
             this.txtCertBase64Data.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtCertBase64Data.Size = new System.Drawing.Size(452, 449);
+            this.txtCertBase64Data.Size = new System.Drawing.Size(605, 568);
             this.txtCertBase64Data.TabIndex = 12;
             this.txtCertBase64Data.WordWrap = false;
             // 
@@ -1715,9 +1784,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lstCertDomains.FormattingEnabled = true;
             this.lstCertDomains.IntegralHeight = false;
-            this.lstCertDomains.Location = new System.Drawing.Point(3, 3);
+            this.lstCertDomains.Location = new System.Drawing.Point(4, 4);
+            this.lstCertDomains.Margin = new System.Windows.Forms.Padding(4);
             this.lstCertDomains.Name = "lstCertDomains";
-            this.lstCertDomains.Size = new System.Drawing.Size(12, 578);
+            this.lstCertDomains.Size = new System.Drawing.Size(16, 713);
             this.lstCertDomains.TabIndex = 2;
             // 
             // tableCertDomains
@@ -1728,11 +1798,12 @@
             this.tableCertDomains.Controls.Add(this.btnHideCertDomains, 0, 1);
             this.tableCertDomains.Dock = System.Windows.Forms.DockStyle.Left;
             this.tableCertDomains.Location = new System.Drawing.Point(0, 0);
+            this.tableCertDomains.Margin = new System.Windows.Forms.Padding(4);
             this.tableCertDomains.Name = "tableCertDomains";
             this.tableCertDomains.RowCount = 2;
             this.tableCertDomains.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableCertDomains.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableCertDomains.Size = new System.Drawing.Size(18, 609);
+            this.tableCertDomains.Size = new System.Drawing.Size(24, 750);
             this.tableCertDomains.TabIndex = 3;
             this.tableCertDomains.Visible = false;
             // 
@@ -1741,10 +1812,10 @@
             this.btnHideCertDomains.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.btnHideCertDomains.AutoSize = true;
             this.btnHideCertDomains.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnHideCertDomains.Location = new System.Drawing.Point(1, 585);
+            this.btnHideCertDomains.Location = new System.Drawing.Point(1, 722);
             this.btnHideCertDomains.Margin = new System.Windows.Forms.Padding(1);
             this.btnHideCertDomains.Name = "btnHideCertDomains";
-            this.btnHideCertDomains.Size = new System.Drawing.Size(16, 23);
+            this.btnHideCertDomains.Size = new System.Drawing.Size(22, 27);
             this.btnHideCertDomains.TabIndex = 12;
             this.btnHideCertDomains.Text = "ok";
             this.btnHideCertDomains.UseVisualStyleBackColor = true;
@@ -1760,92 +1831,60 @@
             // toolStripContainer5.ContentPanel
             // 
             this.toolStripContainer5.ContentPanel.Controls.Add(this.tabControl1);
-            this.toolStripContainer5.ContentPanel.Size = new System.Drawing.Size(472, 562);
+            this.toolStripContainer5.ContentPanel.Margin = new System.Windows.Forms.Padding(4);
+            this.toolStripContainer5.ContentPanel.Size = new System.Drawing.Size(629, 700);
             this.toolStripContainer5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer5.Location = new System.Drawing.Point(0, 0);
+            this.toolStripContainer5.Margin = new System.Windows.Forms.Padding(4);
             this.toolStripContainer5.Name = "toolStripContainer5";
-            this.toolStripContainer5.Size = new System.Drawing.Size(472, 609);
+            this.toolStripContainer5.Size = new System.Drawing.Size(629, 750);
             this.toolStripContainer5.TabIndex = 6;
             this.toolStripContainer5.Text = "toolStripContainer5";
             // 
             // statusStrip1
             // 
             this.statusStrip1.Dock = System.Windows.Forms.DockStyle.None;
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.labVer,
             this.toolStripStatusLabel1,
             this.lnkProject});
             this.statusStrip1.Location = new System.Drawing.Point(0, 0);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(472, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(629, 25);
             this.statusStrip1.TabIndex = 0;
             // 
             // labVer
             // 
             this.labVer.Name = "labVer";
-            this.labVer.Size = new System.Drawing.Size(37, 17);
+            this.labVer.Size = new System.Drawing.Size(46, 20);
             this.labVer.Text = "v0.0.0";
             // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(78, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(147, 20);
             this.toolStripStatusLabel1.Spring = true;
             // 
             // lnkProject
             // 
             this.lnkProject.IsLink = true;
             this.lnkProject.Name = "lnkProject";
-            this.lnkProject.Size = new System.Drawing.Size(342, 17);
+            this.lnkProject.Size = new System.Drawing.Size(421, 20);
             this.lnkProject.Text = "https://github.com/masbicudo/LetsEncrypt-Certificate-Creator";
             this.lnkProject.Click += new System.EventHandler(this.linkProject_LinkClicked);
             // 
-            // tableLayoutPanel11
-            // 
-            this.tableLayoutPanel11.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel11.AutoSize = true;
-            this.tableLayoutPanel11.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanel11.ColumnCount = 2;
-            this.tableLayoutPanel1.SetColumnSpan(this.tableLayoutPanel11, 2);
-            this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel11.Controls.Add(this.btnCertDomains, 1, 0);
-            this.tableLayoutPanel11.Controls.Add(this.cmbCertificate, 0, 0);
-            this.tableLayoutPanel11.Location = new System.Drawing.Point(0, 310);
-            this.tableLayoutPanel11.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel11.Name = "tableLayoutPanel11";
-            this.tableLayoutPanel11.RowCount = 1;
-            this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel11.Size = new System.Drawing.Size(401, 25);
-            this.tableLayoutPanel11.TabIndex = 2;
-            // 
-            // btnCertDomains
-            // 
-            this.btnCertDomains.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCertDomains.AutoSize = true;
-            this.btnCertDomains.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnCertDomains.Location = new System.Drawing.Point(308, 1);
-            this.btnCertDomains.Margin = new System.Windows.Forms.Padding(1);
-            this.btnCertDomains.Name = "btnCertDomains";
-            this.btnCertDomains.Size = new System.Drawing.Size(92, 23);
-            this.btnCertDomains.TabIndex = 12;
-            this.btnCertDomains.Text = "More domains...";
-            this.btnCertDomains.UseVisualStyleBackColor = true;
-            this.btnCertDomains.Click += new System.EventHandler(this.btnCertDomains_Click);
-            // 
             // Form2
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(472, 609);
+            this.ClientSize = new System.Drawing.Size(629, 750);
             this.Controls.Add(this.tableCertDomains);
             this.Controls.Add(this.toolStripContainer5);
             this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(480, 640);
+            this.Margin = new System.Windows.Forms.Padding(4);
+            this.MinimumSize = new System.Drawing.Size(634, 777);
             this.Name = "Form2";
             this.Text = "LetsEncrypt.com Certification Wizard (by MASBicudo)";
             this.Resize += new System.EventHandler(this.Form2_Resize);
@@ -1853,6 +1892,8 @@
             this.tabPage1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.tableLayoutPanel11.ResumeLayout(false);
+            this.tableLayoutPanel11.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
@@ -1909,8 +1950,6 @@
             this.toolStripContainer5.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.tableLayoutPanel11.ResumeLayout(false);
-            this.tableLayoutPanel11.PerformLayout();
             this.ResumeLayout(false);
 
         }

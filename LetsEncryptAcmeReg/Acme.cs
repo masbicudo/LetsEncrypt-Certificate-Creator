@@ -75,10 +75,9 @@ namespace LetsEncryptAcmeReg
             VaultInfo vlt = null;
             for (int it = 0; it < 2 && vlt == null; it++)
             {
-                vlt = new GetVault().GetValue<VaultInfo>()
+                vlt = CmdLetExtensions.GetValue<VaultInfo>(new GetVault())
                           ??
-                          new InitializeVault { BaseUri = "https://acme-v01.api.letsencrypt.org/" }
-                              .GetValue<VaultInfo>();
+                          CmdLetExtensions.GetValue<VaultInfo>(new InitializeVault { BaseUri = "https://acme-v01.api.letsencrypt.org/" });
             }
             return vlt;
         }
@@ -181,8 +180,7 @@ namespace LetsEncryptAcmeReg
 
         public bool IdentifierExists(string idref)
         {
-            IDictionary[] allIds = new GetIdentifier()
-                .GetValues()
+            IDictionary[] allIds = GetAllIdentifiers()
                 .Where(x => x != null)
                 .Select(x => (x as object).ToDictionary()).ToArray();
 
@@ -551,6 +549,23 @@ namespace LetsEncryptAcmeReg
             using (Stream s = vlt.LoadAsset(asset))
             using (var reader = new StreamReader(s))
                 return reader.ReadToEnd();
+        }
+
+        public CertificateInfo[] GetAllCertificates()
+        {
+            using (var vlt = GetVault())
+            {
+                vlt.OpenStorage();
+                var v = vlt.LoadVault();
+
+                if (v.Registrations == null || v.Registrations.Count < 1)
+                    throw new InvalidOperationException("No registrations found");
+
+                var ri = v.Registrations[0];
+                var r = ri.Registration;
+
+                return v.Certificates.Values.ToArray();
+            }
         }
     }
 }

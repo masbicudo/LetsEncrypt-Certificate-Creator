@@ -275,8 +275,8 @@ namespace LetsEncryptAcmeReg
                         Handler = "Manual",
                         IdentifierRef = idref,
                         ChallengeType = "http-01",
-                        Repeat = SwitchParameter.Present,
-                        Regenerate = SwitchParameter.Present
+                        RepeatDecoder = SwitchParameter.Present,
+                        //Regenerate = SwitchParameter.Present
                     }
                         .GetValue<AuthorizationState>();
 
