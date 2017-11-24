@@ -54,9 +54,12 @@ namespace LetsEncryptAcmeReg
             VaultInfo vlt = null;
             for (int it = 0; it < 2 && vlt == null; it++)
             {
-                vlt = CmdLetExtensions.GetValue<VaultInfo>(new GetVault())
-                          ??
-                          CmdLetExtensions.GetValue<VaultInfo>(new InitializeVault { BaseUri = "https://acme-v01.api.letsencrypt.org/" });
+                vlt = new GetVault().GetValue<VaultInfo>();
+
+                if (vlt == null)
+                    new InitializeVault { BaseUri = "https://acme-v01.api.letsencrypt.org/" }.Run();
+
+                vlt = new GetVault().GetValue<VaultInfo>();
             }
             return vlt;
         }
