@@ -557,6 +557,7 @@ namespace LetsEncryptAcmeReg
 
                     this.Model.Domains.Value = this.Model.Domains.Value?.Append(states[0].Dns).Sort().Distinct().ToArray();
                     this.Model.Domain.Value = states[0].Dns;
+                    this.Model.CurrentIdentifier.Value = states[0];
                 },
                 this.Model.AutoInitializeChallenge,
                 this.InitializeChallenge);
