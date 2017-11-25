@@ -116,6 +116,28 @@ namespace LetsEncryptAcmeReg
         public static string IssuerSerialNumberNotSet { get; }
             = "IssuerSerialNumber was not set.";
 
+        public static string ToolTipForAutoValidate =>
+            "Automatically triggers validation after `Test` passes.\n" +
+            "This sets both `Test` and `Validate` commands to auto-retry when failed.";
+
+        public static string ToolTipForMoreDomains =>
+            "Allows you to add multiple domains in a single certificate.\n" +
+            "All domains must have passed the validation process already.";
+
+        public static string ToolTipForCertificate =>
+            "The domains for which you want to create a certificate file.";
+
+        public static string ToolTipForCreateCertificate =>
+            "Creates the certificate with the given domain or domains.\n" +
+            "After calling this you must send the created certificate to Let's Encrypt,\n" +
+            "so that they can validate it and put their signature over it.";
+
+        public static string ToolTipForRoot =>
+            "This is the folder where your site is stored.\n" +
+            "The generated challenge files will be saved here,\n" +
+            "or in a subdirectory... it depends on the SSG\n"+
+            "(Statis Site Generator) being used.";
+
         public static string MapMessageToExplanation(string message)
         {
             if (dicMsgExplain == null)

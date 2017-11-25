@@ -54,9 +54,17 @@ namespace LetsEncryptAcmeReg
             this.ToolTipFor(this.btnValidate, Messages.ToolTipForValidate);
             this.ToolTipFor(this.btnUpdateStatus, Messages.ToolTipForUpdateStatus);
 
+            this.ToolTipFor(this.chkAutoValidate, Messages.ToolTipForAutoValidate);
+
             this.ToolTipFor(this.btnRegister, Messages.ToolTipForRegister);
 
             this.ToolTipFor(this.lnkGitLabCertHelp, Messages.ToolTipForGitLabCertHelp, "v,>,<,^,>v,>^,<v,<^");
+
+            this.ToolTipFor(this.cmbCertificate, Messages.ToolTipForCertificate);
+            this.ToolTipFor(this.btnCreateCertificate, Messages.ToolTipForCreateCertificate);
+            this.ToolTipFor(this.btnCertDomains, Messages.ToolTipForMoreDomains);
+
+            this.ToolTipFor(this.txtSiteRoot, Messages.ToolTipForRoot);
 
             this.txtSiteRoot.MouseMove += this.txtSiteRoot_MouseMove;
             this.txtSiteRoot.MouseEnter += this.txtSiteRoot_MouseEnter;
