@@ -205,7 +205,7 @@ namespace LetsEncryptAcmeReg
                 {
                     bool cancel = false;
                     for (int it = 0; it < this.changingHandlers.Count; it++)
-                        this.changingHandlers[it].Invoke(this, this.value, value, ref cancel);
+                        this.changingHandlers[it].Invoke(this, ref value, this.value, ref cancel);
                     if (cancel)
                         return;
                 }
@@ -247,7 +247,7 @@ namespace LetsEncryptAcmeReg
                 {
                     bool cancel = false;
                     for (int it = 0; it < this.changingHandlers.Count; it++)
-                        cancel = await this.changingHandlers[it].InvokeAsync(this, this.value, value, cancel);
+                        (cancel, value) = await this.changingHandlers[it].InvokeAsync(this, value, this.value, cancel);
                     if (cancel)
                         return;
                 }
@@ -475,21 +475,23 @@ namespace LetsEncryptAcmeReg
                 this.async = async;
             }
 
-            public void Invoke(Bindable<T> sender, T value, T prev, ref bool cancel)
+            public void Invoke(Bindable<T> sender, ref T value, T prev, ref bool cancel)
             {
                 if (this.sync != null)
-                    this.sync(sender, value, prev, ref cancel);
+                    this.sync(sender, ref value, prev, ref cancel);
                 else if (this.@async != null)
-                    cancel = this.@async(sender, value, prev, cancel).Result;
+                    foreach (BindableChangingAsync<T> bindableChangingAsync in this.@async.GetInvocationList())
+                        (cancel, value) = bindableChangingAsync(sender, value, prev, cancel).Result;
             }
 
-            public async Task<bool> InvokeAsync(Bindable<T> sender, T value, T prev, bool cancel)
+            public async Task<(bool cancel, T newValue)> InvokeAsync(Bindable<T> sender, T value, T prev, bool cancel)
             {
                 if (this.@async != null)
-                    cancel = await this.@async(sender, value, prev, cancel);
+                    foreach (BindableChangingAsync<T> bindableChangingAsync in this.@async.GetInvocationList())
+                        (cancel, value) = await bindableChangingAsync(sender, value, prev, cancel);
                 else if (this.sync != null)
-                    this.sync(sender, value, prev, ref cancel);
-                return cancel;
+                    this.sync(sender, ref value, prev, ref cancel);
+                return (cancel, value);
             }
 
             public static implicit operator ChangingHandlers(BindableChanging<T> b) => new ChangingHandlers(b);
