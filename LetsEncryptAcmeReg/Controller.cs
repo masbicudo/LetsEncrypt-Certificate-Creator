@@ -63,6 +63,9 @@ namespace LetsEncryptAcmeReg
             init += mo.Domains.BindExpression(() => this.acme.GetDomainsByEmail(mo.Registrations.Value, mo.Email.Value).OrderBy(x => x).ToArray());
             init += mo.Certificates.BindExpression(() => this.Certifcates_value(mo.CurrentRegistration.Value, mo.CurrentIdentifier.Value));
 
+            mo.Challenge.Changed += Challenge_Changed;
+            mo.CurrentAuthState.Changing += CurrentAuthState_Changing;
+
             // Complex relations:
             //      These relations are built by using expressions.
             //      Every bindable reference in the right hand side
@@ -72,10 +75,10 @@ namespace LetsEncryptAcmeReg
             init += mo.IsDomainValid.BindExpression(() => !string.IsNullOrWhiteSpace(mo.Domain.Value) && mo.IsEmailValid.Value);
             init += mo.IsDomainCreated.BindExpression(() => mo.Domains.Value._S(v => v.Any(i => i == mo.Domain.Value)) ?? false);
             init += mo.IsChallengeValid.BindExpression(() => !string.IsNullOrWhiteSpace(mo.Challenge.Value) && mo.IsDomainValid.Value);
-            init += mo.IsChallengeCreated.BindExpression(() => mo.CurrentAuthState.Value._(v => v.Challenges._S(c => c.Any(x => x.Challenge != null))) ?? false);
-            init += mo.IsTargetValid.BindExpression(() => !string.IsNullOrWhiteSpace(mo.Target.Value) && mo.IsChallengeCreated.Value);
-            init += mo.IsKeyValid.BindExpression(() => !string.IsNullOrWhiteSpace(mo.Key.Value) && mo.IsChallengeCreated.Value);
-            init += mo.IsSiteRootValid.BindExpression(() => !string.IsNullOrWhiteSpace(mo.SiteRoot.Value) && mo.IsChallengeCreated.Value);
+            init += mo.IsChallengeInitialized.BindExpression(() => mo.CurrentAuthState.Value._(v => v.Challenges._S(c => c.Any(x => x.Challenge != null))) ?? false);
+            init += mo.IsTargetValid.BindExpression(() => !string.IsNullOrWhiteSpace(mo.Target.Value) && mo.IsChallengeInitialized.Value);
+            init += mo.IsKeyValid.BindExpression(() => !string.IsNullOrWhiteSpace(mo.Key.Value) && mo.IsChallengeInitialized.Value);
+            init += mo.IsSiteRootValid.BindExpression(() => !string.IsNullOrWhiteSpace(mo.SiteRoot.Value) && mo.IsChallengeInitialized.Value);
             init += mo.ChallengeHasFile.BindExpression(() => mo.IsTargetValid.Value && mo.IsKeyValid.Value
                     && (mo.Challenge.Value != "http-01" || !string.IsNullOrWhiteSpace(mo.SiteRoot.Value)));
 
@@ -96,7 +99,6 @@ namespace LetsEncryptAcmeReg
             init += mo.CanRegister.BindExpression(() => this.CanRegister_Value(mo.Registrations.Value, mo.Email.Value, mo.IsEmailValid.Value));
             init += mo.CanAcceptTos.BindExpression(() => this.CanAcceptTos_Value(mo.CurrentRegistration.Value));
             init += mo.CanAddDomain.BindExpression(() => mo.CurrentRegistration.Value != null && mo.IsDomainValid.Value && !mo.IsDomainCreated.Value);
-            init += mo.CanInitializeChallenge.BindExpression(() => mo.CurrentIdentifier.Value != null && mo.IsChallengeValid.Value);
             init += mo.CanSaveChallenge.BindExpression(() => mo.ChallengeHasFile.Value);
             init += mo.CanCommitChallenge.BindExpression(() => this.CanCommitChallenge_Value(mo.SiteRoot.Value));
             init += mo.CanTestChallenge.BindExpression(() => mo.IsTargetValid.Value && mo.IsKeyValid.Value);
@@ -133,6 +135,43 @@ namespace LetsEncryptAcmeReg
             mo.CurrentSsg.Changed += this.CurrentSsg_Changed;
 
             return init;
+        }
+
+        private void Challenge_Changed(string challenge)
+        {
+            if (string.IsNullOrWhiteSpace(challenge))
+                return;
+
+            var value = InitChallenge();
+            this.Model.CurrentAuthState.Value = value;
+        }
+
+        private void CurrentAuthState_Changing(Bindable<AuthorizationState> sender, ref AuthorizationState value, AuthorizationState prev, ref bool cancel)
+        {
+            value = InitChallenge();
+        }
+
+        AuthorizationState InitChallenge(string idref = null, string challengeType = null)
+        {
+            if (this.Model.CurrentIdentifier.Value == null)
+                return null;
+
+            if (challengeType == null)
+            {
+                this.Model.Challenge.Update();
+                challengeType = this.Model.Challenge.Value;
+            }
+
+            if (string.IsNullOrWhiteSpace(challengeType))
+                return null;
+
+            idref = idref ?? this.acme.GetIdentifierAlias(
+                        this.Model.CurrentRegistration.Value,
+                        this.Model.Domain.Value);
+
+            var state = this.acme.SetupChallenge(idref, challengeType);
+
+            return state;
         }
 
         private string[] Certifcates_value(RegistrationInfo registrationInfo, IdentifierInfo domain)
@@ -187,7 +226,7 @@ namespace LetsEncryptAcmeReg
             return true;
         }
 
-        private void CurrentSsg_Changing(Bindable<ISsg> sender, ISsg value, ISsg prev, ref bool cancel)
+        private void CurrentSsg_Changing(Bindable<ISsg> sender, ref ISsg value, ISsg prev, ref bool cancel)
         {
             prev?.Dispose();
             this.UIServices.ClearPanelForSsg();
@@ -509,7 +548,7 @@ namespace LetsEncryptAcmeReg
                         var newList = this.Model.Registrations.Value.Concat(new[] { newRegistration }).ToArray();
                         this.Model.Registrations.Value = newList;
                         this.Model.CurrentRegistration.Value = newRegistration;
-                        this.Success("Registration created.");
+                        this.Success($"Registration created for {newRegistration.Registration.Contacts.FirstOrDefault()}");
                     }
                     else
                         throw new InvalidOperationException("E-mail already used in another registration.");
@@ -528,6 +567,7 @@ namespace LetsEncryptAcmeReg
                 async () =>
                 {
                     this.Model.CurrentRegistration.Value = this.acme.AcceptTos(this.Model.CurrentRegistration.Value);
+                    this.Success("Terms of service accepted");
                 },
                 this.Model.AutoAddDomain,
                 this.AddDomain);
@@ -558,30 +598,9 @@ namespace LetsEncryptAcmeReg
                     this.Model.Domains.Value = this.Model.Domains.Value?.Append(states[0].Dns).Sort().Distinct().ToArray();
                     this.Model.Domain.Value = states[0].Dns;
                     this.Model.CurrentIdentifier.Value = states[0];
-                },
-                this.Model.AutoInitializeChallenge,
-                this.InitializeChallenge);
-        }
+                    this.Model.CurrentAuthState.Value = states[0].Authorization;
 
-        public async Task InitializeChallenge()
-        {
-            await AutoCaller(
-                this.Model.CanInitializeChallenge,
-                this.Model.AutoInitializeChallenge,
-                this.Model.AutoInitializeChallengeRetry,
-                this.Model.AutoInitializeChallengeTimer,
-                async () =>
-                {
-                    if (this.Model.CurrentIdentifier.Value == null)
-                        return;
-
-                    var idref = this.acme.GetIdentifierAlias(
-                        this.Model.CurrentRegistration.Value,
-                        this.Model.Domain.Value);
-
-                    var state = this.acme.SetupChallenge(idref, this.Model.Challenge.Value);
-
-                    this.Model.CurrentAuthState.Value = state;
+                    this.Success($"Domain added: {states[0].Dns}");
                 },
                 this.Model.AutoSaveChallenge,
                 this.SaveChallenge);
@@ -600,10 +619,11 @@ namespace LetsEncryptAcmeReg
                     if (ssg != null)
                     {
                         ssg.Patch();
+                        this.Success($"Challenge file(s) saved");
                     }
                     else
                     {
-
+                        this.Success($"There is nothing to do!");
                     }
                 },
                 this.Model.AutoCommitChallenge,
@@ -633,6 +653,8 @@ namespace LetsEncryptAcmeReg
                         foreach (var eachPath in filesToAdd)
                             repo.Index.Add(eachPath.TrimStart('\\', '/'));
 
+                        this.Success($"Files staged");
+
                         // Create the committer's signature and commit
                         Signature author = new Signature(username, email, DateTime.Now);
                         Signature committer = author;
@@ -652,6 +674,8 @@ namespace LetsEncryptAcmeReg
                             // ignore empty commit exception
                         }
 
+                        this.Success($"Files commited");
+
                         if (ok)
                         {
                             // Push to origin
@@ -661,6 +685,8 @@ namespace LetsEncryptAcmeReg
                             options.CredentialsProvider = (url, usernameFromUrl, types) => credentials;
                             var pushRefSpec = @"refs/heads/master";
                             repo.Network.Push(remote, pushRefSpec, options);
+
+                            this.Success($"Files pushed to origin");
                         }
                     }
                 },
@@ -714,7 +740,7 @@ namespace LetsEncryptAcmeReg
                                 this.Model.CanValidateChallenge.Value = false;
                             }
 
-                    throw new Exception("Waiting for file to be uploaded.");
+                    throw new Exception("Files are not yet publicly visible.");
                 },
                 this.Model.AutoValidateChallenge,
                 this.Validate);
@@ -737,6 +763,13 @@ namespace LetsEncryptAcmeReg
                         Force = SwitchParameter.Present
                     }.GetValue<AuthorizationState>();
                     this.Model.CurrentAuthState.Value = state;
+
+                    if (state.Status == "valid")
+                        this.Success?.Invoke($"Validation status for {state.Identifier}: {state.Status}");
+                    else if (state.Status == "pending")
+                        this.Warn?.Invoke($"Validation status for {state.Identifier}: {state.Status}");
+                    else
+                        throw new Exception($"Validation status for {state.Identifier}: {state.Status}");
                 },
                 this.Model.AutoUpdateStatus,
                 this.UpdateStatus);
@@ -970,7 +1003,14 @@ namespace LetsEncryptAcmeReg
             var idref = this.acme.GetIdentifierAlias(this.Model.CurrentRegistration.Value, this.Model.CurrentAuthState.Value.Identifier);
             var newState = new UpdateIdentifier { IdentifierRef = idref }.GetValue<AuthorizationState>();
 
-            this.Model.CurrentAuthState.SetOnce(newState);
+            this.Model.CurrentAuthState.Value = newState;
+
+            if (newState.Status == "valid")
+                this.Success?.Invoke($"Validation status for {newState.Identifier}: {newState.Status}");
+            else if (newState.Status == "pending")
+                this.Warn?.Invoke($"Validation status for {newState.Identifier}: {newState.Status}");
+            else
+                this.Error?.Invoke(new Exception($"Validation status for {newState.Identifier}: {newState.Status}"));
         }
 
         public void DeleteCurrentRegistration()

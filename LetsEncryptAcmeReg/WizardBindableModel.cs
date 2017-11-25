@@ -54,7 +54,7 @@ namespace LetsEncryptAcmeReg
 
         public Bindable<bool> IsRegistrationCreated { get; } = new Bindable<bool>(nameof(IsRegistrationCreated));
         public Bindable<bool> IsDomainCreated { get; } = new Bindable<bool>(nameof(IsDomainCreated));
-        public Bindable<bool> IsChallengeCreated { get; } = new Bindable<bool>(nameof(IsChallengeCreated));
+        public Bindable<bool> IsChallengeInitialized { get; } = new Bindable<bool>(nameof(IsChallengeInitialized));
         public Bindable<bool> ChallengeHasFile { get; } = new Bindable<bool>(nameof(ChallengeHasFile));
         public Bindable<string[]> Domains { get; } = new Bindable<string[]>(nameof(Domains));
         public Bindable<RegistrationInfo[]> Registrations { get; } = new Bindable<RegistrationInfo[]>(nameof(Registrations));
@@ -74,7 +74,6 @@ namespace LetsEncryptAcmeReg
         public Bindable<bool> AutoRegister { get; } = new Bindable<bool>(nameof(AutoRegister));
         public Bindable<bool> AutoAcceptTos { get; } = new Bindable<bool>(nameof(AutoAcceptTos));
         public Bindable<bool> AutoAddDomain { get; } = new Bindable<bool>(nameof(AutoAddDomain));
-        public Bindable<bool> AutoInitializeChallenge { get; } = new Bindable<bool>(nameof(AutoInitializeChallenge));
         public Bindable<bool> AutoSaveChallenge { get; } = new Bindable<bool>(nameof(AutoSaveChallenge));
         public Bindable<bool> AutoCommitChallenge { get; } = new Bindable<bool>(nameof(AutoCommitChallenge));
         public Bindable<bool> AutoTestChallenge { get; } = new Bindable<bool>(nameof(AutoTestChallenge));
@@ -88,7 +87,6 @@ namespace LetsEncryptAcmeReg
         public Bindable<int?> AutoRegisterTimer { get; } = new Bindable<int?>(nameof(AutoRegisterTimer));
         public Bindable<int?> AutoAcceptTosTimer { get; } = new Bindable<int?>(nameof(AutoAcceptTosTimer));
         public Bindable<int?> AutoAddDomainTimer { get; } = new Bindable<int?>(nameof(AutoAddDomainTimer));
-        public Bindable<int?> AutoInitializeChallengeTimer { get; } = new Bindable<int?>(nameof(AutoInitializeChallengeTimer));
         public Bindable<int?> AutoSaveChallengeTimer { get; } = new Bindable<int?>(nameof(AutoSaveChallengeTimer));
         public Bindable<int?> AutoCommitChallengeTimer { get; } = new Bindable<int?>(nameof(AutoCommitChallengeTimer));
         public Bindable<int?> AutoTestChallengeTimer { get; } = new Bindable<int?>(nameof(AutoTestChallengeTimer));
@@ -102,7 +100,6 @@ namespace LetsEncryptAcmeReg
         public Bindable<int?> AutoRegisterRetry { get; } = new Bindable<int?>(nameof(AutoRegisterRetry));
         public Bindable<int?> AutoAcceptTosRetry { get; } = new Bindable<int?>(nameof(AutoAcceptTosRetry));
         public Bindable<int?> AutoAddDomainRetry { get; } = new Bindable<int?>(nameof(AutoAddDomainRetry));
-        public Bindable<int?> AutoInitializeChallengeRetry { get; } = new Bindable<int?>(nameof(AutoInitializeChallengeRetry));
         public Bindable<int?> AutoSaveChallengeRetry { get; } = new Bindable<int?>(nameof(AutoSaveChallengeRetry));
         public Bindable<int?> AutoCommitChallengeRetry { get; } = new Bindable<int?>(nameof(AutoCommitChallengeRetry));
         public Bindable<int?> AutoTestChallengeRetry { get; } = new Bindable<int?>(nameof(AutoTestChallengeRetry));
@@ -116,7 +113,6 @@ namespace LetsEncryptAcmeReg
         public Bindable<bool> CanRegister { get; } = new Bindable<bool>(nameof(CanRegister));
         public Bindable<bool> CanAcceptTos { get; } = new Bindable<bool>(nameof(CanAcceptTos));
         public Bindable<bool> CanAddDomain { get; } = new Bindable<bool>(nameof(CanAddDomain));
-        public Bindable<bool> CanInitializeChallenge { get; } = new Bindable<bool>(nameof(CanInitializeChallenge));
         public Bindable<bool> CanSaveChallenge { get; } = new Bindable<bool>(nameof(CanSaveChallenge));
         public Bindable<bool> CanCommitChallenge { get; } = new Bindable<bool>(nameof(CanCommitChallenge));
         public Bindable<bool> CanTestChallenge { get; } = new Bindable<bool>(nameof(CanTestChallenge));

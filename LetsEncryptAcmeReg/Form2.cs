@@ -45,7 +45,6 @@ namespace LetsEncryptAcmeReg
             this.ToolTipFor(this.btnAddDomain, Messages.ToolTipForAddDomain);
             this.ToolTipFor(this.cmbDomain, Messages.ToolTipForDomain);
 
-            this.ToolTipFor(this.btnInitializeChallenge, Messages.ToolTipForInitializeChallenge);
             this.ToolTipFor(this.txtChallengeTarget, Messages.ToolTipForChallengeTarget);
             this.ToolTipFor(this.txtChallengeKey, Messages.ToolTipForChallengeKey);
             this.ToolTipFor(this.cmbSsg, Messages.ToolTipForSsg);
@@ -88,7 +87,6 @@ namespace LetsEncryptAcmeReg
             init += mo.AutoRegister.BindControl(this.chkAutoRegister);
             init += mo.AutoAcceptTos.BindControl(this.chkAutoAcceptTos);
             init += mo.AutoAddDomain.BindControl(this.chkAutoAddDomain);
-            init += mo.AutoInitializeChallenge.BindControl(this.chkAutoInitializeChallenge);
             init += mo.AutoSaveChallenge.BindControl(this.chkAutoSaveChallenge);
             init += mo.AutoCommitChallenge.BindControl(this.chkAutoCommit);
             init += mo.AutoTestChallenge.BindControl(this.chkAutoTest);
@@ -117,7 +115,6 @@ namespace LetsEncryptAcmeReg
             init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnRegister, mo.AutoRegisterRetry.Value, mo.AutoRegisterTimer.Value));
             init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnAcceptTos, mo.AutoAcceptTosRetry.Value, mo.AutoAcceptTosTimer.Value));
             init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnAddDomain, mo.AutoAddDomainRetry.Value, mo.AutoAddDomainTimer.Value));
-            init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnInitializeChallenge, mo.AutoInitializeChallengeRetry.Value, mo.AutoInitializeChallengeTimer.Value));
             init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnSaveChallenge, mo.AutoSaveChallengeRetry.Value, mo.AutoSaveChallengeTimer.Value));
             init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnCommitChallenge, mo.AutoCommitChallengeRetry.Value, mo.AutoCommitChallengeTimer.Value));
             init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnTestChallenge, mo.AutoTestChallengeRetry.Value, mo.AutoTestChallengeTimer.Value));
@@ -127,7 +124,6 @@ namespace LetsEncryptAcmeReg
             init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnSubmit, mo.AutoSubmitCertificateRetry.Value, mo.AutoSubmitCertificateTimer.Value));
             init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnGetIssuerCert, mo.AutoGetIssuerCertificateRetry.Value, mo.AutoGetIssuerCertificateTimer.Value));
             init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnSaveCertificate, mo.AutoSaveOrShowCertificateRetry.Value, mo.AutoSaveOrShowCertificateTimer.Value));
-            //init += BindHelper.BindExpression(() => RetryToolTip(this.btnShowCertificate, null, null));
 
             // Custom collection bindings:
             init += mo.Registrations.Bind(
@@ -177,7 +173,6 @@ namespace LetsEncryptAcmeReg
             mo.CanAcceptTos.Changed += v => this.btnAcceptTos.Enabled = v;
             mo.IsRegistrationCreated.Changed += v => this.lnkTOS.Enabled = v;
             mo.CanAddDomain.Changed += v => this.btnAddDomain.Enabled = v;
-            mo.CanInitializeChallenge.Changed += v => this.btnInitializeChallenge.Enabled = v;
             mo.CanSaveChallenge.Changed += v => this.btnSaveChallenge.Enabled = v;
             mo.CanCommitChallenge.Changed += v => this.btnCommitChallenge.Enabled = v;
             mo.CanTestChallenge.Changed += v => this.btnTestChallenge.Enabled = v;
@@ -192,7 +187,6 @@ namespace LetsEncryptAcmeReg
 
             mo.IsPasswordEnabled.Changed += v => this.txtPassword.Enabled = this.chkShowPassword.Enabled = v;
             mo.Files.Changed += this.UpdateFiles;
-            //mo.CurrentAuthState.Changing += this.CurrentAuthState_Changing;
             mo.CurrentAuthState.Changed += this.CurrentAuthState_Changed;
             mo.CurrentIdentifier.Changed += s => this.tableCertDomains.Hide();
             mo.CurrentSsg.Changed += this.CurrentSsg_Changed;
@@ -451,9 +445,6 @@ namespace LetsEncryptAcmeReg
 
         private async void btnAddDomain_Click(object sender, EventArgs e)
             => await this.controller.AddDomain();
-
-        private async void btnInitializeChallenge_Click(object sender, EventArgs e)
-            => await this.controller.InitializeChallenge();
 
         private async void lstRegistrations_SelectedIndexChanged(object sender, EventArgs e)
             => await this.controller.RegistrationListChanged();

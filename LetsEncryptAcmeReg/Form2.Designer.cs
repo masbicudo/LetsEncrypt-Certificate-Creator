@@ -38,7 +38,6 @@
             this.cmbCertificate = new System.Windows.Forms.ComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.btnInitializeChallenge = new System.Windows.Forms.Button();
             this.btnAddDomain = new System.Windows.Forms.Button();
             this.cmbDomain = new System.Windows.Forms.ComboBox();
             this.chkAutoAddDomain = new System.Windows.Forms.CheckBox();
@@ -55,7 +54,6 @@
             this.chkAutoValidate = new System.Windows.Forms.CheckBox();
             this.chkAutoUpdateStatus = new System.Windows.Forms.CheckBox();
             this.btnUpdateStatus = new System.Windows.Forms.Button();
-            this.chkAutoInitializeChallenge = new System.Windows.Forms.CheckBox();
             this.chkAutoCreateCertificate = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.lnkTOS = new System.Windows.Forms.LinkLabel();
@@ -217,14 +215,12 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel11, 0, 9);
             this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 13);
-            this.tableLayoutPanel1.Controls.Add(this.btnInitializeChallenge, 3, 5);
             this.tableLayoutPanel1.Controls.Add(this.btnAddDomain, 3, 3);
             this.tableLayoutPanel1.Controls.Add(this.cmbDomain, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.chkAutoAddDomain, 2, 3);
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.btnCreateCertificate, 3, 9);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 0, 7);
-            this.tableLayoutPanel1.Controls.Add(this.chkAutoInitializeChallenge, 2, 5);
             this.tableLayoutPanel1.Controls.Add(this.chkAutoCreateCertificate, 2, 9);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel6, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.cmbRegistration, 1, 1);
@@ -274,7 +270,7 @@
             this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel11.Controls.Add(this.btnCertDomains, 1, 0);
             this.tableLayoutPanel11.Controls.Add(this.cmbCertificate, 0, 0);
-            this.tableLayoutPanel11.Location = new System.Drawing.Point(0, 359);
+            this.tableLayoutPanel11.Location = new System.Drawing.Point(0, 356);
             this.tableLayoutPanel11.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel11.Name = "tableLayoutPanel11";
             this.tableLayoutPanel11.RowCount = 1;
@@ -315,10 +311,10 @@
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tableLayoutPanel1.SetColumnSpan(this.panel1, 4);
             this.panel1.Controls.Add(this.richTextBox1);
-            this.panel1.Location = new System.Drawing.Point(4, 565);
+            this.panel1.Location = new System.Drawing.Point(4, 562);
             this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(603, 88);
+            this.panel1.Size = new System.Drawing.Size(603, 91);
             this.panel1.TabIndex = 2;
             // 
             // richTextBox1
@@ -331,25 +327,11 @@
             this.richTextBox1.Margin = new System.Windows.Forms.Padding(4);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(601, 86);
+            this.richTextBox1.Size = new System.Drawing.Size(601, 89);
             this.richTextBox1.TabIndex = 14;
             this.richTextBox1.Text = "";
             this.richTextBox1.MouseLeave += new System.EventHandler(this.richTextBox1_MouseLeave);
             this.richTextBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.richTextBox1_MouseMove);
-            // 
-            // btnInitializeChallenge
-            // 
-            this.btnInitializeChallenge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnInitializeChallenge.AutoSize = true;
-            this.btnInitializeChallenge.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnInitializeChallenge.Location = new System.Drawing.Point(539, 145);
-            this.btnInitializeChallenge.Margin = new System.Windows.Forms.Padding(0, 1, 1, 1);
-            this.btnInitializeChallenge.Name = "btnInitializeChallenge";
-            this.btnInitializeChallenge.Size = new System.Drawing.Size(71, 27);
-            this.btnInitializeChallenge.TabIndex = 10;
-            this.btnInitializeChallenge.Text = "Initialize";
-            this.btnInitializeChallenge.UseVisualStyleBackColor = true;
-            this.btnInitializeChallenge.Click += new System.EventHandler(this.btnInitializeChallenge_Click);
             // 
             // btnAddDomain
             // 
@@ -409,7 +391,7 @@
             this.btnCreateCertificate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCreateCertificate.AutoSize = true;
             this.btnCreateCertificate.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnCreateCertificate.Location = new System.Drawing.Point(539, 360);
+            this.btnCreateCertificate.Location = new System.Drawing.Point(539, 357);
             this.btnCreateCertificate.Margin = new System.Windows.Forms.Padding(0, 1, 1, 1);
             this.btnCreateCertificate.Name = "btnCreateCertificate";
             this.btnCreateCertificate.Size = new System.Drawing.Size(71, 27);
@@ -447,7 +429,7 @@
             this.tableLayoutPanel3.Controls.Add(this.chkAutoValidate, 6, 0);
             this.tableLayoutPanel3.Controls.Add(this.chkAutoUpdateStatus, 8, 0);
             this.tableLayoutPanel3.Controls.Add(this.btnUpdateStatus, 9, 0);
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 295);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 292);
             this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
@@ -607,29 +589,13 @@
             this.btnUpdateStatus.UseVisualStyleBackColor = true;
             this.btnUpdateStatus.Click += new System.EventHandler(this.btnUpdateStatus_Click);
             // 
-            // chkAutoInitializeChallenge
-            // 
-            this.chkAutoInitializeChallenge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkAutoInitializeChallenge.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkAutoInitializeChallenge.AutoSize = true;
-            this.chkAutoInitializeChallenge.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkAutoInitializeChallenge.Location = new System.Drawing.Point(540, 145);
-            this.chkAutoInitializeChallenge.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
-            this.chkAutoInitializeChallenge.Name = "chkAutoInitializeChallenge";
-            this.chkAutoInitializeChallenge.Size = new System.Drawing.Size(1, 27);
-            this.chkAutoInitializeChallenge.TabIndex = 11;
-            this.chkAutoInitializeChallenge.Text = ">";
-            this.chkAutoInitializeChallenge.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.chkAutoInitializeChallenge.UseVisualStyleBackColor = true;
-            this.chkAutoInitializeChallenge.Visible = false;
-            // 
             // chkAutoCreateCertificate
             // 
             this.chkAutoCreateCertificate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.chkAutoCreateCertificate.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoCreateCertificate.AutoSize = true;
             this.chkAutoCreateCertificate.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkAutoCreateCertificate.Location = new System.Drawing.Point(540, 360);
+            this.chkAutoCreateCertificate.Location = new System.Drawing.Point(540, 357);
             this.chkAutoCreateCertificate.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.chkAutoCreateCertificate.Name = "chkAutoCreateCertificate";
             this.chkAutoCreateCertificate.Size = new System.Drawing.Size(1, 27);
@@ -763,16 +729,17 @@
             // 
             this.cmbChallenge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbChallenge.BackColor = System.Drawing.Color.White;
-            this.tableLayoutPanel1.SetColumnSpan(this.cmbChallenge, 2);
+            this.tableLayoutPanel1.SetColumnSpan(this.cmbChallenge, 4);
             this.cmbChallenge.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbChallenge.FormattingEnabled = true;
             this.cmbChallenge.Items.AddRange(new object[] {
             "http-01"});
-            this.cmbChallenge.Location = new System.Drawing.Point(1, 146);
+            this.cmbChallenge.Location = new System.Drawing.Point(1, 145);
             this.cmbChallenge.Margin = new System.Windows.Forms.Padding(1);
             this.cmbChallenge.Name = "cmbChallenge";
-            this.cmbChallenge.Size = new System.Drawing.Size(537, 24);
+            this.cmbChallenge.Size = new System.Drawing.Size(609, 24);
             this.cmbChallenge.TabIndex = 9;
+            this.cmbChallenge.Visible = false;
             // 
             // label7
             // 
@@ -782,7 +749,7 @@
             this.tableLayoutPanel1.SetColumnSpan(this.label7, 4);
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(1, 338);
+            this.label7.Location = new System.Drawing.Point(1, 335);
             this.label7.Margin = new System.Windows.Forms.Padding(1, 14, 1, 1);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(609, 20);
@@ -809,7 +776,7 @@
             this.tableLayoutPanel10.Controls.Add(this.btnSubmit, 3, 0);
             this.tableLayoutPanel10.Controls.Add(this.chkAutoGetIssuerCert, 4, 0);
             this.tableLayoutPanel10.Controls.Add(this.btnGetIssuerCert, 5, 0);
-            this.tableLayoutPanel10.Location = new System.Drawing.Point(0, 388);
+            this.tableLayoutPanel10.Location = new System.Drawing.Point(0, 385);
             this.tableLayoutPanel10.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel10.Name = "tableLayoutPanel10";
             this.tableLayoutPanel10.RowCount = 1;
@@ -903,7 +870,7 @@
             this.tableLayoutPanel4.Controls.Add(this.txtPassword, 1, 2);
             this.tableLayoutPanel4.Controls.Add(this.chkShowPassword, 2, 2);
             this.tableLayoutPanel4.Controls.Add(this.label10, 0, 0);
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(0, 417);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(0, 414);
             this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 6;
@@ -1174,7 +1141,7 @@
             this.tableLayoutPanel2.Controls.Add(this.label19, 0, 3);
             this.tableLayoutPanel2.Controls.Add(this.cmbSsg, 1, 3);
             this.tableLayoutPanel2.Controls.Add(this.flowSsgControls, 1, 4);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 173);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 170);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 8;
@@ -1959,7 +1926,6 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Button btnInitializeChallenge;
         private System.Windows.Forms.ComboBox cmbChallenge;
         private System.Windows.Forms.Button btnAddDomain;
         private System.Windows.Forms.ComboBox cmbDomain;
@@ -1998,7 +1964,6 @@
         private System.Windows.Forms.TextBox txtPassword;
         private System.Windows.Forms.CheckBox chkShowPassword;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.CheckBox chkAutoInitializeChallenge;
         private System.Windows.Forms.CheckBox chkAutoCreateCertificate;
         private System.Windows.Forms.CheckBox chkAutoSubmit;
         private System.Windows.Forms.Button btnSubmit;
