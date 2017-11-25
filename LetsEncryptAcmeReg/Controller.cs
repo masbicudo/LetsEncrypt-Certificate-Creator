@@ -497,7 +497,7 @@ namespace LetsEncryptAcmeReg
 
                 while (timer.Value.HasValue && timer.Value > 0)
                 {
-                    if (!isAuto.Value)
+                    if (!isAuto.Value && isNextAuto?.Value == false)
                     {
                         timer.Value = null; // stop timer, indicating that this is not running
                         break;
@@ -519,7 +519,7 @@ namespace LetsEncryptAcmeReg
                     timer.Value -= dec;
                 }
 
-                if (!isAuto.Value || timer.Value == null)
+                if (!isAuto.Value && isNextAuto?.Value == false || timer.Value == null)
                     break;
             }
 

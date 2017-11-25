@@ -546,6 +546,8 @@
             this.chkAutoValidate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.chkAutoValidate.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkAutoValidate.AutoSize = true;
+            this.chkAutoValidate.Checked = true;
+            this.chkAutoValidate.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkAutoValidate.Cursor = System.Windows.Forms.Cursors.Hand;
             this.chkAutoValidate.Location = new System.Drawing.Point(367, 1);
             this.chkAutoValidate.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
@@ -555,7 +557,6 @@
             this.chkAutoValidate.Text = ">";
             this.chkAutoValidate.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.chkAutoValidate.UseVisualStyleBackColor = true;
-            this.chkAutoValidate.Visible = false;
             // 
             // chkAutoUpdateStatus
             // 
