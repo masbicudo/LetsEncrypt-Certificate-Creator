@@ -7,6 +7,7 @@ using ACMESharp.Vault.Util;
 using JetBrains.Annotations;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Management.Automation;
@@ -561,7 +562,14 @@ namespace LetsEncryptAcmeReg
                 var ri = v.Registrations[0];
                 var r = ri.Registration;
 
-                var ii = this.FindIdentifier(identifyerRef);
+                var ii = v.Identifiers.Values.ToArray()
+                    .SingleOrDefault(x => x.Alias == identifyerRef);
+
+                if (ii.Challenges == null)
+                    ii.Challenges = new Dictionary<string, AuthorizeChallenge>();
+
+                if (ii.ChallengeCompleted == null)
+                    ii.ChallengeCompleted = new Dictionary<string, DateTime?>();
 
                 var authzState = ii.Authorization;
 
