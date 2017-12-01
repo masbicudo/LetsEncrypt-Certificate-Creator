@@ -343,7 +343,10 @@ namespace LetsEncryptAcmeReg
 
             var allIds = this.GetAllIdentifiers(regInfo);
 
-            var identifierInfo = domain == null || domain.Length == 0 ? allIds : allIds.Where(x => Array.IndexOf(domain, x.Dns) >= 0);
+            var identifierInfo = domain == null
+                ||  domain.Length == 0 ?
+                    allIds :
+                    allIds.Where(x => Array.IndexOf(domain, x.Dns) >= 0 || Array.IndexOf(domain, x.Alias) >= 0);
 
             var result = v.Certificates?.Values?.Where(c => identifierInfo.Any(i => c.IdentifierRef == i.Id)).ToArray();
             return result ?? new CertificateInfo[0];
