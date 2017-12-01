@@ -56,7 +56,7 @@
             this.btnUpdateStatus = new System.Windows.Forms.Button();
             this.chkAutoCreateCertificate = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
-            this.lnkTOS = new System.Windows.Forms.LinkLabel();
+            this.lnkTos = new System.Windows.Forms.LinkLabel();
             this.cmbRegistration = new System.Windows.Forms.ComboBox();
             this.chkAutoAcceptTos = new System.Windows.Forms.CheckBox();
             this.btnAcceptTos = new System.Windows.Forms.Button();
@@ -617,7 +617,7 @@
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel6.Controls.Add(this.lnkTOS, 0, 0);
+            this.tableLayoutPanel6.Controls.Add(this.lnkTos, 0, 0);
             this.tableLayoutPanel6.Location = new System.Drawing.Point(58, 51);
             this.tableLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
@@ -627,18 +627,18 @@
             this.tableLayoutPanel6.Size = new System.Drawing.Size(481, 29);
             this.tableLayoutPanel6.TabIndex = 17;
             // 
-            // lnkTOS
+            // lnkTos
             // 
-            this.lnkTOS.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.lnkTOS.AutoSize = true;
-            this.lnkTOS.Location = new System.Drawing.Point(1, 6);
-            this.lnkTOS.Margin = new System.Windows.Forms.Padding(1);
-            this.lnkTOS.Name = "lnkTOS";
-            this.lnkTOS.Size = new System.Drawing.Size(113, 17);
-            this.lnkTOS.TabIndex = 16;
-            this.lnkTOS.TabStop = true;
-            this.lnkTOS.Text = "Terms of service";
-            this.lnkTOS.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkTOS_LinkClicked);
+            this.lnkTos.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.lnkTos.AutoSize = true;
+            this.lnkTos.Location = new System.Drawing.Point(1, 6);
+            this.lnkTos.Margin = new System.Windows.Forms.Padding(1);
+            this.lnkTos.Name = "lnkTos";
+            this.lnkTos.Size = new System.Drawing.Size(113, 17);
+            this.lnkTos.TabIndex = 16;
+            this.lnkTos.TabStop = true;
+            this.lnkTos.Text = "Terms of service";
+            this.lnkTos.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkTos_LinkClicked);
             // 
             // cmbRegistration
             // 
@@ -1970,7 +1970,7 @@
         private System.Windows.Forms.Button btnSubmit;
         private System.Windows.Forms.Button btnRegister;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
-        private System.Windows.Forms.LinkLabel lnkTOS;
+        private System.Windows.Forms.LinkLabel lnkTos;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;

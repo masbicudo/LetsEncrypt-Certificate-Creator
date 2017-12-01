@@ -21,7 +21,7 @@ namespace LetsEncryptAcmeReg
 
         public Form2()
         {
-            InitializeComponent();
+            this.InitializeComponent();
 
             this.labVer.Text = $"v{App.CurrentVersion} alpha";
 
@@ -40,7 +40,7 @@ namespace LetsEncryptAcmeReg
 
             // Tool tips
             this.ToolTipFor(this.btnRegister, Messages.ToolTipForRegister);
-            mo.TOSLink.Changed += s => this.DataTipFor(this.lnkTOS, s, ">,v,>v,>v,>^,<v,<^");
+            mo.TosLink.Changed += s => this.DataTipFor(this.lnkTos, s, ">,v,>v,>v,>^,<v,<^");
             this.ToolTipFor(this.btnAcceptTos, Messages.ToolTipForAcceptTos);
             this.ToolTipFor(this.btnAddDomain, Messages.ToolTipForAddDomain);
             this.ToolTipFor(this.cmbDomain, Messages.ToolTipForDomain);
@@ -179,7 +179,7 @@ namespace LetsEncryptAcmeReg
             // Manual changed events:
             mo.CanRegister.Changed += v => this.btnRegister.Enabled = v;
             mo.CanAcceptTos.Changed += v => this.btnAcceptTos.Enabled = v;
-            mo.IsRegistrationCreated.Changed += v => this.lnkTOS.Enabled = v;
+            mo.IsRegistrationCreated.Changed += v => this.lnkTos.Enabled = v;
             mo.CanAddDomain.Changed += v => this.btnAddDomain.Enabled = v;
             mo.CanSaveChallenge.Changed += v => this.btnSaveChallenge.Enabled = v;
             mo.CanCommitChallenge.Changed += v => this.btnCommitChallenge.Enabled = v;
@@ -448,7 +448,7 @@ namespace LetsEncryptAcmeReg
         private async void btnAcceptTos_Click(object sender, EventArgs e)
             => await this.controller.AcceptTos();
 
-        private async void lnkTOS_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private async void lnkTos_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
             => await this.controller.OpenTosInBrowser();
 
         private async void btnAddDomain_Click(object sender, EventArgs e)

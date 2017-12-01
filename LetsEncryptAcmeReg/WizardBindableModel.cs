@@ -33,7 +33,7 @@ namespace LetsEncryptAcmeReg
         public Bindable<string[]> AvailableDomains { get; } = new Bindable<string[]>(nameof(AvailableDomains));
         public Bindable<string[]> CertificateDomains { get; } = new Bindable<string[]>(nameof(CertificateDomains));
 
-        public Bindable<string> TOSLink { get; } = new Bindable<string>(nameof(TOSLink));
+        public Bindable<string> TosLink { get; } = new Bindable<string>(nameof(TosLink));
         public Bindable<string> ExpandedSavePath { get; } = new Bindable<string>(nameof(ExpandedSavePath));
 
         public Bindable<string> FileRelativePath { get; } = new Bindable<string>(nameof(FileRelativePath));

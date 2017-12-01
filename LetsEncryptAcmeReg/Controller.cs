@@ -56,7 +56,7 @@ namespace LetsEncryptAcmeReg
             init += new BindResult(() => mo.Registrations.Value = this.acme.GetRegistrations());
             init += new BindResult(() => mo.Now.Value = DateTime.Now);
             init += mo.Date.BindExpression(() => mo.Now.Value.Date);
-            init += mo.TOSLink.BindExpression(() => this.acme.GetTos(mo.Registrations.Value, mo.Email.Value));
+            init += mo.TosLink.BindExpression(() => this.acme.GetTos(mo.Registrations.Value, mo.Email.Value));
             mo.Domain.Changed += strings => mo.Certificate.Value = "";
 
             // Collections
@@ -418,7 +418,7 @@ namespace LetsEncryptAcmeReg
         public async Task OpenTosInBrowser()
         {
             await Task.Delay(1);
-            Process.Start(this.Model.TOSLink.Value);
+            Process.Start(this.Model.TosLink.Value);
         }
 
         public async Task OpenPemConcatHelpInBrowser()
