@@ -29,9 +29,13 @@ namespace LetsEncryptAcmeReg
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form2());
-        }
+            var mainForm = new Form2();
 
+            GlobalMouseHandler globalClick = new GlobalMouseHandler(mainForm);
+            Application.AddMessageFilter(globalClick);
+
+            Application.Run(mainForm);
+        }
         //[DllImport("user32.dll")]
         //private static extern bool SetProcessDPIAware();
 

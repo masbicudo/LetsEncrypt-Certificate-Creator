@@ -6,6 +6,10 @@ namespace LetsEncryptAcmeReg
     {
         private static Dictionary<string, string> dicMsgExplain;
 
+        public static string CannotSave_CertInvalid =>
+            $"First you need to issue a certificate...\n" +
+            $"or select an already issued one from the list.";
+
         public static string MultipleIdentities { get; }
             = "Multiple identitiers with the same domain were found.\n" +
               "In this case, the first one will be used.";

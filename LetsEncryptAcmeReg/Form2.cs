@@ -13,7 +13,8 @@ namespace LetsEncryptAcmeReg
 {
     public partial class Form2 : Form,
         IUIServices,
-        ITooltipCreator
+        ITooltipCreator,
+        IGlobalEvents
     {
         private readonly Controller controller;
         private readonly Acme acme = new Acme();
@@ -673,6 +674,61 @@ namespace LetsEncryptAcmeReg
         private void linkProject_LinkClicked(object sender, EventArgs e)
         {
             Process.Start("https://github.com/masbicudo/LetsEncrypt-Certificate-Creator");
+        }
+
+        public void GlobalMouseMove(Control target, GlobalMouseEventArgs args)
+        {
+            if (args.MouseEvent == MouseEvents.MouseMove)
+            {
+                // find control under mouse pointer
+                Control control = target.GetChildAtPoint(args.Location);
+                if (control == this.btnShowCertificate && control?.Enabled == false)
+                {
+                    var msg = "";
+                    if (string.IsNullOrWhiteSpace(this.controller.Model.CurrentCertificate.Value?.IssuerSerialNumber))
+                        msg = Messages.CannotSave_CertInvalid;
+                    else
+                        msg = "First, select a certificate type to show!";
+                    msg += "\n" +
+                           "**Note:** You can use the `Certificate View` tab\n" +
+                           "to view any issued certificate.";
+
+                    var tt = this.tooltip.ToolTipFor(control, "DISABLED")
+                        .ShowMessage(msg, useMarkdown: true, showWhenNotActive: true);
+                    string positionPreferences = ">,v,^,<,>v,>^,<v,<^";
+                    tt.PositionPreferences = positionPreferences;
+                    tt.BorderColor = Color.OrangeRed;
+                    tt.Margin = 1;
+                }
+                else
+                {
+                    var tt = this.tooltip.ToolTipFor(this.btnShowCertificate, "DISABLED");
+                    if (tt.Visible)
+                        tt.Hide();
+                }
+
+                if (control == this.btnSaveCertificate && control?.Enabled == false)
+                {
+                    var msg = "";
+                    if (string.IsNullOrWhiteSpace(this.controller.Model.CurrentCertificate.Value?.IssuerSerialNumber))
+                        msg = Messages.CannotSave_CertInvalid;
+                    else
+                        msg = "First, select a certificate type to save!";
+
+                    var tt = this.tooltip.ToolTipFor(control, "DISABLED")
+                        .ShowMessage(msg, useMarkdown: true, showWhenNotActive: true);
+                    string positionPreferences = ">,v,^,<,>v,>^,<v,<^";
+                    tt.PositionPreferences = positionPreferences;
+                    tt.BorderColor = Color.OrangeRed;
+                    tt.Margin = 1;
+                }
+                else
+                {
+                    var tt = this.tooltip.ToolTipFor(this.btnSaveCertificate, "DISABLED");
+                    if (tt.Visible)
+                        tt.Hide();
+                }
+            }
         }
     }
 }

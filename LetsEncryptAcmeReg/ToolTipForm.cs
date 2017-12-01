@@ -93,20 +93,24 @@ namespace LetsEncryptAcmeReg
             return this.isMouseOverControl;
         }
 
-        public ToolTipForm ShowMessage(string message, bool useMarkdown = false)
+        public ToolTipForm ShowMessage(string message, bool useMarkdown = false, bool showWhenNotActive = false)
         {
             this.fixedLocation = null;
             this.useMarkdown = useMarkdown;
             this.shouldShow = this.ShouldShowFixed;
+            if (showWhenNotActive)
+                this.shouldShow = () => true;
             this.ShowMessageInternal(message);
             return this;
         }
 
-        public ToolTipForm ShowMessageAt(string message, Point location, bool useMarkdown = false)
+        public ToolTipForm ShowMessageAt(string message, Point location, bool useMarkdown = false, bool showWhenNotActive = false)
         {
             this.fixedLocation = location;
             this.useMarkdown = useMarkdown;
             this.shouldShow = this.ShouldShowFixed;
+            if (showWhenNotActive)
+                this.shouldShow = () => true;
             this.ShowMessageInternal(message);
             return this;
         }
