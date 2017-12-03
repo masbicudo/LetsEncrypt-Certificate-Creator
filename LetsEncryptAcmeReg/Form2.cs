@@ -261,6 +261,22 @@ namespace LetsEncryptAcmeReg
 
         private void PgConfig_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
+            var oldCfg = this.rootCfg;
+            var newCfg = (Root)this.pgConfig.SelectedObject;
+            if (oldCfg.VaultLocation != newCfg.VaultLocation)
+            {
+                var newExists = Directory.Exists(Environment.ExpandEnvironmentVariables(newCfg.VaultLocation));
+                if (MessageBox.Show(this,
+                    (!newExists ? "A new vault will be created at that location.\n" : "Vault location about to be changed.\n") +
+                        "Do you really want to continue?",
+                        "Change Vault Location",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question) != DialogResult.Yes)
+                {
+                    this.pgConfig.SelectedObject = LoadRootConfig();
+                    return;
+                }
+            }
             this.ConfigUpdated();
         }
 
