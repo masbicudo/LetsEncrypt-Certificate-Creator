@@ -19,21 +19,23 @@ namespace LetsEncryptAcmeReg
         ITooltipCreator,
         IGlobalEvents
     {
-        private readonly Root rootCfg;
+        private Root rootCfg;
         private readonly Controller controller;
         private readonly Acme acme = new Acme();
         private readonly ToolTipManager tooltip = new ToolTipManager();
+        [CanBeNull]
+        private Action unbindAll;
 
         public Form2([NotNull] Root rootCfg)
         {
             this.rootCfg = rootCfg ?? throw new ArgumentNullException(nameof(rootCfg));
 
-            this.ConfigUpdated();
-
             this.InitializeComponent();
 
-            this.pgConfig.SelectedObject = this.rootCfg;
+            this.pgConfig.SelectedObject = LoadRootConfig();
             this.pgConfig.PropertyValueChanged += PgConfig_PropertyValueChanged;
+
+            this.ConfigUpdated();
 
             this.labVer.Text = $"v{App.CurrentVersion} alpha";
 
@@ -46,13 +48,8 @@ namespace LetsEncryptAcmeReg
                 Success = this.Success,
             };
 
-            var mo = this.controller.Model;
-            var ma = this.controller.ManagerModel;
-            var mc = this.controller.CertViewModel;
-
             // Tool tips
             this.ToolTipFor(this.btnRegister, Messages.ToolTipForRegister);
-            mo.TosLink.Changed += s => this.DataTipFor(this.lnkTos, s, ">,v,>v,>v,>^,<v,<^");
             this.ToolTipFor(this.btnAcceptTos, Messages.ToolTipForAcceptTos);
             this.ToolTipFor(this.btnAddDomain, Messages.ToolTipForAddDomain);
             this.ToolTipFor(this.cmbDomain, Messages.ToolTipForDomain);
@@ -82,9 +79,32 @@ namespace LetsEncryptAcmeReg
             this.txtSiteRoot.MouseEnter += this.txtSiteRoot_MouseEnter;
             this.txtSiteRoot.MouseLeave += this.txtSiteRoot_MouseLeave;
 
+            var init = this.BindModelsAndControls();
+            init.InitAction?.Invoke();
+            this.unbindAll = init.UnbindAction;
+
+            this.tableCertDomains.Width = this.Width / 2;
+        }
+
+        private static Root LoadRootConfig()
+        {
+            return JsonConvert.DeserializeObject<Root>(File.ReadAllText("config.json"));
+        }
+
+        private BindResult BindModelsAndControls()
+        {
+            var mo = this.controller.Model;
+            var ma = this.controller.ManagerModel;
+            var mc = this.controller.CertViewModel;
+
             // Model bindings
 
-            BindResult init = this.controller.Initialize();
+            BindResult init = default(BindResult);
+
+            init += mo.TosLink.BindOnChanged(s => this.DataTipFor(this.lnkTos, s, ">,v,>v,>v,>^,<v,<^"));
+
+            // controller bindings
+            init += this.controller.Initialize();
 
             // Control bindings:
             //      These are relations between the controls on the form
@@ -132,18 +152,30 @@ namespace LetsEncryptAcmeReg
             init += mc.Base64Data.BindControl(this.txtCertBase64Data);
 
             // 
-            init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnRegister, mo.AutoRegisterRetry.Value, mo.AutoRegisterTimer.Value));
-            init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnAcceptTos, mo.AutoAcceptTosRetry.Value, mo.AutoAcceptTosTimer.Value));
-            init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnAddDomain, mo.AutoAddDomainRetry.Value, mo.AutoAddDomainTimer.Value));
-            init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnSaveChallenge, mo.AutoSaveChallengeRetry.Value, mo.AutoSaveChallengeTimer.Value));
-            init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnCommitChallenge, mo.AutoCommitChallengeRetry.Value, mo.AutoCommitChallengeTimer.Value));
-            init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnTestChallenge, mo.AutoTestChallengeRetry.Value, mo.AutoTestChallengeTimer.Value));
-            init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnValidate, mo.AutoValidateChallengeRetry.Value, mo.AutoValidateChallengeTimer.Value));
-            init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnUpdateStatus, mo.AutoUpdateStatusRetry.Value, mo.AutoUpdateStatusTimer.Value));
-            init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnCreateCertificate, mo.AutoCreateCertificateRetry.Value, mo.AutoCreateCertificateTimer.Value));
-            init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnSubmit, mo.AutoSubmitCertificateRetry.Value, mo.AutoSubmitCertificateTimer.Value));
-            init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnGetIssuerCert, mo.AutoGetIssuerCertificateRetry.Value, mo.AutoGetIssuerCertificateTimer.Value));
-            init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnSaveCertificate, mo.AutoSaveOrShowCertificateRetry.Value, mo.AutoSaveOrShowCertificateTimer.Value));
+            init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnRegister, mo.AutoRegisterRetry.Value,
+                mo.AutoRegisterTimer.Value));
+            init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnAcceptTos, mo.AutoAcceptTosRetry.Value,
+                mo.AutoAcceptTosTimer.Value));
+            init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnAddDomain, mo.AutoAddDomainRetry.Value,
+                mo.AutoAddDomainTimer.Value));
+            init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnSaveChallenge, mo.AutoSaveChallengeRetry.Value,
+                mo.AutoSaveChallengeTimer.Value));
+            init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnCommitChallenge,
+                mo.AutoCommitChallengeRetry.Value, mo.AutoCommitChallengeTimer.Value));
+            init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnTestChallenge, mo.AutoTestChallengeRetry.Value,
+                mo.AutoTestChallengeTimer.Value));
+            init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnValidate, mo.AutoValidateChallengeRetry.Value,
+                mo.AutoValidateChallengeTimer.Value));
+            init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnUpdateStatus, mo.AutoUpdateStatusRetry.Value,
+                mo.AutoUpdateStatusTimer.Value));
+            init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnCreateCertificate,
+                mo.AutoCreateCertificateRetry.Value, mo.AutoCreateCertificateTimer.Value));
+            init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnSubmit, mo.AutoSubmitCertificateRetry.Value,
+                mo.AutoSubmitCertificateTimer.Value));
+            init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnGetIssuerCert,
+                mo.AutoGetIssuerCertificateRetry.Value, mo.AutoGetIssuerCertificateTimer.Value));
+            init += BindHelper.BindExpression(() => this.RetryToolTip(this.btnSaveCertificate,
+                mo.AutoSaveOrShowCertificateRetry.Value, mo.AutoSaveOrShowCertificateTimer.Value));
 
             // Custom collection bindings:
             init += mo.Registrations.Bind(
@@ -155,7 +187,7 @@ namespace LetsEncryptAcmeReg
                 v => this.lstRegistrations.SetItems(v.AsArray((RegistrationInfo x) => new RegistrationItem(x))));
 
             init += mo.Domains.Bind
-                (() => this.cmbDomain.Items.AsArray((object o) => o.ToString()),
+            (() => this.cmbDomain.Items.AsArray((object o) => o.ToString()),
                 v => this.cmbDomain.SetItems(v));
 
             init += mo.Domains.Bind(
@@ -165,62 +197,66 @@ namespace LetsEncryptAcmeReg
             init += ma.Challenges.Bind(
                 () => this.lstChallenges.Items.AsArray((object o) => o.ToString()),
                 v => this.lstChallenges.SetItems(v));
-            ma.Challenges.Changed += fnames =>
+            init += ma.Challenges.BindOnChanged(fnames =>
             {
                 if (this.cmbChallenge.SelectedIndex < 0)
                     this.cmbChallenge.SelectedIndex = 0;
-            };
+            });
 
             init += ma.Certificates.Bind(
                 () => this.lstCertificates.Items.OfType<string>().ToArray(),
                 v => this.lstCertificates.SetItems(v));
 
             init += mo.Certificates.Bind(() => this.cmbCertificate.Items.OfType<string>().ToArray());
-            init += BindHelper.BindExpression(() => this.SetItemsOf_cmbCertificate(mo.Certificates.Value, mo.Domain.Value, mo.Date.Value));
+            init += BindHelper.BindExpression(
+                () => this.SetItemsOf_cmbCertificate(mo.Certificates.Value, mo.Domain.Value, mo.Date.Value));
 
             init += mo.SsgName.BindControl(this.cmbSsg);
             init += mo.SsgTypes.Bind(
                 () => this.cmbSsg.Items.OfType<string>().ToArray(),
                 v => this.cmbSsg.SetItems(v));
-            mo.SsgTypes.Changed += fnames =>
+            init += mo.SsgTypes.BindOnChanged(fnames =>
             {
                 if (this.cmbSsg.SelectedIndex < 0)
                     this.cmbSsg.SelectedIndex = 0;
-            };
+            });
 
             // Manual changed events:
-            mo.CanRegister.Changed += v => this.btnRegister.Enabled = v;
-            mo.CanAcceptTos.Changed += v => this.btnAcceptTos.Enabled = v;
-            mo.IsRegistrationCreated.Changed += v => this.lnkTos.Enabled = v;
-            mo.CanAddDomain.Changed += v => this.btnAddDomain.Enabled = v;
-            mo.CanSaveChallenge.Changed += v => this.btnSaveChallenge.Enabled = v;
-            mo.CanCommitChallenge.Changed += v => this.btnCommitChallenge.Enabled = v;
-            mo.CanTestChallenge.Changed += v => this.btnTestChallenge.Enabled = v;
-            mo.CanValidateChallenge.Changed += v => this.btnValidate.Enabled = v;
-            mo.CanUpdateStatus.Changed += v => this.btnUpdateStatus.Enabled = v;
-            mo.CanCreateCertificate.Changed += v => this.btnCreateCertificate.Enabled = v;
-            mo.CanSubmitCertificate.Changed += v => this.btnSubmit.Enabled = v;
-            mo.CanGetIssuerCertificate.Changed += v => this.btnGetIssuerCert.Enabled = v;
-            mo.CanSaveCertificate.Changed += v => this.btnSaveCertificate.Enabled = v;
-            mo.CanShowCertificate.Changed += v => this.btnShowCertificate.Enabled = v;
-            mo.ShowPassword.Changed += b => this.txtPassword.UseSystemPasswordChar = !b;
+            init += mo.CanRegister.BindOnChanged(v => this.btnRegister.Enabled = v);
+            init += mo.CanAcceptTos.BindOnChanged(v => this.btnAcceptTos.Enabled = v);
+            init += mo.IsRegistrationCreated.BindOnChanged(v => this.lnkTos.Enabled = v);
+            init += mo.CanAddDomain.BindOnChanged(v => this.btnAddDomain.Enabled = v);
+            init += mo.CanSaveChallenge.BindOnChanged(v => this.btnSaveChallenge.Enabled = v);
+            init += mo.CanCommitChallenge.BindOnChanged(v => this.btnCommitChallenge.Enabled = v);
+            init += mo.CanTestChallenge.BindOnChanged(v => this.btnTestChallenge.Enabled = v);
+            init += mo.CanValidateChallenge.BindOnChanged(v => this.btnValidate.Enabled = v);
+            init += mo.CanUpdateStatus.BindOnChanged(v => this.btnUpdateStatus.Enabled = v);
+            init += mo.CanCreateCertificate.BindOnChanged(v => this.btnCreateCertificate.Enabled = v);
+            init += mo.CanSubmitCertificate.BindOnChanged(v => this.btnSubmit.Enabled = v);
+            init += mo.CanGetIssuerCertificate.BindOnChanged(v => this.btnGetIssuerCert.Enabled = v);
+            init += mo.CanSaveCertificate.BindOnChanged(v => this.btnSaveCertificate.Enabled = v);
+            init += mo.CanShowCertificate.BindOnChanged(v => this.btnShowCertificate.Enabled = v);
+            init += mo.ShowPassword.BindOnChanged(b => this.txtPassword.UseSystemPasswordChar = !b);
 
-            mo.IsPasswordEnabled.Changed += v => this.txtPassword.Enabled = this.chkShowPassword.Enabled = v;
-            mo.Files.Changed += this.UpdateFiles;
-            mo.CurrentAuthState.Changed += this.CurrentAuthState_Changed;
-            mo.CurrentIdentifier.Changed += s => this.tableCertDomains.Hide();
-            mo.CurrentSsg.Changed += this.CurrentSsg_Changed;
+            init += mo.IsPasswordEnabled.BindOnChanged(v => this.txtPassword.Enabled = this.chkShowPassword.Enabled = v);
+            init += mo.Files.BindOnChanged(this.UpdateFiles);
+            init += mo.CurrentAuthState.BindOnChanged(this.CurrentAuthState_Changed);
+            init += mo.CurrentIdentifier.BindOnChanged(s => this.tableCertDomains.Hide());
+            init += mo.CurrentSsg.BindOnChanged(this.CurrentSsg_Changed);
 
-            mo.X509Certificate.Changed += this.X509Certificate_Changed;
+            init += mo.X509Certificate.BindOnChanged(this.X509Certificate_Changed);
 
-            init.InitAction?.Invoke();
-
-            this.lstCertDomains.ItemCheck += (s, a) =>
+            ItemCheckEventHandler lstCertDomainsOnItemCheck = (s, a) =>
             {
                 if (this.lstCertDomains.Items[a.Index].ToString() == mo.Domain.Value)
                     a.NewValue = CheckState.Checked;
             };
-            this.tableCertDomains.Width = this.Width / 2;
+
+            init += new BindResult(
+                () => this.lstCertDomains.ItemCheck += lstCertDomainsOnItemCheck,
+                () => this.lstCertDomains.ItemCheck -= lstCertDomainsOnItemCheck);
+
+            return init;
         }
 
         private void PgConfig_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
@@ -230,10 +266,27 @@ namespace LetsEncryptAcmeReg
 
         private void ConfigUpdated()
         {
+            var initUnbindAction = this.unbindAll;
+            if (initUnbindAction != null)
+            {
+                initUnbindAction();
+                this.unbindAll = null;
+            }
+
+            this.rootCfg = (Root)this.pgConfig.SelectedObject;
             this.acme.VaultLocation = this.rootCfg.VaultLocation;
 
             File.WriteAllText("config.json",
                 JsonConvert.SerializeObject(this.rootCfg, Formatting.Indented));
+
+            this.pgConfig.SelectedObject = LoadRootConfig();
+
+            if (initUnbindAction != null)
+            {
+                var init = this.BindModelsAndControls();
+                init.InitAction?.Invoke();
+                this.unbindAll = init.UnbindAction;
+            }
         }
 
         private void X509Certificate_Changed(X509Certificate2 certificate)

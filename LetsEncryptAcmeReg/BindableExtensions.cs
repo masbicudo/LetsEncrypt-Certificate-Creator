@@ -12,8 +12,14 @@ namespace LetsEncryptAcmeReg
             };
 
             bindable.Changing += currentAuthStateOnChanging;
-            bindable.Value = value;
-            bindable.Changing -= currentAuthStateOnChanging;
+            try
+            {
+                bindable.Value = value;
+            }
+            finally
+            {
+                bindable.Changing -= currentAuthStateOnChanging;
+            }
         }
     }
 }

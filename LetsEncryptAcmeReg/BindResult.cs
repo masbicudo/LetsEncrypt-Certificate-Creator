@@ -48,7 +48,7 @@ namespace LetsEncryptAcmeReg
         {
             return new BindResult(
                 a.InitAction + b.InitAction,
-                a.UnbindAction + b.UnbindAction);
+                b.UnbindAction + a.UnbindAction);
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using JetBrains.Annotations;
 
@@ -28,12 +29,16 @@ namespace LetsEncryptAcmeReg
                     isSetting = false;
                 }
             };
-            control.TextChanged += (sender, args) =>
+            EventHandler handler = (sender, args) =>
             {
                 if (!isSetting)
                     bindable.Value = getter();
             };
-            return bindable.Bind(getter, setter);
+            var init = new BindResult(
+                () => control.TextChanged += handler,
+                () => control.TextChanged -= handler);
+            init += bindable.Bind(getter, setter);
+            return init;
         }
 
         public static BindResult BindControl([NotNull] this Bindable<bool> bindable, [NotNull] CheckBox checkBox)
@@ -56,12 +61,16 @@ namespace LetsEncryptAcmeReg
                     isSetting = false;
                 }
             };
-            checkBox.CheckedChanged += (sender, args) =>
+            EventHandler handler = (sender, args) =>
             {
                 if (!isSetting)
                     bindable.Value = getter();
             };
-            return bindable.Bind(getter, setter);
+            var init = new BindResult(
+                () => checkBox.CheckedChanged += handler,
+                () => checkBox.CheckedChanged -= handler);
+            init += bindable.Bind(getter, setter);
+            return init;
         }
 
         public static BindResult BindControl<T>([NotNull] this Bindable<T> bindable, [NotNull] ComboBox cmb)
@@ -84,17 +93,24 @@ namespace LetsEncryptAcmeReg
                     isSetting = false;
                 }
             };
-            cmb.TextChanged += (sender, args) =>
+            EventHandler handler1 = (sender, args) =>
             {
                 if (cmb.DropDownStyle != ComboBoxStyle.DropDownList && !isSetting)
                     bindable.Value = getter();
             };
-            cmb.SelectedIndexChanged += (sender, args) =>
+            EventHandler handler2 = (sender, args) =>
             {
                 if (cmb.DropDownStyle == ComboBoxStyle.DropDownList && !isSetting)
                     bindable.Value = getter();
             };
-            return bindable.Bind(getter, setter);
+            var init = new BindResult(
+                () => cmb.TextChanged += handler1,
+                () => cmb.TextChanged -= handler1);
+            init += new BindResult(
+                () => cmb.SelectedIndexChanged += handler2,
+                () => cmb.SelectedIndexChanged -= handler2);
+            init += bindable.Bind(getter, setter);
+            return init;
         }
 
         public static BindResult BindControl<TValue, TListItem>(
@@ -123,17 +139,24 @@ namespace LetsEncryptAcmeReg
                     isSetting = false;
                 }
             };
-            cmb.TextChanged += (sender, args) =>
+            EventHandler handler1 = (sender, args) =>
             {
                 if (cmb.DropDownStyle != ComboBoxStyle.DropDownList && !isSetting)
                     bindable.Value = getter();
             };
-            cmb.SelectedIndexChanged += (sender, args) =>
+            EventHandler handler2 = (sender, args) =>
             {
                 if (cmb.DropDownStyle == ComboBoxStyle.DropDownList && !isSetting)
                     bindable.Value = getter();
             };
-            return bindable.Bind(getter, setter);
+            var init = new BindResult(
+                () => cmb.TextChanged += handler1,
+                () => cmb.TextChanged -= handler1);
+            init += new BindResult(
+                () => cmb.SelectedIndexChanged += handler2,
+                () => cmb.SelectedIndexChanged -= handler2);
+            init += bindable.Bind(getter, setter);
+            return init;
         }
 
         public static BindResult BindControl<T>([NotNull] this Bindable<T> bindable, [NotNull] ListBox lst)
@@ -156,12 +179,16 @@ namespace LetsEncryptAcmeReg
                     isSetting = false;
                 }
             };
-            lst.SelectedIndexChanged += (sender, args) =>
+            EventHandler handler = (sender, args) =>
             {
                 if (!isSetting)
                     bindable.Value = getter();
             };
-            return bindable.Bind(getter, setter);
+            var init = new BindResult(
+                () => lst.SelectedIndexChanged += handler,
+                () => lst.SelectedIndexChanged -= handler);
+            init += bindable.Bind(getter, setter);
+            return init;
         }
 
         public static BindResult Bind<TValue, TListItem>(
@@ -190,12 +217,16 @@ namespace LetsEncryptAcmeReg
                     isSetting = false;
                 }
             };
-            lst.SelectedIndexChanged += (sender, args) =>
+            EventHandler handler = (sender, args) =>
             {
                 if (!isSetting)
                     bindable.Value = getter();
             };
-            return bindable.Bind(getter, setter);
+            var init = new BindResult(
+                () => lst.SelectedIndexChanged += handler,
+                () => lst.SelectedIndexChanged -= handler);
+            init += bindable.Bind(getter, setter);
+            return init;
         }
 
         public static BindResult BindControl([NotNull] this Bindable<string> bindable, [NotNull] TextBox txt)
@@ -228,12 +259,16 @@ namespace LetsEncryptAcmeReg
                     isSetting = false;
                 }
             };
-            txt.TextChanged += (sender, args) =>
+            EventHandler handler = (sender, args) =>
             {
                 if (!isSetting)
                     bindable.Value = getter();
             };
-            return bindable.Bind(getter, setter);
+            var init = new BindResult(
+                () => txt.TextChanged += handler,
+                () => txt.TextChanged -= handler);
+            init += bindable.Bind(getter, setter);
+            return init;
         }
 
         public static BindResult BindControl([NotNull] this Bindable<string> bindable, [NotNull] ComboBox cmb)
@@ -254,17 +289,24 @@ namespace LetsEncryptAcmeReg
                     cmb.SelectionLength = oldSelLength;
                 }
             };
-            cmb.TextChanged += (sender, args) =>
+            EventHandler handler1 = (sender, args) =>
             {
                 if (cmb.DropDownStyle != ComboBoxStyle.DropDownList)
                     bindable.Value = getter();
             };
-            cmb.SelectedIndexChanged += (sender, args) =>
+            EventHandler handler2 = (sender, args) =>
             {
                 if (cmb.DropDownStyle == ComboBoxStyle.DropDownList)
                     bindable.Value = getter();
             };
-            return bindable.Bind(getter, setter);
+            var init = new BindResult(
+                () => cmb.TextChanged += handler1,
+                () => cmb.TextChanged -= handler1);
+            init += new BindResult(
+                () => cmb.SelectedIndexChanged += handler2,
+                () => cmb.SelectedIndexChanged -= handler2);
+            init += bindable.Bind(getter, setter);
+            return init;
         }
 
         public static BindResult BindControl(
@@ -301,19 +343,26 @@ namespace LetsEncryptAcmeReg
                     cmb.SelectionLength = oldSelLength;
                 }
             };
-            cmb.TextChanged += (sender, args) =>
+            EventHandler handler1 = (sender, args) =>
             {
                 if (!isSetting)
                     if (cmb.DropDownStyle != ComboBoxStyle.DropDownList)
                         bindable.Value = getter();
             };
-            cmb.SelectedIndexChanged += (sender, args) =>
+            EventHandler handler2 = (sender, args) =>
             {
                 if (!isSetting)
                     if (cmb.DropDownStyle == ComboBoxStyle.DropDownList)
                         bindable.Value = getter();
             };
-            return bindable.Bind(getter, setter);
+            var init = new BindResult(
+                () => cmb.TextChanged += handler1,
+                () => cmb.TextChanged -= handler1);
+            init += new BindResult(
+                () => cmb.SelectedIndexChanged += handler2,
+                () => cmb.SelectedIndexChanged -= handler2);
+            init += bindable.Bind(getter, setter);
+            return init;
         }
 
         /// <summary>
@@ -415,6 +464,30 @@ namespace LetsEncryptAcmeReg
             var finder = new ExpressionBinder<string>(boundExpression, init);
             finder.Visit(boundExpression);
             return finder.BindResult;
+        }
+
+        public static BindResult BindOnChanged<T>([NotNull] this Bindable<T> bindable, Action<T> handler)
+        {
+            bindable.Changed += handler;
+            return new BindResult(null, () => bindable.Changed -= handler);
+        }
+
+        public static BindResult BindOnChanging<T>([NotNull] this Bindable<T> bindable, BindableChanging<T> handler)
+        {
+            bindable.Changing += handler;
+            return new BindResult(null, () => bindable.Changing -= handler);
+        }
+
+        public static BindResult BindOnChangedAsync<T>([NotNull] this Bindable<T> bindable, Func<T, Task> handler)
+        {
+            bindable.ChangedAsync += handler;
+            return new BindResult(null, () => bindable.ChangedAsync -= handler);
+        }
+
+        public static BindResult BindOnChangingAsync<T>([NotNull] this Bindable<T> bindable, BindableChangingAsync<T> handler)
+        {
+            bindable.ChangingAsync += handler;
+            return new BindResult(null, () => bindable.ChangingAsync -= handler);
         }
     }
 }

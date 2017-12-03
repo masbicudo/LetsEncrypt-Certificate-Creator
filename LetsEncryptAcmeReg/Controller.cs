@@ -57,14 +57,14 @@ namespace LetsEncryptAcmeReg
             init += new BindResult(() => mo.Now.Value = DateTime.Now);
             init += mo.Date.BindExpression(() => mo.Now.Value.Date);
             init += mo.TosLink.BindExpression(() => this.acme.GetTos(mo.Registrations.Value, mo.Email.Value));
-            mo.Domain.Changed += strings => mo.Certificate.Value = "";
+            init += mo.Domain.BindOnChanged(strings => mo.Certificate.Value = "");
 
             // Collections
             init += mo.Domains.BindExpression(() => this.acme.GetDomainsByEmail(mo.Registrations.Value, mo.Email.Value).OrderBy(x => x).ToArray());
             init += mo.Certificates.BindExpression(() => this.Certifcates_value(mo.CurrentRegistration.Value, mo.CurrentIdentifier.Value));
 
-            mo.Challenge.Changed += Challenge_Changed;
-            mo.CurrentAuthState.Changing += CurrentAuthState_Changing;
+            init += mo.Challenge.BindOnChanged(this.Challenge_Changed);
+            init += mo.CurrentAuthState.BindOnChanging(this.CurrentAuthState_Changing);
 
             // Complex relations:
             //      These relations are built by using expressions.
@@ -129,10 +129,10 @@ namespace LetsEncryptAcmeReg
             init += mc.Base64Data.BindExpression(() => mc.TextAssets.Value == null ? null : mc.TextAssets.Value.GetAsset(mc.CertificateType.Value));
 
             // when the key changes, the domain must be tested again
-            mo.Key.Changed += s => mo.CanValidateChallenge.Value = false;
+            init += mo.Key.BindOnChanged(s => mo.CanValidateChallenge.Value = false);
 
-            mo.CurrentSsg.Changing += this.CurrentSsg_Changing;
-            mo.CurrentSsg.Changed += this.CurrentSsg_Changed;
+            init += mo.CurrentSsg.BindOnChanging(this.CurrentSsg_Changing);
+            init += mo.CurrentSsg.BindOnChanged(this.CurrentSsg_Changed);
 
             return init;
         }
