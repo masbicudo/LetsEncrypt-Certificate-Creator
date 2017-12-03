@@ -8,6 +8,9 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
+using JetBrains.Annotations;
+using LetsEncryptAcmeReg.Config;
+using Newtonsoft.Json;
 
 namespace LetsEncryptAcmeReg
 {
@@ -16,12 +19,17 @@ namespace LetsEncryptAcmeReg
         ITooltipCreator,
         IGlobalEvents
     {
+        private readonly Root rootCfg;
         private readonly Controller controller;
         private readonly Acme acme = new Acme();
         private readonly ToolTipManager tooltip = new ToolTipManager();
 
-        public Form2()
+        public Form2([NotNull] Root rootCfg)
         {
+            this.rootCfg = rootCfg ?? throw new ArgumentNullException(nameof(rootCfg));
+
+            this.ConfigUpdated();
+
             this.InitializeComponent();
 
             this.labVer.Text = $"v{App.CurrentVersion} alpha";
@@ -210,6 +218,14 @@ namespace LetsEncryptAcmeReg
                     a.NewValue = CheckState.Checked;
             };
             this.tableCertDomains.Width = this.Width / 2;
+        }
+
+        private void ConfigUpdated()
+        {
+            this.acme.VaultLocation = this.rootCfg.VaultLocation;
+
+            File.WriteAllText("config.json",
+                JsonConvert.SerializeObject(this.rootCfg, Formatting.Indented));
         }
 
         private void X509Certificate_Changed(X509Certificate2 certificate)

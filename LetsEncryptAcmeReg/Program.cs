@@ -1,7 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Windows.Forms;
+using LetsEncryptAcmeReg.Config;
+using Newtonsoft.Json;
 
 namespace LetsEncryptAcmeReg
 {
@@ -25,11 +28,19 @@ namespace LetsEncryptAcmeReg
             if (Environment.OSVersion.Version.Major >= 6)
                 SetProcessDpiAwareness(_Process_DPI_Awareness.Process_Per_Monitor_DPI_Aware);
 
-            Environment.SetEnvironmentVariable("Desktop", Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+            if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("Desktop")))
+                Environment.SetEnvironmentVariable("Desktop", Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+
+
+            Root rootCfg = new Root();
+            if (File.Exists("config.json"))
+                rootCfg = JsonConvert.DeserializeObject<Root>(File.ReadAllText("config.json"));
+            else
+                File.WriteAllText("config.json", JsonConvert.SerializeObject(rootCfg, Formatting.Indented));
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            var mainForm = new Form2();
+            var mainForm = new Form2(rootCfg);
 
             GlobalMouseHandler globalClick = new GlobalMouseHandler(mainForm);
             Application.AddMessageFilter(globalClick);

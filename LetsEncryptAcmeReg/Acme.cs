@@ -1,4 +1,5 @@
 ﻿using ACMESharp;
+using ACMESharp.ACME;
 using ACMESharp.POSH;
 using ACMESharp.POSH.Util;
 using ACMESharp.Vault;
@@ -6,29 +7,25 @@ using ACMESharp.Vault.Model;
 using ACMESharp.Vault.Util;
 using JetBrains.Annotations;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Management.Automation;
-using ACMESharp.ACME;
-using ACMESharp.Util;
 
 namespace LetsEncryptAcmeReg
 {
     public class Acme
     {
-#if !DEFAULT_VAULT
-        static Acme()
+        public Acme()
         {
-            VaultHelper.CustomVaultGetter = GetCustomVault;
+            VaultHelper.CustomVaultGetter = this.GetCustomVault;
         }
-#endif
-        private static IVault GetCustomVault()
+
+        public string VaultLocation { get; set; }
+
+        private IVault GetCustomVault()
         {
-            var rootPath = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                "wizVault");
+            var rootPath = this.GetVaultPath();
 
             var vlt = new ACMESharp.Vault.Providers.LocalDiskVault();
             var ok = false;
@@ -45,6 +42,14 @@ namespace LetsEncryptAcmeReg
             {
                 if (!ok) vlt.Dispose();
             }
+        }
+
+        private string GetVaultPath()
+        {
+            if (string.IsNullOrWhiteSpace(this.VaultLocation))
+                throw new ArgumentNullException("Vault path is null.");
+
+            return Environment.ExpandEnvironmentVariables(this.VaultLocation);
         }
 
         private static IVault GetVault()
@@ -344,7 +349,7 @@ namespace LetsEncryptAcmeReg
             var allIds = this.GetAllIdentifiers(regInfo);
 
             var identifierInfo = domain == null
-                ||  domain.Length == 0 ?
+                || domain.Length == 0 ?
                     allIds :
                     allIds.Where(x => Array.IndexOf(domain, x.Dns) >= 0 || Array.IndexOf(domain, x.Alias) >= 0);
 
