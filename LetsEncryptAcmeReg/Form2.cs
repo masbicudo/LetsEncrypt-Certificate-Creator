@@ -32,6 +32,9 @@ namespace LetsEncryptAcmeReg
 
             this.InitializeComponent();
 
+            this.pgConfig.SelectedObject = this.rootCfg;
+            this.pgConfig.PropertyValueChanged += PgConfig_PropertyValueChanged;
+
             this.labVer.Text = $"v{App.CurrentVersion} alpha";
 
             // Controller
@@ -218,6 +221,11 @@ namespace LetsEncryptAcmeReg
                     a.NewValue = CheckState.Checked;
             };
             this.tableCertDomains.Width = this.Width / 2;
+        }
+
+        private void PgConfig_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+        {
+            this.ConfigUpdated();
         }
 
         private void ConfigUpdated()
@@ -507,7 +515,7 @@ namespace LetsEncryptAcmeReg
         private void btnShowCertificate_Click(object sender, EventArgs e)
         {
             this.controller.ViewCertificate(this.controller.Model.Certificate.Value, this.controller.Model.CertificateType.Value);
-            this.tabControl1.SelectedTab = this.tabPage3;
+            this.tabConfig.SelectedTab = this.tabPage3;
         }
 
         private void txtSiteRoot_MouseLeave(object sender, EventArgs e)
